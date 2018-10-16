@@ -1,0 +1,129 @@
+{
+    "name": "ANTS-buildtemplateparallel",
+    "label": "buildtemplateparallel",
+    "description": "Runs buildtemplateparallel from ANTs toolkit",
+    "author": "MatherLab <matherlab@usc.edu>",
+    "maintainer": "Noah Mercer <noahmerc@usc.edu>",
+    "url": "http://gero.usc.edu/labs/matherlab/",
+    "source": "",
+    "license": "Other",
+    "flywheel": {
+        "suite": "ANTs"
+    },
+    "version": "0.0.1",
+    "config": {
+        "cpu_cores": {
+            "default": 2,
+            "minimum": 1,
+            "type": "integer",
+            "description": "Number of CPU cores to use (default 2). This option only applies if you select '2 - pexec' for parallel computation."
+        },
+        "gradient_step_size": {
+            "default": 0.25,
+            "type": "number",
+            "description": "Gradient step size; smaller in magnitude results in more cautious steps (default 0.25). This does not affect the step size of individual registrations; it lets you update the template more cautiously after each iteration by reducing the template update step size from 0.25 to a smaller positive number."
+        },
+        "image_dimension": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 4,
+            "description": "Number of image dimensions. 2 or 3 (for 2 or 3 dimensional registration of single volume) or 4 (for template generation of time-series data)"
+        },
+        "input_file_pattern": {
+            "default": "*.nii.gz",
+            "type": "string",
+            "description": "File system wildcard pattern (e.g. *.nii.gz) matching your input files"
+        },
+        "iteration_limit": {
+            "default": "4",
+            "type": "integer",
+            "description": "Iteration limit (default = 4) for template construction. requires 4*NumImages registrations."
+        },
+        "max_iterations": {
+            "default": "1x0x0",
+            "type": "string",
+            "pattern": "^([0-9]{1,}x){1,}[0-9]{1,}$",
+            "description": "Max-Iterations in form: JxKxL where J = max iterations at coarsest resolution (here, reduce by power of 2^2); K = middle resolution iterations (here,reduce by power of 2); L = fine resolution iterations (here, full resolution) !!this level takes much more time per iteration!! Adding an extra value before JxKxL (i.e. resulting in IxJxKxL) would add another iteration level."
+        },
+        "n4_bias_field_correction": {
+            "default": 1,
+            "minimum": 0,
+            "maximum": 1,
+            "type": "integer",
+            "description": "N4BiasFieldCorrection of moving image ( 0 = off; 1 = on (default) )"
+        },
+        "out_prefix": {
+            "default": "full_template",
+            "type": "string",
+            "description": "A prefix that is prepended to all output files."
+        },
+        "parallel_computation": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5,
+            "description": "How to control parallel computation. 0 == run serially,  1 == SGE qsub, 2 == use PEXEC (localhost), 3 == Apple XGrid, 4 == PBS Grid, 5 == SLURM"
+        },
+        "queue_name": {
+            "default": "nopreempt",
+            "type": "string",
+            "description": "Set default queue for PBS jobs (default: nopreempt)"
+        },
+        "registration_similarity_metric": {
+            "default": "PR",
+            "enum": [
+                "CC",
+                "MI",
+                "PR",
+                "MSQ",
+                "SSD"
+            ],
+            "type": "string",
+            "description": "Type of similarity metric used for registration. For intramodal image registration, use: CC = cross-correlation; MI = mutual information; PR = probability mapping (default); MSQ = mean square difference (Demons-like); SSD = sum of squared differences. For intermodal image registration, use: MI = mutual information; PR = probability mapping (default)."
+        },
+        "rigid_body_registration": {
+            "default": 0,
+            "minimum": 0,
+            "maximum": 1,
+            "type": "integer",
+            "description": "Do rigid-body registration of inputs before creating template (default 0) -- 0 == off 1 == on. Only useful when you do not have an initial template. In case a template is specified (initial template input), all inputs are registered to that template. If no template is specified, the inputs will be registered to the averaged input."
+        },
+        "transformation_model_type": {
+            "enum": [
+                "RI",
+                "RA",
+                "EL",
+                "SY",
+                "S2",
+                "GR",
+                "EX",
+                "DD"
+            ],
+            "type": "string",
+            "description": "Type of transformation model used for registration. For rigid image registration, use: RI = Purely rigid; RA = Affine rigid. For elastic image registration, use: EL = elastic transformation model (less deformation possible).  For diffeomorphic image registration, use: SY = SyN with time (default) with arbitrary number of time points in time discretization; S2 = SyN with time optimized specifically for 2 time points in the time discretization; GR = Greedy SyN; EX = Exponential; DD = Diffeomorphic Demons style exponential mapping."
+        },
+        "xgrid_args": {
+            "type": "string",
+            "description": "XGrid arguments (e.g., -x '-p password -h controlhost')"
+        }
+    },
+    "inputs": {
+        "zip": {
+            "base": "file",
+            "type": {
+                "enum": [
+                    "zip"
+                ]
+            },
+            "description": "Zip file containing all the images to process. When unzipped they must all be in one directory."
+        },
+        "template": {
+            "base": "file",
+            "optional": true,
+            "description": "Template volume to be used as target of all inputs. When not used, the script will create an unbiased starting point by averaging all inputs."
+        }
+    },
+    "custom": {
+        "docker-image": "matherlab/buildtemplateparallel"
+    }
+}
