@@ -7,9 +7,6 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "",
     "license": "Other",
-    "flywheel": {
-        "suite": "ANTs"
-    },
     "version": "0.0.1",
     "config": {
         "cpu_cores": {
