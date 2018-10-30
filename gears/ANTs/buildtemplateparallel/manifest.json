@@ -2,12 +2,12 @@
     "name": "ANTS-buildtemplateparallel",
     "label": "buildtemplateparallel",
     "description": "Runs buildtemplateparallel from ANTs toolkit",
-    "author": "MatherLab <matherlab@usc.edu>",
-    "maintainer": "Noah Mercer <noahmerc@usc.edu>",
+    "author": "Noah Mercer <noahmerc@usc.edu>",
+    "maintainer": "MatherLab <matherlab@usc.edu>",
     "url": "http://gero.usc.edu/labs/matherlab/",
-    "source": "",
+    "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/buildtemplateparallel",
     "license": "Other",
-    "version": "0.0.2",
+    "version": "0.1.0",
     "config": {
         "cpu_cores": {
             "default": 2,
@@ -105,15 +105,6 @@
         }
     },
     "inputs": {
-        "zip": {
-            "base": "file",
-            "type": {
-                "enum": [
-                    "zip"
-                ]
-            },
-            "description": "Zip file containing all the images to process. When unzipped they must all be in one directory."
-        },
         "template": {
             "base": "file",
             "optional": true,
@@ -121,6 +112,9 @@
         }
     },
     "custom": {
-        "docker-image": "matherlab/buildtemplateparallel"
+        "docker-image": "matherlab/buildtemplateparallel",
+        "flywheel": {
+            "suite": "ANTs"
+        }
     }
 }
