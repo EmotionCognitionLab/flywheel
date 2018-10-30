@@ -17,11 +17,14 @@ RUN apt-get update -qq \
            locales \
            gnupg \ 
            unzip \
+           python3 \
+           python3-pip \
     && curl -sS 'http://neuro.debian.net/_static/neuro.debian.net.asc' | apt-key add - \
     && echo deb http://neurodeb.pirsquared.org data main contrib non-free >> /etc/apt/sources.list.d/neurodebian.sources.list \
     && echo deb http://neurodeb.pirsquared.org stretch main contrib non-free >> /etc/apt/sources.list.d/neurodebian.sources.list \
     && apt-get update -qq \
     && apt-get install -y -q --no-install-recommends ants \
+    && pip3 install flywheel-sdk \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
