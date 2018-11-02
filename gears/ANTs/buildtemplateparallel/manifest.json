@@ -105,6 +105,15 @@
         }
     },
     "inputs": {
+        "DUMMY_INPUT_FILE": {
+            "base": "file",
+            "description": "Any NIFTI file belonging to a collection of files that you want to process with buildtemplateparallel.",
+            "type": {
+                "enum": [
+                    "nifti"
+                ]
+            }
+        },
         "template": {
             "base": "file",
             "optional": true,
