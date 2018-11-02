@@ -123,14 +123,9 @@ def get_output_files(from_dir):
 def save_inputs_to_analysis(input_files):
     """Saves a list of files used as inputs to this analysis as part of the analysis.info field"""
 
-    files_to_save = input_files.copy()
     analysis_id = config['destination']['id']
-    analysis = fw.get_analysis(analysis_id, inflate_job=True)
-    if (analysis.files):
-        # the update method overwrites, so keep any input files that may already be associated with the analysis
-        files_to_save.extend(analysis.files)
     # TODO this sets an object with the key 'inputs' into the 'info' field. Figure out how to simply set the 'inputs' field.
-    fw.modify_analysis_info(analysis_id, {'set': {'inputs': files_to_save}})
+    fw.modify_analysis_info(analysis_id, {'set': {'inputs': input_files}})
 
 
 input_files = download_input_files(input_dir)
