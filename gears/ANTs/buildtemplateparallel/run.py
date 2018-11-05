@@ -92,7 +92,7 @@ def get_btp_command():
     template_file = config['inputs'].get('template', None)
     if (template_file):
         btp_cmd.append('-z')
-        btp_cmd.append(template_file)
+        btp_cmd.append(template_file['location']['path'])
     
     btp_cmd.append(config['config']['input_file_pattern'])
 
