@@ -1,0 +1,105 @@
+#!/usr/bin/env bash
+set -e
+
+# Parses config and inputs from flywheel and calls antsRegistrationSyNQuick.
+
+CONTAINER="[matherlab/antsRegistrationSyNQuick]"
+echo -e "$CONTAINER Initiated"
+
+
+###############################################################################
+# Built to flywheel-v0 spec.
+
+FLYWHEEL_BASE=/flywheel/v0
+INPUT_DIR=$FLYWHEEL_BASE/input
+OUTPUT_DIR=$FLYWHEEL_BASE/output
+MANIFEST=$FLYWHEEL_BASE/manifest.json
+CONFIG_FILE=$FLYWHEEL_BASE/config.json
+
+###############################################################################
+# Configure the ENV
+
+export USER=Flywheel
+
+###############################################################################
+# Map of config parameter names -> antsRegistrationSyNQuick command line flags
+declare -A param_flags
+param_flags[image_dimension]=-d
+param_flags[out_prefix]=-o
+param_flags[num_threads]=-n
+param_flags[transform_type]=-t
+param_flags[histogram_bin_count]=-r
+param_flags[spline_distance]=-s
+param_flags[masks]=-x
+param_flags[precision_type]=-p
+param_flags[use_histogram_matching]=-j
+param_flags[collapse_output_transforms]=-z
+
+##############################################################################
+# Parse configuration
+
+function parse_config {
+
+  CONFIG_FILE=$FLYWHEEL_BASE/config.json
+  MANIFEST_FILE=$FLYWHEEL_BASE/manifest.json
+
+  if [[ -f $CONFIG_FILE ]]; then
+    echo "$(jq -r '.'$1'.'$2 $CONFIG_FILE)"
+  else
+    echo "$(jq -r '.'$1'.'$2'.default' $MANIFEST_FILE )"
+  fi
+}
+
+declare -A param_values
+for param_name in "${!param_flags[@]}"; do
+    param_values[$param_name]="$(parse_config 'config' ${param_name})"
+done
+
+fixed_input_file="${INPUT_DIR}/$(parse_config 'inputs' 'fixed')"
+moving_input_file="${INPUT_DIR}/$(parse_config 'inputs' 'moving')"
+
+echo "fixed_input_file: ${fixed_input_file}"
+echo "moving_input_file: ${moving_input_file}"
+
+
+##############################################################################
+# Build up the command line arguments for antsRegistrationSyNQuick.sh
+
+ants_cmd="${ANTSPATH}/antsRegistrationSyNQuick.sh -f ${fixed_input_file} -m ${moving_input_file} "
+
+for param_name in "${!param_flags[@]}"; do
+    if [ "${param_values[$param_name]}" != "null" ]; then
+        ants_cmd="${ants_cmd} ${param_flags[$param_name]} ${param_values[$param_name]}"
+    fi
+done
+
+
+log_file="ants-reg-quick.log"
+ants_cmd="${ants_cmd} > ${OUTPUT_DIR}/${log_file} 2>&1"
+
+echo
+echo ${ants_cmd}
+
+##############################################################################
+# Run antsRegistrationSyNQuick.sh
+$ants_cmd
+
+##############################################################################
+# Copy results to output directory and write metadata file
+out_prefix=${param_values['out_prefix']}
+metafile="${OUTPUT_DIR}/.metadata.json"
+expected_files=( "${out_prefix}0GenericAffine.mat" "${out_prefix}1Warp.nii.gz" "${out_prefix}1InverseWarp.nii.gz" "${out_prefix}Warped.nii.gz" "${out_prefix}InverseWarped.nii.gz" )
+
+echo '{ "acquisition" : { "files" : [' > $metafile
+
+for file in "${expected_files[@]}"; do
+    if [ -e "${file}" ]; then
+        echo "{ \"name\": \"${file}\" }" >> $metafile
+        mv "${file}" ${OUTPUT_DIR}
+    fi
+done
+
+if [ -e "${OUTPUT_DIR}/${log_file}" ]; then
+    echo "{ \"name\": \"${log_file}\" }" >> $metafile
+fi
+echo '] } }' >> $metafile
