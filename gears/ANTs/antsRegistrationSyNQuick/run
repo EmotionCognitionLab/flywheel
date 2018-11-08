@@ -3,7 +3,7 @@ set -e
 
 # Parses config and inputs from flywheel and calls antsRegistrationSyNQuick.
 
-CONTAINER="[matherlab/antsRegistrationSyNQuick]"
+CONTAINER="[matherlab/ants-registration-syn-quick]"
 echo -e "$CONTAINER Initiated"
 
 

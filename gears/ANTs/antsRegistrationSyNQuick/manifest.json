@@ -92,7 +92,7 @@
         }
     },
     "custom": {
-        "docker-image": "matherlab/antsRegistrationSyNQuick",
+        "docker-image": "matherlab/ants-registration-syn-quick",
         "flywheel": {
             "suite": "ANTs"
         }
