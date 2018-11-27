@@ -1,0 +1,116 @@
+CONTAINER="[flywheel/multiecho-ica]"
+echo -e "$CONTAINER  Initiated"
+
+
+###############################################################################
+# Built to flywheel-v0 spec.
+
+FLYWHEEL_BASE=/flywheel/v0
+OUTPUT_DIR=$FLYWHEEL_BASE/output
+INPUT_ECHO_DIR1=$FLYWHEEL_BASE/input/ECHO1_FILE
+INPUT_ECHO_DIR2=$FLYWHEEL_BASE/input/ECHO2_FILE
+INPUT_ECHO_DIR3=$FLYWHEEL_BASE/input/ECHO3_FILE
+INPUT_STRUCTURE=$FLYWHEEL_BASE/input/STRUCTURE
+MANIFEST=$FLYWHEEL_BASE/manifest.json
+MEICA=$FLYWHEEL_BASE/meica_ns2.py
+
+
+###############################################################################
+# Configure the ENV
+
+
+export USER=Flywheel
+
+##############################################################################
+# Parse configuration
+function parse_config {
+
+  CONFIG_FILE=$FLYWHEEL_BASE/config.json
+  MANIFEST_FILE=$FLYWHEEL_BASE/manifest.json
+
+  if [[ -f $CONFIG_FILE ]]; then
+    echo "$(cat $CONFIG_FILE | jq -r '.config.'$1)"
+  else
+    CONFIG_FILE=$MANIFEST_FILE
+    echo "$(cat $MANIFEST_FILE | jq -r '.config.'$1'.default')"
+  fi
+}
+
+FW_CONFIG_ECHO_TIME1="$(parse_config 'ECHO_TIME1')"
+FW_CONFIG_ECHO_TIME2="$(parse_config 'ECHO_TIME2')"
+FW_CONFIG_ECHO_TIME3="$(parse_config 'ECHO_TIME3')"
+
+
+###############################################################################
+# INPUT File
+
+echo_file1=`find INPUT_ECHO_DIR1/* -maxdepth 0 -not -path '*/\.*' -type f -name "*.nii*" | head -1`
+if [[ -z $input_file ]]; then
+  echo "$CONTAINER  INPUT_ECHO_DIR1 has no valid input files!"
+  exit 1
+fi
+
+echo_file2=`find INPUT_ECHO_DIR2/* -maxdepth 0 -not -path '*/\.*' -type f -name "*.nii*" | head -1`
+if [[ -z $input_file ]]; then
+  echo "$CONTAINER  INPUT_ECHO_DIR2 has no valid input files!"
+  exit 1
+fi
+
+echo_file3=`find INPUT_ECHO_DIR3/* -maxdepth 0 -not -path '*/\.*' -type f -name "*.nii*" | head -1`
+if [[ -z $input_file ]]; then
+  echo "$CONTAINER  INPUT_ECHO_DIR3 has no valid input files!"
+  exit 1
+fi
+
+structure_file=`find INPUT_STRUCTURE/* -maxdepth 0 -not -path '*/\.*' -type f -name "*.nii*" | head -1`
+if [[ -z $input_file ]]; then
+  echo "$CONTAINER  INPUT_STRUCTURE has no valid input files!"
+  exit 1
+fi
+
+####################################################################
+
+# THE INPUT VOLUME TO USE (CAN BE .NII OR .NII.GZ)
+INPUT_ECHO_FILE1="${echo_file1}"
+INPUT_ECHO_FILE2="${echo_file2}"
+INPUT_ECHO_FILE3="${echo_file3}"
+INPUT_STRUCTURE_FILE="${structure_file}"
+
+# STATISTICS
+ECHO_TIME1=FW_CONFIG_ECHO_TIME1
+ECHO_TIME2=FW_CONFIG_ECHO_TIME2
+ECHO_TIME3=FW_CONFIG_ECHO_TIME3
+
+####################################################################
+# RUN THE Algorithm
+
+echo -e "${CONTAINER}  Running Multi-echo ICA..."
+
+outDIR=Result
+
+for subID in 8001 8002 8003 ;do
+
+session=pre
+for cond in ER RS;do
+
+indoutDIR=${outDIR}/${subID}/${session}/${cond}
+if [ ! -e ${indoutDIR} ]; then
+mkdir -p ${indoutDIR}
+
+cd ${indoutDIR}
+cp ${INPUT_ECHO_FILE1} ${indoutDIR}
+cp ${INPUT_ECHO_FILE2} ${indoutDIR}
+cp ${INPUT_ECHO_FILE3} ${indoutDIR}
+cp ${structure} ${indoutDIR}
+cd ${indoutDIR}
+python ${MEICA} -d ${INPUT_ECHO_FILE1},${INPUT_ECHO_FILE2},${INPUT_ECHO_FILE3} -e ECHO_TIME1,ECHO_TIME2,ECHO_TIME3 -a ${INPUT_STRUCTURE_FILE} --MNI --native --prefix ${cond}
+fi
+
+done
+done
+
+
+echo -e "${CONTAINER}  Multi-echo ICA completed!"
+
+
+
