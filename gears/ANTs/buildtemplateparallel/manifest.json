@@ -1,19 +1,28 @@
 {
-    "name": "ANTS-buildtemplateparallel",
-    "label": "buildtemplateparallel",
+    "name": "ants-buildtemplateparallel",
+    "label": "ANTs: Build Template Parallel",
     "description": "Runs buildtemplateparallel from ANTs toolkit",
     "author": "Noah Mercer <noahmerc@usc.edu>",
     "maintainer": "MatherLab <matherlab@usc.edu>",
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/buildtemplateparallel",
     "license": "Other",
-    "version": "0.1.0",
+    "version": "0.1.2",
+    "custom": {
+        "docker-image": "matherlab/ants-buildtemplateparallel:0.1.2",
+        "flywheel": {
+            "suite": "ANTs"
+        },
+        "gear-builder": {
+            "image": "matherlab/ants-buildtemplateparallel:0.1.2"
+        }
+    },
     "config": {
         "cpu_cores": {
-            "default": 2,
+            "default": 96,
             "minimum": 1,
             "type": "integer",
-            "description": "Number of CPU cores to use (default 2). This option only applies if you select '2 - pexec' for parallel computation."
+            "description": "Number of CPU cores to use (default 96). This option only applies if you select '2 - pexec' for parallel computation."
         },
         "gradient_step_size": {
             "default": 0.25,
@@ -121,12 +130,6 @@
             "base": "file",
             "optional": true,
             "description": "Template volume to be used as target of all inputs. When not used, the script will create an unbiased starting point by averaging all inputs."
-        }
-    },
-    "custom": {
-        "docker-image": "matherlab/buildtemplateparallel",
-        "flywheel": {
-            "suite": "ANTs"
         }
     }
 }
