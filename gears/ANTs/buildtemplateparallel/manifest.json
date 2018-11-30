@@ -106,6 +106,9 @@
         }
     },
     "inputs": {
+        "api_key": {
+            "base": "api-key"
+        },
         "DUMMY_INPUT_FILE": {
             "base": "file",
             "description": "Any NIFTI file belonging to a collection of files that you want to process with buildtemplateparallel.",
