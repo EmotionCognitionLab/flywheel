@@ -1,6 +1,6 @@
 {
-    "label": "ANTs: Build Template Parallel",
     "name": "ants-buildtemplateparallel",
+    "label": "ANTs: Build Template Parallel",
     "description": "Runs buildtemplateparallel from ANTs toolkit",
     "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
     "maintainer": "MatherLab <matherlab@usc.edu>",
@@ -8,13 +8,21 @@
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/buildtemplateparallel",
     "license": "Other",
     "version": "0.1.2",
-    "cite": "Brian B. Avants, Nick Tustison and Gang Song. Penn Image Computing And Science Laboratory. University of Pennsylvania. Please reference http://www.ncbi.nlm.nih.gov/pubmed/20851191. A reproducible evaluation of ANTs similarity metric performance in brain image registration: Avants BB, Tustison NJ, Song G, Cook PA, Klein A, Gee JC. Neuroimage, 2011.",
+    "custom": {
+        "docker-image": "matherlab/ants-buildtemplateparallel:0.1.2",
+        "flywheel": {
+            "suite": "ANTs"
+        },
+        "gear-builder": {
+            "image": "matherlab/ants-buildtemplateparallel:0.1.2"
+        }
+    },
     "config": {
         "cpu_cores": {
-            "default": 2,
+            "default": 96,
             "minimum": 1,
             "type": "integer",
-            "description": "Number of CPU cores to use (default 2). This option only applies if you select '2 - pexec' for parallel computation."
+            "description": "Number of CPU cores to use (default 96). This option only applies if you select '2 - pexec' for parallel computation."
         },
         "gradient_step_size": {
             "default": 0.25,
@@ -123,12 +131,6 @@
             "base": "file",
             "optional": true,
             "description": "Template volume to be used as target of all inputs. When not used, the script will create an unbiased starting point by averaging all inputs."
-        }
-    },
-    "custom": {
-        "docker-image": "matherlab/buildtemplateparallel",
-        "flywheel": {
-            "suite": "ANTs"
         }
     }
 }
