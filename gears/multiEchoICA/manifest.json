@@ -1,0 +1,69 @@
+{
+  "name": "multi-echo ica",
+  "label": "Multi-echo ICA",
+  "description": "Multi-echo ICA is the Multi-Echo Independent Component Analysis package created by Prantik Kundu. It can be applied to fMRI datasets that have been acquired with at least 3 different echo times (TE). handles preprocessing and analysis of multi-echo functional magnetic resonance imaging (fMRI) data. The working principle behind MEICA is that genuine BOLD signal depends on TE but artifacts don't. The ICA part of MEICA is used to define a set of components which are individually classified as BOLD or non-BOLD based on their TE dependence. This is slightly modified by Hyun Joo Yoo (Mather Lab, USC) for preprocessing.",
+  "maintainer": "Mather Lab",
+  "author": "Ajay Anand <ajayanan@usc.edu>",
+  "url": "https://me-ica.readthedocs.io/en/latest/",
+  "source": "https://github.com/ME-ICA/me-ica",
+  "license": "Apache-2.0",
+  "version": "0.1.1",
+  "custom": {
+    "docker-image": "flywheel/multiecho-ica:0.1.1"
+  },
+  "inputs": {
+    "ECHO1_FILE": {
+      "description": "ECHO 1 file",
+      "base": "file",
+      "type": {
+        "enum": [
+          "nifti"
+        ]
+      }
+    },
+    "ECHO2_FILE": {
+      "description": "ECHO 2 file",
+      "base": "file",
+      "type": {
+        "enum": [
+          "nifti"
+        ]
+      }
+    },
+    "ECHO3_FILE": {
+      "description": "ECHO 3 file",
+      "base": "file",
+      "type": {
+        "enum": [
+          "nifti"
+        ]
+      }
+    },
+    "STRUCTURE": {
+      "description": "Structure file",
+      "base": "file",
+      "type": {
+        "enum": [
+          "nifti"
+        ]
+      }
+    }
+  },
+  "config": {
+    "ECHO_TIME1": {
+      "description": "ECHO time 1 value",
+      "default": 18,
+      "type": "number"
+    },
+    "ECHO_TIME2": {
+      "description": "ECHO time 2 value",
+      "default": 18,
+      "type": "number"
+    },
+    "ECHO_TIME3": {
+      "description": "ECHO time 3 value",
+      "default": 18,
+      "type": "number"
+    }
+  }
+}

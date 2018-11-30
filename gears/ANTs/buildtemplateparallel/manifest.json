@@ -2,7 +2,7 @@
     "name": "ants-buildtemplateparallel",
     "label": "ANTs: Build Template Parallel",
     "description": "Runs buildtemplateparallel from ANTs toolkit",
-    "author": "Noah Mercer <noahmerc@usc.edu>",
+    "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
     "maintainer": "MatherLab <matherlab@usc.edu>",
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/buildtemplateparallel",
@@ -71,9 +71,9 @@
             "description": "How to control parallel computation. 0 == run serially,  1 == SGE qsub, 2 == use PEXEC (localhost), 3 == Apple XGrid, 4 == PBS Grid, 5 == SLURM"
         },
         "queue_name": {
-            "default": "nopreempt",
             "type": "string",
-            "description": "Set default queue for PBS jobs (default: nopreempt)"
+            "description": "Set default queue for PBS jobs",
+	    "optional": true
         },
         "registration_similarity_metric": {
             "default": "PR",
@@ -110,7 +110,8 @@
         },
         "xgrid_args": {
             "type": "string",
-            "description": "XGrid arguments (e.g., -x '-p password -h controlhost')"
+            "description": "XGrid arguments (e.g., -x '-p password -h controlhost')",
+	    "optional": true
         }
     },
     "inputs": {
