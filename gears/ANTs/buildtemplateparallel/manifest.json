@@ -132,5 +132,8 @@
             "optional": true,
             "description": "Template volume to be used as target of all inputs. When not used, the script will create an unbiased starting point by averaging all inputs."
         }
+    },
+    "environment": {
+      "ANTSPATH": "/usr/lib/ants"
     }
 }
