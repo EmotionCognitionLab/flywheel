@@ -12,8 +12,8 @@ class Data_Upload:
         self.sub_path_dict = {}
         self.pre_ses_path_dict = {}
         self.post_ses_path_dict = {}
-        self.sub_ses_mapping_filepath = "./resources/subID_mriID.xlsx" # path of subjects ids and session ids
-        self.data_path = "D:/Research/Emotion_lab/task_Hyun/2018_HRVT_MRI_Study/pre-training" # Path of folder where data resides
+        self.sub_ses_mapping_filepath = "subID_mriID.xlsx" # path of subjects ids and session ids
+        self.data_path = "pre-training" # Path of folder where data resides
         self.name_change_dict = {
             "ASL_Control":"Wholebrain_ASL",
             "ASL_Control_Perfusion_Weighted":"Perfusion_Weighted",
