@@ -21,7 +21,7 @@ from pprint import pprint
 import subprocess
 
 container = '[matherlab/buildtemplateparallel]'
-print(container, ' initiated')
+print(container, ' initiated', flush=True)
 
 # key directories/files, as per flywheel spec
 flywheel_base = '/flywheel/v0'
@@ -31,7 +31,6 @@ manifest = os.path.join(flywheel_base, 'manifest.json')
 config_file = os.path.join(flywheel_base, 'config.json')
 
 input_file_key = 'DUMMY_INPUT_FILE'
-log_file = os.path.join(input_dir, 'btp.log')
 
 # load the config file
 with open(config_file, 'r') as f:
@@ -75,7 +74,7 @@ def download_input_files(to_dir):
         for f in files:
             results.append({'acquisition_id': a.id, 'file_id': f.id, 'file_name': f.name})
             local_file_name = os.path.join(to_dir, f.name)
-            print('Downloading {0} to {1}'.format(f.name, local_file_name))
+            print('Downloading {0} to {1}'.format(f.name, local_file_name), flush=True)
             fw.download_file_from_acquisition(a.id, f.name, local_file_name)
     return results
 
@@ -114,9 +113,6 @@ def get_output_files(from_dir):
     output_glob_pattern = os.path.join(from_dir, out_prefix + input_file_pattern)
     output_files.extend(glob.glob(output_glob_pattern))
 
-    # include the log file as part of the output
-    if (os.path.isfile(log_file)):
-        output_files.append(log_file)
     
     return output_files
 
@@ -130,9 +126,8 @@ def save_inputs_to_analysis(input_files):
 
 input_files = download_input_files(input_dir)
 btp_cmd = get_btp_command()
-print('btp_cmd: ' + ' '.join(btp_cmd))
-with open(log_file, 'w') as log:
-    subprocess.run(btp_cmd, stdout=log, stderr=subprocess.STDOUT, cwd=input_dir, check=True)
+print('btp_cmd: ' + ' '.join(btp_cmd), flush=True)
+subprocess.run(btp_cmd, cwd=input_dir, check=True)
 output_files = get_output_files(input_dir)
 # move all of the output files to the output directory
 for f in output_files:
