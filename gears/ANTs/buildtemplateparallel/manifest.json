@@ -7,14 +7,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/buildtemplateparallel",
     "license": "Other",
-    "version": "0.1.2",
+    "version": "0.1.5",
     "custom": {
-        "docker-image": "matherlab/ants-buildtemplateparallel:0.1.2",
+        "docker-image": "matherlab/ants-buildtemplateparallel:0.1.5",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-buildtemplateparallel:0.1.2"
+            "image": "matherlab/ants-buildtemplateparallel:0.1.5"
         }
     },
     "config": {
@@ -41,7 +41,7 @@
             "description": "File system wildcard pattern (e.g. *.nii.gz) matching your input files"
         },
         "iteration_limit": {
-            "default": "4",
+            "default": 4,
             "type": "integer",
             "description": "Iteration limit (default = 4) for template construction. requires 4*NumImages registrations."
         },
