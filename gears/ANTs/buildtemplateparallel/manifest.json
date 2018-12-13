@@ -3,18 +3,19 @@
     "label": "ANTs: Build Template Parallel",
     "description": "Runs buildtemplateparallel from ANTs toolkit",
     "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
+    "cite": "Brian B. Avants, Nick Tustison and Gang Song. Penn Image Computing And Science Laboratory. University of Pennsylvania. Please reference http://www.ncbi.nlm.nih.gov/pubmed/20851191. A reproducible evaluation of ANTs similarity metric performance in brain image registration: Avants BB, Tustison NJ, Song G, Cook PA, Klein A, Gee JC. Neuroimage, 2011.",
     "maintainer": "MatherLab <matherlab@usc.edu>",
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/buildtemplateparallel",
     "license": "Other",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "custom": {
-        "docker-image": "matherlab/ants-buildtemplateparallel:0.1.5",
+        "docker-image": "matherlab/ants-buildtemplateparallel:0.1.6",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-buildtemplateparallel:0.1.5"
+            "image": "matherlab/ants-buildtemplateparallel:0.1.6"
         }
     },
     "config": {
@@ -36,9 +37,9 @@
             "description": "Number of image dimensions. 2 or 3 (for 2 or 3 dimensional registration of single volume) or 4 (for template generation of time-series data)"
         },
         "input_file_pattern": {
-            "default": "*.nii.*.gz",
+            "default": "*.nii.gz",
             "type": "string",
-            "description": "File system wildcard pattern (e.g. *.nii.*.gz) matching your input files. Keep in mind that the gear adds a random string before the extension to avoid collisions between files with the same name."
+            "description": "File system wildcard pattern (e.g. *.nii.gz) matching your input files. Keep in mind that the gear adds a random string before the file name to avoid collisions between files with the same name."
         },
         "iteration_limit": {
             "default": 4,
