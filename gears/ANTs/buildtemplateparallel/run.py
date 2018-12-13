@@ -8,7 +8,11 @@ and because (as of this writing) flywheel can only accept one
 input file, the user of the gear should build a collection of
 files in the flywheel GUI and select one of them as input. 
 The gear then uses the flywheel sdk to download all of the files
-in the collection and pass them to buildtemplateparallel. It also
+in the collection and pass them to buildtemplateparallel. To avoid
+collisions between inputs with the same name, the gear adds a
+random string to the file name, e.g. 't1_32channel.nii.gz' might
+be downloaded as 't1_32channel.nii.xWoi87f.gz'. Keep this in mind
+when specifying your input file pattern. It also
 uses the sdk to document the input files as a note in the 'info'
 field of the analysis.
 """
@@ -19,6 +23,7 @@ import json
 import os
 from pprint import pprint
 import subprocess
+import tempfile
 
 container = '[matherlab/buildtemplateparallel]'
 print(container, ' initiated', flush=True)
@@ -73,7 +78,10 @@ def download_input_files(to_dir):
         files = [ f for f in a.files if f.type == 'nifti' and fnmatch.fnmatch(f.name, config['config']['input_file_pattern']) ]
         for f in files:
             results.append({'acquisition_id': a.id, 'file_id': f.id, 'file_name': f.name})
-            local_file_name = os.path.join(to_dir, f.name)
+            fname_parts = f.name.split('.')
+            suffix = '.' + fname_parts[-1] if len(fname_parts) > 1 else None
+            prefix = '.'.join(fname_parts[:-1]) if len(fname_parts) > 1 else fname_parts[0]
+            local_file_name = tempfile.mkstemp(suffix, prefix + '.', to_dir)[1]
             print('Downloading {0} to {1}'.format(f.name, local_file_name), flush=True)
             fw.download_file_from_acquisition(a.id, f.name, local_file_name)
     return results

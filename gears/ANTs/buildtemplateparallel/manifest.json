@@ -36,9 +36,9 @@
             "description": "Number of image dimensions. 2 or 3 (for 2 or 3 dimensional registration of single volume) or 4 (for template generation of time-series data)"
         },
         "input_file_pattern": {
-            "default": "*.nii.gz",
+            "default": "*.nii.*.gz",
             "type": "string",
-            "description": "File system wildcard pattern (e.g. *.nii.gz) matching your input files"
+            "description": "File system wildcard pattern (e.g. *.nii.*.gz) matching your input files. Keep in mind that the gear adds a random string before the extension to avoid collisions between files with the same name."
         },
         "iteration_limit": {
             "default": 4,
