@@ -10,11 +10,10 @@ files in the flywheel GUI and select one of them as input.
 The gear then uses the flywheel sdk to download all of the files
 in the collection and pass them to buildtemplateparallel. To avoid
 collisions between inputs with the same name, the gear prefixes
-"rnd-" plus random string to the file name, e.g. 't1_32channel.nii.gz' might
-be downloaded as 'rnd-xWoi87f.t1_32channel.nii.gz'. Keep this in mind
-when specifying your input file pattern. It also
-uses the sdk to document the input files as a note in the 'info'
-field of the analysis.
+"subj-" plus the subject label to the file name, e.g. 
+'t1_32channel.nii.gz' might be downloaded as 
+'subj-8081.t1_32channel.nii.gz'. It also uses the sdk to document 
+the input files as a note in the 'info' field of the analysis.
 """
 import flywheel
 import fnmatch
@@ -23,7 +22,6 @@ import json
 import os
 from pprint import pprint
 import subprocess
-import tempfile
 
 container = '[matherlab/buildtemplateparallel]'
 print(container, ' initiated', flush=True)
@@ -34,6 +32,7 @@ input_dir = os.path.join(flywheel_base, 'input')
 output_dir = os.path.join(flywheel_base, 'output')
 manifest = os.path.join(flywheel_base, 'manifest.json')
 config_file = os.path.join(flywheel_base, 'config.json')
+subject_prefix = 'subj-'
 
 input_file_key = 'DUMMY_INPUT_FILE'
 
@@ -75,10 +74,13 @@ def download_input_files(to_dir):
     acquisitions = fw.get_collection_acquisitions(collection_id)
     results = []
     for a in acquisitions:
+        subject_id = a.parents.subject
+        subject = fw.get_subject(subject_id)
+        subj_label = subject_prefix + subject.label + '-'
         files = [ f for f in a.files if f.type == 'nifti' and fnmatch.fnmatch(f.name, config['config']['input_file_pattern']) ]
         for f in files:
             results.append({'acquisition_id': a.id, 'file_id': f.id, 'file_name': f.name})
-            local_file_name = tempfile.mkstemp('.'+f.name, 'rnd-', to_dir)[1]
+            local_file_name = os.path.join(to_dir, subj_label + f.name)
             print('Downloading {0} to {1}'.format(f.name, local_file_name), flush=True)
             fw.download_file_from_acquisition(a.id, f.name, local_file_name)
     return results
@@ -98,7 +100,7 @@ def get_btp_command():
         btp_cmd.append('-z')
         btp_cmd.append(template_file['location']['path'])
     
-    btp_cmd.append(config['config']['input_file_pattern'])
+    btp_cmd.append(subject_prefix + '*-' + config['config']['input_file_pattern'])
 
     return btp_cmd
 
@@ -115,7 +117,7 @@ def get_output_files(from_dir):
         output_files.append(output_template)
 
     input_file_pattern = config['config']['input_file_pattern']
-    output_glob_pattern = os.path.join(from_dir, out_prefix + input_file_pattern)
+    output_glob_pattern = os.path.join(from_dir, out_prefix + subject_prefix + '*-' + input_file_pattern)
     output_files.extend(glob.glob(output_glob_pattern))
 
     

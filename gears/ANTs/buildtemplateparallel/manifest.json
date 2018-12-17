@@ -8,14 +8,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/buildtemplateparallel",
     "license": "Other",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "custom": {
-        "docker-image": "matherlab/ants-buildtemplateparallel:0.1.7",
+        "docker-image": "matherlab/ants-buildtemplateparallel:0.1.8",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-buildtemplateparallel:0.1.7"
+            "image": "matherlab/ants-buildtemplateparallel:0.1.8"
         }
     },
     "config": {
@@ -37,9 +37,9 @@
             "description": "Number of image dimensions. 2 or 3 (for 2 or 3 dimensional registration of single volume) or 4 (for template generation of time-series data)"
         },
         "input_file_pattern": {
-            "default": "rnd-*.nii.gz",
+            "default": "*.nii.gz",
             "type": "string",
-            "description": "File system wildcard pattern (e.g. rnd-*.nii.gz) matching your input files. Keep in mind that the gear adds 'rnd-' + a random string before the file name to avoid collisions between files with the same name."
+            "description": "File system wildcard pattern (e.g. *.nii.gz) matching your input files."
         },
         "iteration_limit": {
             "default": 4,
