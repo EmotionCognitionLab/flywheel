@@ -1,6 +1,6 @@
 {
     "label": "ANTs: RegistrationSyNQuick",
-    "name": "ANTS-antsRegistrationSyNQuick",
+    "name": "ants-antsregistrationsynquick",
     "description": "Runs antsRegistrationSyNQuick from ANTs toolkit",
     "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
     "maintainer": "MatherLab <matherlab@usc.edu>",
