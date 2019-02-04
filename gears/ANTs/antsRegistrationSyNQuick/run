@@ -57,8 +57,8 @@ for param_name in "${!param_flags[@]}"; do
     param_values[$param_name]="$(parse_config 'config' ${param_name})"
 done
 
-fixed_input_file="${INPUT_DIR}/$(parse_config 'inputs' 'fixed')"
-moving_input_file="${INPUT_DIR}/$(parse_config 'inputs' 'moving')"
+fixed_input_file="${INPUT_DIR}/$(parse_config 'inputs' 'fixed.location.path')"
+moving_input_file="${INPUT_DIR}/$(parse_config 'inputs' 'moving.location.path')"
 
 echo "fixed_input_file: ${fixed_input_file}"
 echo "moving_input_file: ${moving_input_file}"
