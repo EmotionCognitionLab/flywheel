@@ -80,15 +80,6 @@
             ],
             "description": "Use histogram matching. 0=false, 1=true."
         },
-        "collapse_output_transforms": {
-            "default": 1,
-            "type": "integer",
-            "enum": [
-                0,
-                1
-            ],
-            "description": "Collapse output transforms."
-        }
     },
     "inputs": {
         "fixed": {

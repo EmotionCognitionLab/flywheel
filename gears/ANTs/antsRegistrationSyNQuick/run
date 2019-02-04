@@ -35,7 +35,7 @@ param_flags[spline_distance]=-s
 param_flags[masks]=-x
 param_flags[precision_type]=-p
 param_flags[use_histogram_matching]=-j
-param_flags[collapse_output_transforms]=-z
+
 
 ##############################################################################
 # Parse configuration
