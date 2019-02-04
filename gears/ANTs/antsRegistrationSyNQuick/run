@@ -20,6 +20,9 @@ CONFIG_FILE=$FLYWHEEL_BASE/config.json
 # Configure the ENV
 
 export USER=Flywheel
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
+export ANTSPATH=/usr/lib/ants
 
 ###############################################################################
 # Map of config parameter names -> antsRegistrationSyNQuick command line flags
