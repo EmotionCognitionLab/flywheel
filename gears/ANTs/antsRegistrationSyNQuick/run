@@ -15,11 +15,13 @@ INPUT_DIR=$FLYWHEEL_BASE/input
 OUTPUT_DIR=$FLYWHEEL_BASE/output
 MANIFEST=$FLYWHEEL_BASE/manifest.json
 CONFIG_FILE=$FLYWHEEL_BASE/config.json
+ANTSPATH=/usr/lib/ants
 
 ###############################################################################
 # Configure the ENV
 
 export USER=Flywheel
+export ANTSPATH=${ANTSPATH}
 
 ###############################################################################
 # Map of config parameter names -> antsRegistrationSyNQuick command line flags
