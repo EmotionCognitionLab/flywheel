@@ -33,7 +33,8 @@
         "num_threads": {
             "default": 1,
             "type": "integer",
-            "description": "Number of threads"
+            "description": "Number of threads",
+            "optional": true
         },
         "transform_type": {
             "default": "s",
@@ -49,27 +50,32 @@
                 "br",
                 "bo"
             ],
-            "description": "Transform type. t=translation (1 stage), r=rigid (1 stage), a=rigid + affine (2 stages), s=rigid + affine + deformable syn (3 stages), sr=rigid + deformable syn (2 stages), so=deformable syn only (1 stage), b=rigid + affine + deformable b-spline syn (3 stages), br=rigid + deformable b-spline syn (2 stages), bo=deformable b-spline syn only (1 stage)"
+            "description": "Transform type. t=translation (1 stage), r=rigid (1 stage), a=rigid + affine (2 stages), s=rigid + affine + deformable syn (3 stages), sr=rigid + deformable syn (2 stages), so=deformable syn only (1 stage), b=rigid + affine + deformable b-spline syn (3 stages), br=rigid + deformable b-spline syn (2 stages), bo=deformable b-spline syn only (1 stage)",
+            "optional": true
         },
         "histogram_bin_count": {
             "default": 32,
             "type": "integer",
-            "description": "Histogram bins for mutual information in SyN stage"
+            "description": "Histogram bins for mutual information in SyN stage",
+            "optional": true
         },
         "spline_distance": {
             "default": 26,
             "type": "integer",
-            "description": "Spline distance for deformable B-spline SyN transform"
+            "description": "Spline distance for deformable B-spline SyN transform",
+            "optional": true
         },
         "masks": {
             "default": "NULL",
             "type": "string",
-            "description": "Mask(s) for the fixed image space.  Should specify either a single image to be used for all stages or one should specify a mask image for each 'stage' (cf -t option).  If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of a file name."
+            "description": "Mask(s) for the fixed image space.  Should specify either a single image to be used for all stages or one should specify a mask image for each 'stage' (cf -t option).  If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of a file name.",
+            "optional": true
         },
         "precision_type": {
             "default": "d",
             "type": "string",
-            "description": "Precision type. f=float, d=double"
+            "description": "Precision type. f=float, d=double",
+            "optional": true
         },
         "use_histogram_matching": {
             "default": 0,
@@ -78,7 +84,8 @@
                 0,
                 1
             ],
-            "description": "Use histogram matching. 0=false, 1=true."
+            "description": "Use histogram matching. 0=false, 1=true.",
+            "optional": true
         },
     },
     "inputs": {
