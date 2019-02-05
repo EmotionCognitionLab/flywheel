@@ -31,13 +31,11 @@
             "description": "A prefix that is prepended to all output files."
         },
         "num_threads": {
-            "default": 1,
             "type": "integer",
             "description": "Number of threads",
             "optional": true
         },
         "transform_type": {
-            "default": "s",
             "type": "string",
             "enum": [
                 "t",
@@ -54,31 +52,26 @@
             "optional": true
         },
         "histogram_bin_count": {
-            "default": 32,
             "type": "integer",
             "description": "Histogram bins for mutual information in SyN stage",
             "optional": true
         },
         "spline_distance": {
-            "default": 26,
             "type": "integer",
             "description": "Spline distance for deformable B-spline SyN transform",
             "optional": true
         },
         "masks": {
-            "default": "NULL",
             "type": "string",
             "description": "Mask(s) for the fixed image space.  Should specify either a single image to be used for all stages or one should specify a mask image for each 'stage' (cf -t option).  If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of a file name.",
             "optional": true
         },
         "precision_type": {
-            "default": "d",
             "type": "string",
             "description": "Precision type. f=float, d=double",
             "optional": true
         },
         "use_histogram_matching": {
-            "default": 0,
             "type": "integer",
             "enum": [
                 0,
