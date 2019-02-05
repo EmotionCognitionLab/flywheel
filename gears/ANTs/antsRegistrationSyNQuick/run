@@ -11,7 +11,6 @@ echo -e "$CONTAINER Initiated"
 # Built to flywheel-v0 spec.
 
 FLYWHEEL_BASE=/flywheel/v0
-INPUT_DIR=$FLYWHEEL_BASE/input
 OUTPUT_DIR=$FLYWHEEL_BASE/output
 MANIFEST=$FLYWHEEL_BASE/manifest.json
 CONFIG_FILE=$FLYWHEEL_BASE/config.json
@@ -57,8 +56,8 @@ for param_name in "${!param_flags[@]}"; do
     param_values[$param_name]="$(parse_config 'config' ${param_name})"
 done
 
-fixed_input_file="${INPUT_DIR}/$(parse_config 'inputs' 'fixed.location.path')"
-moving_input_file="${INPUT_DIR}/$(parse_config 'inputs' 'moving.location.path')"
+fixed_input_file="$(parse_config 'inputs' 'fixed.location.path')"
+moving_input_file="$(parse_config 'inputs' 'moving.location.path')"
 
 echo "fixed_input_file: ${fixed_input_file}"
 echo "moving_input_file: ${moving_input_file}"
