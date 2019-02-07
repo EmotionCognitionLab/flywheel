@@ -86,21 +86,12 @@ echo ${ants_cmd}
 $ants_cmd
 
 ##############################################################################
-# Copy results to output directory and write metadata file
+# Copy results to output directory
 out_prefix=${param_values['out_prefix']}
-metafile="${OUTPUT_DIR}/.metadata.json"
 expected_files=( "${out_prefix}0GenericAffine.mat" "${out_prefix}1Warp.nii.gz" "${out_prefix}1InverseWarp.nii.gz" "${out_prefix}Warped.nii.gz" "${out_prefix}InverseWarped.nii.gz" )
-
-echo '{ "acquisition" : { "files" : [' > $metafile
 
 for file in "${expected_files[@]}"; do
     if [ -e "${file}" ]; then
-        echo "{ \"name\": \"${file}\" }" >> $metafile
         mv "${file}" ${OUTPUT_DIR}
     fi
 done
-
-if [ -e "${OUTPUT_DIR}/${log_file}" ]; then
-    echo "{ \"name\": \"${log_file}\" }" >> $metafile
-fi
-echo '] } }' >> $metafile
