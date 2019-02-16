@@ -8,14 +8,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/buildtemplateparallel",
     "license": "Other",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "custom": {
-        "docker-image": "matherlab/ants-buildtemplateparallel:0.1.8",
+        "docker-image": "matherlab/ants-buildtemplateparallel:0.1.9",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-buildtemplateparallel:0.1.8"
+            "image": "matherlab/ants-buildtemplateparallel:0.1.9"
         }
     },
     "config": {
