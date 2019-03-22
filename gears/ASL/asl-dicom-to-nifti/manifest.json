@@ -1,0 +1,44 @@
+{
+    "label": "ASL dicom-to-nifti",
+    "name": "asl-dicom-to-nifti",
+    "description": "Uses dcm2niix to convert a set of ASL dicom images to a 3D and a 4D nifti file",
+    "author": "Chris Rorden (@neurolabusc)",
+    "url": "https://github.com/rordenlab/dcm2niix",
+    "maintainer": "MatherLab <matherlab@usc.edu>",
+    "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ASL/asl-dicom-to-nifti",
+    "license": "BSD-2-Clause",
+    "version": "0.0.1",
+    "custom": {
+        "docker-image": "matherlab/asl-dicom-to-nifti:0.0.1",
+        "flywheel": {
+            "suite": "ASL"
+        },
+        "gear-builder": {
+            "category": "converter",
+            "image": "matherlab/asl-dicom-to-nifti:0.0.1"
+        }
+    },
+    "config": {
+        "3D_file_name": {
+            "type": "string",
+            "description": "Name for the 3D nifti file. Do not include the .nii extension. Can use the % modifiers supported by dcm2niix's -f parameter.",
+            "default": "M0"
+        },
+        "4D_file_name": {
+            "type": "string",
+            "description": "Name for the 4D nifti file. Do not include the .nii extension. Can use the % modifiers supported by dcm2niix's -f parameter.",
+            "default": "PCASLREST"
+        }
+    },
+    "inputs": {
+        "zip_file": {
+            "base": "file",
+            "description": "Zip file containing the DICOM images to be converted to the 3D and 4D nifti files",
+            "type": {
+                "enum": [
+                    "zip"
+                ]
+            }
+        }
+    }
+}
