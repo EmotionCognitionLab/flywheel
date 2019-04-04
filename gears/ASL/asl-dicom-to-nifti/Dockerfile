@@ -8,8 +8,8 @@ RUN apt-get update -qq \
 # Make directory for flywheel spec (v0)
 ENV FLYWHEEL /flywheel/v0
 RUN mkdir -p ${FLYWHEEL}
-COPY run.py ${FLYWHEEL}/run.py
-RUN chmod +x ${FLYWHEEL}/run.py
+COPY run.py ${FLYWHEEL}/run
+RUN chmod +x ${FLYWHEEL}/run
 COPY manifest.json ${FLYWHEEL}/manifest.json
 
-ENTRYPOINT ["/flywheel/v0/run.py"]
+ENTRYPOINT ["/flywheel/v0/run"]
