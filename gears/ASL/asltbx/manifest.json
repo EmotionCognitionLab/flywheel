@@ -1,0 +1,54 @@
+{
+    "label": "ASLtbx",
+    "name": "asl-tbx",
+    "description": "A gear for ASL analysis using ASLtbx",
+    "author": "Ze Wang (redhatw@gmail.com)",
+    "url": "https://cfn.upenn.edu/~zewang/ASLtbx.php",
+    "maintainer": "MatherLab <matherlab@usc.edu>",
+    "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ASL/asltbx",
+    "cite": "Ze Wang, Geoffrey Aguirre, Hengyi Rao, JiongJiong Wang, Anna R. Childress, John A. Detre, Empirical ASL data analysis using an ASL data processing toolbox: ASLtbx, Magnetic Resonance Imaging, 2008, 26(2):261-9.",
+    "license": "GPL",
+    "version": "0.0.1",
+    "custom": {
+        "docker-image": "matherlab/asltbx:0.0.1",
+        "flywheel": {
+            "suite": "ASL"
+        },
+        "gear-builder": {
+            "image": "matherlab/asltbx:0.0.1"
+        }
+    },
+    "config": {
+        "project": {
+            "type": "string",
+            "description": "The name of the project containing the files to be analyzed"
+        },
+        "tag": {
+            "type": "string",
+            "description": "The tag that identifies the sessions and files to be analyzed"
+        },
+        "struct_prefix": {
+            "type": "string",
+            "description": "The prefix that all of the T1-weighted anatomical scan nifti file names start with",
+            "default": "M0"
+        },
+        "func_prefix": {
+            "type": "string",
+            "description": "The prefix that all of the 4D functional scan nifti file names start with",
+            "default": "PCASLREST"
+        },
+        "delay_time": {
+            "type": "number",
+            "description": "Delay time for labeled spin to enter the imaging slice"
+        },
+        "TE": {
+            "type": "number",
+            "description": "echo time"
+        }
+    },
+    "inputs": {
+        "api_key": {
+            "base": "api-key"
+        }
+    }
+}

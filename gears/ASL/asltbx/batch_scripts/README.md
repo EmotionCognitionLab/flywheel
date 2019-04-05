@@ -1,0 +1,1 @@
+The files in this directory are from the 06-27-2015 version of [ASLtbx](https://cfn.upenn.edu/~zewang/ASLtbx.php) with minor modifications (principally to the batch scripts) to allow parameters to be passed in programatically, rather than by editing them in par.m.
