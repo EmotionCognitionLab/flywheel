@@ -17,7 +17,7 @@ spm_make_standalone();
 system('mv /opt/spm12/config/spm_make_standalone_orig.m /opt/spm12/config/spm_make_standalone.m');
 
 addpath('/opt/flywheel-sdk');
-delete('/flywheel/gears/ASL/asltbx/build/asltbx_gear'); % so there's no confusion about whether the build replaced what's there
+delete('/flywheel/gears/ASL/asltbx/bin/asltbx_gear'); % so there's no confusion about whether the build replaced what's there
 addpath('/flywheel/gears/ASL/asltbx');
 disp('Building gear...');
 % We want to avoid adding spm12/external/fieldtrip/compat to the build as functions there re-define core Matlab routines,
@@ -30,7 +30,7 @@ a = cell(1, numel(dirs_to_add));
 a(:) = {'-a'};
 add_flags = reshape([a;dirs_to_add], 1, []); % results in 1*N array of {'-a', 'dir1_name', '-a', 'dir2_name', ...};
 
-mcc('-v', '-N', '-R', '-nodisplay', add_flags{:}, '-m', 'asltbx_gear.m')
+mcc('-v', '-N', '-R', '-nodisplay', '-d', '/flywheel/gears/ASL/asltbx/bin/', add_flags{:}, '-m', 'asltbx_gear.m')
 
 function subdirs = get_dirs(start_dir, exclude_dirs)
     items = dir(start_dir);
