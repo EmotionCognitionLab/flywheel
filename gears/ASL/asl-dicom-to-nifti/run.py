@@ -33,7 +33,7 @@ zip.extractall(input_dir)
 zip.close()
 
 # unzipping should have created directory with same name as zip file
-dicom_dir = os.path.splitext(zipfile_path)[0]
+dicom_dir = os.path.join(input_dir, os.path.splitext(zipfile_name)[0])
 dicom_files = os.listdir(dicom_dir)
 dicom_files.sort()
 if len(dicom_files) != 12:

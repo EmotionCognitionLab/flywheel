@@ -7,15 +7,15 @@
     "maintainer": "MatherLab <matherlab@usc.edu>",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ASL/asl-dicom-to-nifti",
     "license": "BSD-2-Clause",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "custom": {
-        "docker-image": "matherlab/asl-dicom-to-nifti:0.0.2",
+        "docker-image": "matherlab/asl-dicom-to-nifti:0.0.3",
         "flywheel": {
             "suite": "ASL"
         },
         "gear-builder": {
             "category": "converter",
-            "image": "matherlab/asl-dicom-to-nifti:0.0.2"
+            "image": "matherlab/asl-dicom-to-nifti:0.0.3"
         }
     },
     "config": {
