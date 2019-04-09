@@ -7,15 +7,16 @@
     "maintainer": "MatherLab <matherlab@usc.edu>",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ASL/asltbx",
     "cite": "Ze Wang, Geoffrey Aguirre, Hengyi Rao, JiongJiong Wang, Anna R. Childress, John A. Detre, Empirical ASL data analysis using an ASL data processing toolbox: ASLtbx, Magnetic Resonance Imaging, 2008, 26(2):261-9.",
-    "license": "GPL",
+    "license": "GPL-2.0",
     "version": "0.0.1",
     "custom": {
-        "docker-image": "matherlab/asltbx:0.0.1",
+        "docker-image": "matherlab/asl-asltbx:0.0.1",
         "flywheel": {
             "suite": "ASL"
         },
         "gear-builder": {
-            "image": "matherlab/asltbx:0.0.1"
+            "image": "matherlab/asl-asltbx:0.0.1",
+            "category": "analysis"
         }
     },
     "config": {
