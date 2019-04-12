@@ -29,11 +29,11 @@ with open(config_file, 'r') as f:
 zipfile_path = config['inputs'][input_file_key]['location']['path']
 zipfile_name = config['inputs'][input_file_key]['location']['name']
 zip = ZipFile(zipfile_path, 'r')
-zip.extractall(input_dir)
+dicom_dir = os.path.join(input_dir, "dicom_files")
+os.mkdir(dicom_dir)
+zip.extractall(dicom_dir)
 zip.close()
 
-# unzipping should have created directory with same name as zip file
-dicom_dir = os.path.join(input_dir, os.path.splitext(zipfile_name)[0])
 dicom_files = os.listdir(dicom_dir)
 dicom_files.sort()
 if len(dicom_files) != 12:
