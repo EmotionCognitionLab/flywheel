@@ -71,7 +71,7 @@ end
 
 function input_files = download_files(sessions, tag, struct_prefix)
     % For each session in sessions, downloads all of the files in that
-    % session that have the key-value pair 'tag=<tag parameter>' in their
+    % session that have the key-value pair 'Tags=<tag parameter>' in their
     % info object. Functional and structural files are both required for
     % ASLtbx analysis and the struct_prefix is used to determine 
     % which is which. (All files whose names start with struct_prefix are
@@ -89,25 +89,28 @@ function input_files = download_files(sessions, tag, struct_prefix)
            subj_dir = make_subject_folder(sess.subject.label);
            for f = 1:numel(tagged_file_info)
                acquisition_id = tagged_file_info(f).acquisition_id;
-               file = tagged_file_info(f).file;
-               dest_dir = '';
-               if startsWith(file.name, struct_prefix)
-                   dest_dir = struct_dir;
-               else
-                   dest_dir = func_dir;
-               end
-               dest_file = fullfile(subj_dir, dest_dir, file.name);
-               fprintf('Downloading %s_%s/%s/%s to %s\n', sess.subject.label, sess.label, acquisition_id, file.name, dest_file);
-               fw.downloadFileFromAcquisition(acquisition_id, file.name, dest_file);
-               if (endsWith(dest_file, '.gz'))
-                    fprintf('gunzipping %s...\n', dest_file);
-                    gunzip(dest_file);
-                    delete(dest_file);
-               end
-               if (i == 1 && f == 1) 
-                    input_files = struct('subject', sess.subject.label, 'session', sess.label,'acquisition_id', acquisition_id, 'file_id', file.id, 'file_name', file.name);
-               else
-                    input_files(numel(input_files) + 1) = struct('subject', sess.subject.label, 'session', sess.label,'acquisition_id', acquisition_id, 'file_id', file.id, 'file_name', file.name);
+               files = tagged_file_info(f).files;
+               for j = 1:numel(files)
+                    file = files(j);
+                    dest_dir = '';
+                    if startsWith(file.name, struct_prefix)
+                        dest_dir = struct_dir;
+                    else
+                        dest_dir = func_dir;
+                    end
+                    dest_file = fullfile(subj_dir, dest_dir, file.name);
+                    fprintf('Downloading %s_%s/%s/%s to %s\n', sess.subject.label, sess.label, acquisition_id, file.name, dest_file);
+                    fw.downloadFileFromAcquisition(acquisition_id, file.name, dest_file);
+                    if (endsWith(dest_file, '.gz'))
+                            fprintf('gunzipping %s...\n', dest_file);
+                            gunzip(dest_file);
+                            delete(dest_file);
+                    end
+                    if (i == 1 && f == 1 && j == 1) 
+                        input_files = struct('subject', sess.subject.label, 'session', sess.label,'acquisition_id', acquisition_id, 'file_id', file.id, 'file_name', file.name);
+                    else
+                        input_files(numel(input_files) + 1) = struct('subject', sess.subject.label, 'session', sess.label,'acquisition_id', acquisition_id, 'file_id', file.id, 'file_name', file.name);
+                    end
                end
            end
        end
@@ -116,20 +119,26 @@ end
 
 function tagged_files = find_tagged_files(session, tag)
     % Returns a struct array where each element has an acquisition_id field
-    % and a file field. The file field is a FileEntry element for the (sole)
-    % file in the acquisition tagged with the tag parameter.
+    % and a files field. The files field is an array of structs (file id
+    % and name) for the files in the acquisition tagged with the tag parameter.
     global fw;
     tagged_files = [];
     acquisitions = session.acquisitions();
     for a = 1:numel(acquisitions)
         cur_idx = numel(tagged_files) + 1;
         files = acquisitions{a}.files;
+        no_tagged_file_found = true;
         for f = 1:numel(files)
             file = fw.getAcquisitionFileInfo(acquisitions{a}.id, files{f}.name);
             file_info = file.info.struct;
             if isfield(file_info, 'Tags') && strcmp(file_info.Tags, tag) && strcmp(file.type, 'nifti')
                 tagged_files(cur_idx).acquisition_id = acquisitions{a}.id;
-                tagged_files(cur_idx).file = file; % We expect only one tagged file per acquisition. If there are more we'll only get the last one.
+                if no_tagged_file_found
+                    tagged_files(cur_idx).files = struct('id', file.id, 'name', file.name);
+                    no_tagged_file_found = false;
+                else
+                    tagged_files(cur_idx).files(numel(tagged_files(cur_idx).files) + 1) = struct('id', file.id, 'name', file.name);;
+                end
             end
         end
     end
