@@ -7,9 +7,11 @@ ENV FLYWHEEL /flywheel/v0
 RUN mkdir -p ${FLYWHEEL}
 
 # copy the Matlab Stand-Alone (MSA) into the container.
-COPY bin/asltbx_gear ${FLYWHEEL}/run
+COPY bin/asltbx_gear ${FLYWHEEL}/asltbx_gear
+COPY bin/run_asltbx_gear.sh ${FLYWHEEL}/run
 
 # Ensure that the standalone and its run script are executable
+RUN chmod +x ${FLYWHEEL}/asltbx_gear
 RUN chmod +x ${FLYWHEEL}/run
 
 # Copy manifest
