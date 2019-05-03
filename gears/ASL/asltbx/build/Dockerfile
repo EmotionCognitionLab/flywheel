@@ -21,10 +21,10 @@ RUN apt-get update && apt-get install -y \
     unzip -q spm12.zip && \
     rm spm12.zip && \
     echo "Downloading flywheel sdk..." && \
-    wget -q https://github.com/flywheel-io/core/releases/download/5.0.4/flywheel-matlab-sdk-5.0.4.zip && \
+    wget -q https://github.com/flywheel-io/core/releases/download/6.3.0/flywheel-matlab-sdk-6.3.0.zip && \
     echo "Unzipping flywheel sdk..." && \
-    unzip -q flywheel-matlab-sdk-5.0.4.zip && \
-    rm flywheel-matlab-sdk-5.0.4.zip && \
+    unzip -q flywheel-matlab-sdk-6.3.0.zip && \
+    rm flywheel-matlab-sdk-6.3.0.zip && \
     rm -rf /var/lib/apt/lists/*
 
 # Prep matlab installer
