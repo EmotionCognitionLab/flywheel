@@ -50,6 +50,6 @@ And you're now done setting up your buid environment. If you want to build the g
 
 4. Assuming that all went well, open another command line prompt (on your local machine, not the docker container) and copy the build results to your local machine. Use docker ps (see step 7 above for an example) to get the container id and then:
 
-    docker cp container_id:/flywheel/gears/ASL/asltbx/build/asltbx_gear ./asltbx_gear
+    docker cp container_id:/flywheel/gears/ASL/asltbx/bin/asltbx_gear ./bin/
 
 You're done. You can shut down your docker container.
