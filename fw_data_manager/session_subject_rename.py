@@ -67,7 +67,8 @@ def rename_data(fw_sessions_json_data, mapping_dict_data, fw_subject_label_set):
             result_status = upload_modified_sessions_to_fw(each_session["_id"], each_session)
 
             if not result_status:
-                # move session to new subject
+                # move session to new subject using Flywheel SDK
+                # Flywheel SDK is used here after trying out Flywheel Swagger REST APIs which did not work
                 session = fw.get_session(session_id)
                 project = fw.get_project(session.project)
                 subject = project.subjects.find_one('code="{}"'.format(new_subject_code))
@@ -81,7 +82,7 @@ def rename_data(fw_sessions_json_data, mapping_dict_data, fw_subject_label_set):
 def upload_modified_sessions_to_fw(session_id, session_data):
     """
     Update session data for session id using Swagger REST API.
-    You can use Flywheel SDK also for this
+    NOTE: You can also use Flywheel SDK to retrieve sessions of a project
     """
 
     # prepare request
