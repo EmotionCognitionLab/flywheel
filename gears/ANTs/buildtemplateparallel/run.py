@@ -34,8 +34,6 @@ manifest = os.path.join(flywheel_base, 'manifest.json')
 config_file = os.path.join(flywheel_base, 'config.json')
 subject_prefix = 'subj-'
 
-input_file_key = 'DUMMY_INPUT_FILE'
-
 # load the config file
 with open(config_file, 'r') as f:
     config = json.load(f)
@@ -67,22 +65,34 @@ def get_btp_params():
     return { param_flags[k]:v for (k, v) in config['config'].items() if k in param_flags }
 
 def download_input_files(to_dir):
-    """Downloads all files in same collection as dummy input file and returns a list of file info objects"""
+    """Downloads all nifti files that (a) have a name matching config['input_file_pattern']
+    and (b) are in acquisitions that are in sessions tagged with config['tag'].
+    Returns a list of {session_id, file_id, file_name} objects.
+    """
 
-    dummy_input_file = config['inputs'][input_file_key]
-    collection_id = dummy_input_file['hierarchy']['id']
-    acquisitions = fw.get_collection_acquisitions(collection_id)
+    project_label = config['config']['project']
+    project = fw.projects.find_first('label='+project_label)
+    if project == None:
+        print("No project named {} found. Exiting.".format(project_label))
+        raise ValueError
+    tag = config['config']['tag']
+    sessions = project.sessions.find('tags='+tag)
+    if len(sessions) == 0:
+        print("No sessions with the tag {} found in project {}. Exiting.".format(tag, project_label))
+        raise ValueError
+
     results = []
-    for a in acquisitions:
-        subject_id = a.parents.subject
-        subject = fw.get_subject(subject_id)
+    for s in sessions:
+        subject = s.subject
         subj_label = subject_prefix + subject.label + '-'
-        files = [ f for f in a.files if f.type == 'nifti' and fnmatch.fnmatch(f.name, config['config']['input_file_pattern']) ]
-        for f in files:
-            results.append({'acquisition_id': a.id, 'file_id': f.id, 'file_name': f.name})
-            local_file_name = os.path.join(to_dir, subj_label + f.name)
-            print('Downloading {0} to {1}'.format(f.name, local_file_name), flush=True)
-            fw.download_file_from_acquisition(a.id, f.name, local_file_name)
+        acquisitions = s.acquisitions()
+        for a in acquisitions:
+            files = [ f for f in a.files if f.type == 'nifti' and fnmatch.fnmatch(f.name, config['config']['input_file_pattern']) ]
+            for f in files:
+                results.append({'acquisition_id': a.id, 'file_id': f.id, 'file_name': f.name})
+                local_file_name = os.path.join(to_dir, subj_label + f.name)
+                print('Downloading {0} to {1}'.format(f.name, local_file_name), flush=True)
+                fw.download_file_from_acquisition(a.id, f.name, local_file_name)
     return results
 
 

@@ -76,6 +76,10 @@
             "description": "Set default queue for PBS jobs",
 	    "optional": true
         },
+        "project": {
+            "type": "string",
+            "description": "The name of the project containing the files to be analyzed"
+        },
         "registration_similarity_metric": {
             "default": "PR",
             "enum": [
@@ -94,6 +98,10 @@
             "maximum": 1,
             "type": "integer",
             "description": "Do rigid-body registration of inputs before creating template (default 0) -- 0 == off 1 == on. Only useful when you do not have an initial template. In case a template is specified (initial template input), all inputs are registered to that template. If no template is specified, the inputs will be registered to the averaged input."
+        },
+        "tag": {
+            "type": "string",
+            "description": "Tag used to identify the acquisitions that should be analyzed"
         },
         "transformation_model_type": {
             "enum": [
@@ -118,15 +126,6 @@
     "inputs": {
         "api_key": {
             "base": "api-key"
-        },
-        "DUMMY_INPUT_FILE": {
-            "base": "file",
-            "description": "Any NIFTI file belonging to a collection of files that you want to process with buildtemplateparallel.",
-            "type": {
-                "enum": [
-                    "nifti"
-                ]
-            }
         },
         "template": {
             "base": "file",
