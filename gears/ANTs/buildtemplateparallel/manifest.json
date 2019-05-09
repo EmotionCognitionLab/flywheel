@@ -15,7 +15,8 @@
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-buildtemplateparallel:1.0.0"
+            "image": "matherlab/ants-buildtemplateparallel:1.0.0",
+	    "category": "analysis"
         }
     },
     "config": {
