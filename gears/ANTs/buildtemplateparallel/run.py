@@ -29,7 +29,9 @@ print(container, ' initiated', flush=True)
 # key directories/files, as per flywheel spec
 flywheel_base = '/flywheel/v0'
 input_dir = os.path.join(flywheel_base, 'input')
+os.makedirs(input_dir, exist_ok=True)
 output_dir = os.path.join(flywheel_base, 'output')
+os.makedirs(output_dir, exist_ok=True)
 manifest = os.path.join(flywheel_base, 'manifest.json')
 config_file = os.path.join(flywheel_base, 'config.json')
 subject_prefix = 'subj-'
