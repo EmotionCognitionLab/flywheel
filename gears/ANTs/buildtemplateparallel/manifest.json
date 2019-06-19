@@ -61,7 +61,7 @@
             "description": "N4BiasFieldCorrection of moving image ( 0 = off; 1 = on (default) )"
         },
         "out_prefix": {
-            "default": "full_template",
+            "default": "full_template_",
             "type": "string",
             "description": "A prefix that is prepended to all output files."
         },
