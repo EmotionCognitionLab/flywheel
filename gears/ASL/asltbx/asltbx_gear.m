@@ -49,16 +49,9 @@ function run_gear()
     
     struct_prefix = config.config.struct_prefix; % names of all structural files start with this prefix
     func_prefix = config.config.func_prefix;
-    if strcmp(struct_prefix, func_prefix)
-       error('The prefix for structural file names must be different from the prefix for functional file names. Exiting.');
-    end
-    if startsWith(struct_prefix, func_prefix)
-        error('The prefix for functional file names must not be a subset of the prefix for structural file names. Exiting.');  
-    end
-    if startsWith(func_prefix, struct_prefix)
-        error('The prefix for structural file names must not be a subset of the prefix for functional file names. Exiting.');  
-    end
-    
+    calib_prefix = config.config.calib_prefix;
+    validate_prefixes(struct_prefix, func_prefix, calib_prefix);
+
     % download input files and process them
     input_files = download_files(sessions, config.config.tag, struct_prefix);
     asl_params = build_parameters(config, struct_prefix, func_prefix);
@@ -68,15 +61,50 @@ function run_gear()
     save_inputs_to_analysis(analysis_id, input_files);
 end
 
+function validate_prefixes(struct_prefix, func_prefix, calib_prefix)
+    % Checks to make sure that none of the prefixes are equal to or
+    % subsets of one another. Exits with error message if any of them are.
+    if strcmp(struct_prefix, func_prefix)
+       error('The prefix for structural file names must be different from the prefix for functional file names. Exiting.');
+    end
+    if startsWith(struct_prefix, func_prefix)
+        error('The prefix for functional file names must not be a subset of the prefix for structural file names. Exiting.');
+    end
+    if startsWith(func_prefix, struct_prefix)
+        error('The prefix for structural file names must not be a subset of the prefix for functional file names. Exiting.');
+    end
+    
+    if strcmp(struct_prefix, calib_prefix)
+        error('The prefix for structural file names must be different from the prefix for calibration file names. Exiting.');
+    end
+    if startsWith(struct_prefix, calib_prefix)
+        error('The prefix for calibration file names must not be a subset of the prefix for structural file names. Exiting.');
+    end
+    if startsWith(calib_prefix, struct_prefix)
+        error('The prefix for structural file names must not be a subset of the prefix for calibration file names. Exiting.');
+    end
+
+    if strcmp(func_prefix, calib_prefix)
+        error('The prefix for functional file names must be different from the prefix for calibration file names. Exiting.');
+    end
+    if startsWith(func_prefix, calib_prefix)
+        error('The prefix for calibration file names must not be a subset of the prefix for functional file names. Exiting.');
+    end
+    if startsWith(calib_prefix, func_prefix)
+        error('The prefix for functional file names must not be a subset of the prefix for calibration file names. Exiting.');
+    end
+end
+
 
 function input_files = download_files(sessions, tag, struct_prefix)
     % For each session in sessions, downloads all of the files in that
     % session that have the key-value pair 'Tags=<tag parameter>' in their
-    % info object. Functional and structural files are both required for
-    % ASLtbx analysis and the struct_prefix is used to determine 
-    % which is which. (All files whose names start with struct_prefix are
-    % assumed to be structural files, and all others are assumed to be
-    % functional files.)
+    % info object. Functional, structural and calibration files are all
+    % required for ASLtbx analysis and the struct_prefix is used to
+    % determine which is which. (All files whose names start with
+    % struct_prefix are assumed to be structural files, and all others
+    % are put in the functional directory, which is where both functional
+    % and calibration files belong.)
     
     global fw;
     global struct_dir;
