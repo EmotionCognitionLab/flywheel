@@ -238,36 +238,69 @@ end
 
 function save_outputs(input_files)
     % ASLtbx generates output files in the input directory.
-    % This bundles all of the files in the input directory
-    % (except for the original input files) into a tar archive
-    % and saves that to the output directory. Also writes
-    % Flywheel output manifest.
+    % It also generates output files that have identical names
+    % for each subject, meaning that they cannot be put into
+    % one directory without overwriting each other.
+    % This function deletes the original input files and then
+    % renames the remaining output files, prefixing them with
+    % their subject id. Also writes the Flywheel output manifest.
     global input_dir;
     global output_dir;
 
     % we un-gzipped the files, so they no longer have .gz ext
     input_files_no_gz = regexprep(input_files, ".gz$", ""); 
 
-    % build find syntax to omit input files
+    % build find syntax to delete input files
     ors = cell(1, numel(input_files_no_gz));
     ors(:) = {'-or -name'};
-    omit = reshape([ors; input_files_no_gz], 1, []);
-    omit = omit(2:end);
+    inputs = reshape([ors; input_files_no_gz], 1, []);
+    inputs = inputs(2:end);
 
-    output_file = fullfile(output_dir, 'results.tar.gz');
-    % find . -type f -not \( -name input_file1 -or -name input_file2... \) | xargs tar cvzf /flywheel/v0/output/results.tar.gz
-    find_cmd = strjoin(['find ', '.', '-type', 'f', '-not \( -name', omit, ' \) | xargs tar cvzf', output_file]);
-    fprintf('Creating output tar archive with command: %s \n', find_cmd);
+    % find . -type f \( -name input_file1 -or -name input_file2... \) | xargs rm
+    delete_cmd = strjoin(['find ', '.', '-type', 'f', '\( -name', inputs, ' \) | xargs rm']);
+    fprintf('Deleting downloaded input files with command: %s \n', delete_cmd);
     
-    % finally run the find command and generate tarball
+    % run the find/delete command
     curdir = pwd();
     cd(input_dir);
-    system(find_cmd);
+    system(delete_cmd);
+
+    % find remaining files, rename them with subject id prefixes
+    % and move them to the output directory
+    subj_dirs = dir(input_dir);
+
+    % filter out the '.' and '..' dirs (shouldn't be any other dirs
+    % starting with '.')
+    valid_dirs = subj_dirs(strncmp({subj_dirs.name}, '.', 1) == 0);
+    subj_ids = {valid_dirs.name};
+
+    % for each subject dir, rename all the files and move them to output
+    % dir using this command (here subject id is 7003)
+    % find /flywheel/v0/input/7003 -type f | while read -r file; do mv -n
+    % "$file" "/flywheel/v0/output/7003_$(basename $file)"; done
+    for i=1:numel(subj_ids)
+        find_and_mv_cmd = sprintf('find ./%s -type f | while read -r file; do mv -vn "$file" "%s/%s_$(basename $file)"; done', subj_ids{i}, output_dir, subj_ids{i});
+        fprintf('Renaming output files for subject %s with command: %s \n', subj_ids{i}, find_and_mv_cmd);
+        system(find_and_mv_cmd);
+    end
+
     cd(curdir);
     
+    % get list of all files in output directory
+    output_files = dir(output_dir);
+    valid_output_files = output_files(strncmp({output_files.name}, '.', 1) == 0);
+    valid_output_file_names = {valid_output_files.name};
+
     % write manifest file for Flywheel
     manifest_file = fopen(fullfile(output_dir, '.manifest.json'), 'w');
-    fprintf(manifest_file, '{ "acquisition": { "files": ["%s"] } }\n', output_file);
+    fprintf(manifest_file, '{ "acquisition": { "files": [');
+    for j=1:numel(valid_output_file_names)
+       fprintf(manifest_file, '"%s"', valid_output_file_names{j});
+       if (j ~= numel(valid_output_file_names))
+          fprintf(manifest_file, ", ");
+       end
+    end
+    fprintf(manifest_file, '] } }\n');
     fclose(manifest_file);
 end
 
