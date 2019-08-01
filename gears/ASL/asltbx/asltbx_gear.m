@@ -53,7 +53,7 @@ function run_gear()
     validate_prefixes(struct_prefix, func_prefix, calib_prefix);
 
     % download input files and process them
-    input_files = download_files(sessions, config.config.tag, struct_prefix);
+    input_files = download_files(proj_label, sessions, config.config.tag, struct_prefix);
     asl_params = build_parameters(config, struct_prefix, func_prefix);
     batch_run(asl_params); % call the actual ASLtbx analysis code
     save_outputs(unique([{input_files.file_name}]));
@@ -96,7 +96,7 @@ function validate_prefixes(struct_prefix, func_prefix, calib_prefix)
 end
 
 
-function input_files = download_files(sessions, tag, struct_prefix)
+function input_files = download_files(proj_label, sessions, tag, struct_prefix)
     % For each session in sessions, downloads all of the files in that
     % session that have the key-value pair 'Tags=<tag parameter>' in their
     % info object. Functional, structural and calibration files are all
@@ -114,7 +114,7 @@ function input_files = download_files(sessions, tag, struct_prefix)
        sess = sessions{i};
        tagged_file_info = find_tagged_files(sess, tag);
        if numel(tagged_file_info) > 0
-           subj_dir = make_subject_folder(sess.subject.label);
+           subj_dir = make_subject_folder(proj_label, sess.subject.label, sess.label);
            for f = 1:numel(tagged_file_info)
                acquisition_id = tagged_file_info(f).acquisition_id;
                files = tagged_file_info(f).files;
@@ -172,14 +172,17 @@ function tagged_files = find_tagged_files(session, tag)
     end
 end
 
-function subj_dir = make_subject_folder(subj) 
-    % Makes a folder for the subject in the input directory, with
+function subj_dir = make_subject_folder(proj_label, subj, sess)
+    % Makes a folder for the subject/session in the input directory, with
     % functional and structural subdirectories. 
     global input_dir;
     global struct_dir;
     global func_dir;
     
-    subj_dir = fullfile(input_dir, subj);
+    % Replace all filesep (i.e. / or \) with --, otherwise mkdir
+    % will create multi-level directory hierarchy
+    safe_labels = strrep({proj_label, subj, sess}, filesep, '--');
+    subj_dir = fullfile(input_dir, sprintf("%s_%s_%s", safe_labels{1}, safe_labels{2}, safe_labels{3}));
     if exist(subj_dir, 'dir') == 7
         return; % subject folder has already been created
     elseif exist(subj_dir, 'file') == 2
@@ -257,7 +260,7 @@ function save_outputs(input_files)
     inputs = inputs(2:end);
 
     % find . -type f \( -name input_file1 -or -name input_file2... \) | xargs rm
-    delete_cmd = strjoin(['find ', '.', '-type', 'f', '\( -name', inputs, ' \) | xargs rm']);
+    delete_cmd = strjoin(['find ', '.', '-type', 'f', '\( -name', inputs, ' \) -print0 | xargs -0 rm']);
     fprintf('Deleting downloaded input files with command: %s \n', delete_cmd);
     
     % run the find/delete command
@@ -272,15 +275,15 @@ function save_outputs(input_files)
     % filter out the '.' and '..' dirs (shouldn't be any other dirs
     % starting with '.')
     valid_dirs = subj_dirs(strncmp({subj_dirs.name}, '.', 1) == 0);
-    subj_ids = {valid_dirs.name};
+    subj_sess = {valid_dirs.name};
 
     % for each subject dir, rename all the files and move them to output
     % dir using this command (here subject id is 7003)
     % find /flywheel/v0/input/7003 -type f | while read -r file; do mv -n
     % "$file" "/flywheel/v0/output/7003_$(basename $file)"; done
-    for i=1:numel(subj_ids)
-        find_and_mv_cmd = sprintf('find ./%s -type f | while read -r file; do mv -vn "$file" "%s/%s_$(basename $file)"; done', subj_ids{i}, output_dir, subj_ids{i});
-        fprintf('Renaming output files for subject %s with command: %s \n', subj_ids{i}, find_and_mv_cmd);
+    for i=1:numel(subj_sess)
+        find_and_mv_cmd = sprintf('find ''./%s\'' -type f | while read -r file; do mv -vn "$file" "%s/%s_$(basename "$file")"; done', subj_sess{i}, output_dir, subj_sess{i});
+        fprintf('Renaming output files for subject %s with command: %s \n', subj_sess{i}, find_and_mv_cmd);
         system(find_and_mv_cmd);
     end
 
