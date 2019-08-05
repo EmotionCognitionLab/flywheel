@@ -33,6 +33,8 @@ dicom_dir = os.path.join(input_dir, "dicom_files")
 os.mkdir(dicom_dir)
 zip.extractall(dicom_dir)
 zip.close()
+# unzip should have created directory with same name as zipfile
+dicom_dir = os.path.join(dicom_dir, os.path.splitext(zipfile_name)[0])
 
 dicom_files = os.listdir(dicom_dir)
 dicom_files.sort()
