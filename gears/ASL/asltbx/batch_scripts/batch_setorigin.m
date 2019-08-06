@@ -62,7 +62,7 @@ for sb = 1:PAR.nsubs % for each subject
         st.B=cat(2, -1*PAR.subs(sb).t1org, [0 0 0 1 1 1 0 0 0]);
         mat = spm_matrix(st.B);
         P=[];
-        Ptmp=spm_select('FPList', char(PAR.structdir{sb}), ['^' PAR.structprefs '\w*.img$']);
+        Ptmp=spm_select('FPList', char(PAR.structdir{sb}), ['^' PAR.structprefs '.*.img$']);
         P=strvcat(P,Ptmp);
         if strcmp(P(1,:),'/'),continue;end;
         Mats = zeros(4,4,size(P,1));

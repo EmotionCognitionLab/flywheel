@@ -20,7 +20,7 @@ function batch_coreg(PAR)
         %source - Source image, transformed to match PG
         %otherimgs - (O)ther images, originally realigned to PF and transformed again to PF
 
-        target = spm_select('FPList',PAR.structdir{s},['^' PAR.structprefs '\w*\.nii$']);
+        target = spm_select('FPList',PAR.structdir{s},['^' PAR.structprefs '.*\.nii$']);
         source = spm_select('FPList', dir_fun,   ['^mean' PAR.funcimgfilters{1} '\w*\.nii$']);
         PO=[];
         for c=1:PAR.ncond
