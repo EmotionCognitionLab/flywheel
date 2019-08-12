@@ -24,13 +24,9 @@ import TagManager from '../../services/TagManager'
 export default {
     components: { TaggedFiles },
     beforeRouteLeave(to, from, next) {
-        if (this.hasUntaggedFiles()) {
-            const ans = window.confirm("Leaving the page without providing a tag for selected files may cause your file selections to be lost. Are you sure you want to do that?")
-            if (ans) {
-                next()
-            } else {
-                next(false)
-            }
+        if (to.name == "upload" && this.hasUntaggedFiles()) {
+            alert("You must provide tags for all of the files before you can save.")
+            next(false)
         } else {
             next()
         }
