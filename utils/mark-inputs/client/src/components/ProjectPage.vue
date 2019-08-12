@@ -20,8 +20,12 @@
                     </tbody>
                 </table>
             </div>
-            <div id="analysis-list-title">
-                <h3>Analysis Outputs</h3>
+            <div class="tab-nav">
+                <button @click="onTabClicked" class="tab-btn">Acquisitions</button>
+                <button @click="onTabClicked" class="selected tab-btn">Analysis Outputs</button>
+            </div>
+            <div id="acquisition-list" class="hidden">
+                    <h4>Select a session to see acquisitions for that session.</h4>
             </div>
             <div id="analysis-list" @click.stop="analysisSelected">
                 <Analysis
@@ -112,6 +116,16 @@ export default {
                 this.selectedSessionId = event.target.parentNode.dataset.sessid
                 this.selectedAnalysisParentId = ''
             }
+        },
+        onTabClicked: function(event) {
+            // TODO use $refs instead of document.getElement
+            const tabBtns = document.getElementsByClassName('tab-btn')
+            for (var btn of tabBtns) {
+                btn.classList.toggle("selected")
+            }
+
+            document.getElementById('acquisition-list').classList.toggle('hidden')
+            document.getElementById('analysis-list').classList.toggle('hidden')
         }
     }
 }
@@ -137,6 +151,28 @@ export default {
     #session-list tr th {
         text-align: left;
     }
+    .tab-nav {
+        float: left;
+        margin: 10px 0 0 50px;
+    }
+    .tab-btn {
+        padding: 15px 50px 15px 8px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        background-color: rgb(182, 177, 177);
+        color: white;
+        border-radius: 10px 10px 0 0;
+        outline: none;
+    }
+    .tab-btn.selected {
+        background-color: white;
+        color: black;
+        border-bottom: none;
+    }
+    .tab-btn:not(:focus):hover {
+        background-color: rgb(94, 92, 92);
+    }
     .taglink {
         float: right;
         padding: 40px 40px 0px 0px;
@@ -147,13 +183,18 @@ export default {
         border-bottom: 1px solid #ddd;
         padding: 10px;
     }
-    #analysis-list-title, #analysis-list {
+    #analysis-list {
         margin-left: 40px;
         float:left;
-        width: 55%;
+        width: 40%;
     }
-    #analysis-list {
+    #acquisition-list-title {
+        float: left;
+        width: 20%;
+    }
+    #acquisition-list, #analysis-list {
         height: 450px;
+        min-width: 594px;
         overflow: scroll;
         border-bottom: 1px solid lightgray;
         padding: 10px;
