@@ -1,0 +1,9 @@
+.hidden {
+    display: none;
+}
+li {
+    list-style-type: none;
+}
+.list-checkbox {
+    max-width: 20px;
+}

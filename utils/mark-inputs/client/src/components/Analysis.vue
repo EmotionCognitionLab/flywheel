@@ -14,7 +14,7 @@
                     :id="output['id']"
                     :data-name="output['name']"
                     v-on:change="fileClick"
-                    class="analysis-checkbox" />
+                    class="list-checkbox" />
                     <label :for="output['id']">{{ output['name'] }}</label>
                 </div>
             </div>
@@ -49,9 +49,6 @@ export default {
 </script>
 
 <style>
-    li {
-        list-style-type: none;
-    }
     .file-list {
         margin-left: 15px;
     }
@@ -59,11 +56,5 @@ export default {
         padding: 10px 0px 10px 10px;
         margin: 5px 0px 5px 0px;
         background-color: rgb(163, 155, 155);
-    }
-    .hidden {
-        display: none;
-    }
-    .analysis-checkbox {
-        max-width: 20px;
     }
 </style>

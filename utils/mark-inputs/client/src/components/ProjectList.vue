@@ -49,7 +49,6 @@ export default {
     
 <style>
     #project-list {
-        list-style-type: none;
         margin-left: 100px;
         cursor: pointer;
     }

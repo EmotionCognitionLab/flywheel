@@ -8,6 +8,8 @@ import ProjectList from './components/ProjectList'
 import Tag from './components/Tag'
 import Upload from './components/Upload'
 
+import '@/assets/global.css'
+
 Vue.use(VueRouter)
 
 function getApiKeyForProps() {
