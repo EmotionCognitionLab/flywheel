@@ -19,12 +19,13 @@ def projects():
     ids_and_labels.sort(key= lambda item: item['label'] )
     return ids_and_labels
 
+file_fun = lambda files: [{'id':f.id, 'name':f.name} for f in files] if files is not None else []
+
 @app.route('/projects/{id}', cors=cors_config)
 def projectData(id):
     fw = fw_client(app.current_request)
     analyses = fw.get_analyses('projects', id, 'sessions')
     # filter out info we don't need
-    file_fun = lambda files: [{'id':f.id, 'name':f.name} for f in files] if files is not None else []
     analyses_filtered = [{
             'id': x.id,
             'files': file_fun(x.files),
@@ -51,6 +52,67 @@ def projectData(id):
     proj = fw.get_project(id)
     result['label'] = proj.label
     return result
+
+@app.route('/projects/{id}/analyses', cors=cors_config, methods=['GET'])
+def analysesForProject(id):
+    fw = fw_client(app.current_request)
+    analyses = fw.get_analyses('projects', id, 'sessions')
+    if len(analyses) == 0: return []
+
+    # filter out info we don't need
+    analyses_filtered = [{
+            'id': x.id,
+            'files': file_fun(x.files),
+            'label': x.label,
+            'parent': x.parent.id
+            } for x in analyses]
+    return analyses_filtered.sort(key=lambda item: item['label'])
+
+@app.route('/projects/{id}/sessions', cors=cors_config, methods=['GET'])
+def sessionsForProject(id):
+    fw = fw_client(app.current_request)
+    proj = fw.get(id)
+    result = []
+    for sess in proj.sessions.iter():
+        result.append({
+            'id': sess.id,
+            'label': sess.label,
+            'subject_id': sess.subject.id,
+            'subject_label': sess.subject.label
+        })
+    return result
+
+@app.route('/projects/{id}/acquisitions', cors=cors_config, methods=['GET'])
+def acquisitionsForProject(id):
+    page = int(app.current_request.query_params['page']) if app.current_request.query_params and app.current_request.query_params['page'] else 1
+    limit = 1000
+    fw = fw_client(app.current_request)
+    acqs = fw.get_all_acquisitions(filter=f'parents.project={id}', page=page, limit=limit)
+    if len(acqs) == 0: return {'acquisitions': [], 'nextPage': -1}
+
+    result = {}
+    result['nextPage'] = page + 1 if len(acqs) >= limit else -1
+    acqs_filtered = [{
+        'id': x.id,
+        'files': file_fun(x.files),
+        'label': x.label,
+        'parent': x.parents.session
+    } for x in acqs]
+    result['acquisitions'] = acqs_filtered
+    return result
+
+@app.route('/sessions/{id}/acquisitions', cors=cors_config, methods=['GET'])
+def acquisitionsForSession(id):
+    fw = fw_client(app.current_request)
+    acqs = fw.get_all_acquisitions(filter=f'parents.session={id}')
+    if len(acqs) == 0: return {'acquisitions': []}
+
+    return [{
+        'id': x.id,
+        'files': file_fun(x.files),
+        'label': x.label,
+        'parent': x.parents.session
+    } for x in acqs]
 
 @app.route('/projects/{id}/file/upload', cors=cors_config, methods=['POST'])
 def uploadFileToProject(id):
