@@ -3,7 +3,7 @@
         <div v-if="projects.length">
             <p>Choose a Project:</p>
             <ul id="project-list">
-                    <ProjectListItem
+                    <Project
                     v-for="project in projects"
                     :key="project.id"
                     :project="project"
@@ -18,13 +18,13 @@
 
 <script>
 import { Flywheel } from '../../services/Flywheel'
-import ProjectListItem from './ProjectListItem.vue'
+import Project from './Project.vue'
 
 let fw;
 
 export default {
     components: {
-        ProjectListItem
+        Project
     },
     props: {
         fwApiKey: {

@@ -3,7 +3,7 @@ import App from './App.vue'
 import VueRouter from 'vue-router'
 
 import ApiKey from './components/ApiKey'
-import Project from './components/Project'
+import ProjectPage from './components/ProjectPage'
 import ProjectList from './components/ProjectList'
 import Tag from './components/Tag'
 import Upload from './components/Upload'
@@ -25,7 +25,7 @@ const routes =
   {
     name: 'project',
     path: '/project/:id',
-    component: Project,
+    component: ProjectPage,
     props: true
   },
   { name: 'tag',
