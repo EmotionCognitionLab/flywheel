@@ -66,20 +66,27 @@ def analysesForProject(id):
             'label': x.label,
             'parent': x.parent.id
             } for x in analyses]
-    return analyses_filtered.sort(key=lambda item: item['label'])
+    analyses_filtered.sort(key=lambda item: item['label'])
+
+    return analyses_filtered
 
 @app.route('/projects/{id}/sessions', cors=cors_config, methods=['GET'])
 def sessionsForProject(id):
     fw = fw_client(app.current_request)
     proj = fw.get(id)
-    result = []
+    result = { 'project_label': proj.label }
+    result['sessions'] = []
     for sess in proj.sessions.iter():
-        result.append({
+        result['sessions'].append({
             'id': sess.id,
             'label': sess.label,
             'subject_id': sess.subject.id,
-            'subject_label': sess.subject.label
+            'subject_label': sess.subject.label,
+            'acquisitions': [],
+            'analyses': []
         })
+    result['sessions'].sort(key=lambda item: item['subject_label']+item['label'])
+
     return result
 
 @app.route('/projects/{id}/acquisitions', cors=cors_config, methods=['GET'])
