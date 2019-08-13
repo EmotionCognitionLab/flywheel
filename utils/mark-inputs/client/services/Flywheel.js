@@ -18,6 +18,16 @@ class Flywheel {
         return project.data;
     }
 
+    async getAnalysesForProject(id) {
+        const analyses =  await this.api.get(`/projects/${id}/analyses`, this.default_headers);
+        return analyses.data
+    }
+
+    async getSessionsForProject(id) {
+        const sessions = await this.api.get(`/projects/${id}/sessions`, this.default_headers);
+        return sessions.data;
+    }
+
     async uploadFileToProject(id, fileName, fileContents, contentType) {
         const body = {
             name: fileName,
