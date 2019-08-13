@@ -20,27 +20,32 @@
                     </tbody>
                 </table>
             </div>
+
             <div class="tab-nav">
                 <button @click="onTabClicked" class="tab-btn">Acquisitions</button>
                 <button @click="onTabClicked" class="selected tab-btn">Analysis Outputs</button>
             </div>
+
             <div id="acquisition-list" class="hidden">
                     <h4>Select a session to see acquisitions for that session.</h4>
             </div>
-            <div id="analysis-list" @click.stop="analysisSelected">
+
+            <div v-if="displayAnalyses.length" id="analysis-list" @click.stop="analysisSelected">
                 <Analysis
-                v-for="(analysis, index) in analyses"
+                v-for="(analysis, index) in displayAnalyses"
                 :key="index"
                 :analysis="analysis"
-                :hide="selectedSessionId != '' && selectedSessionId != analysis.parent"
                 @file-clicked="onFileClicked"
                 />
+            </div>
+            <div v-else id="analysis-list">
+                {{ analysisLoadingStatus }}
             </div>
             <br clear="all"/>
             <router-link class="taglink" :to="{ name: 'tag', params: { projectId: id, projectLabel: label, selectedFiles: selectedFiles }}">Next >></router-link>
         </div>
         <div v-else>
-            {{ status }}
+            {{ sessionLoadingStatus }}
         </div>
     </div>
 </template>
@@ -60,29 +65,53 @@ export default {
             required: true
         }
     },
+    computed: {
+        displayAnalyses() {
+            if (this.selectedSessionId != '') {
+                const selectedSess = this.sessions.find(el => el.id == this.selectedSessionId)
+                return selectedSess.analyses
+            }
+
+            return this.sessions.flatMap(s => s.analyses)
+        }
+    },
     data() {
         return { 
             label: '',
             sessions: [],
-            analyses: [],
             selectedAnalysisParentId: '',
             selectedFiles: [],
             selectedSessionId: '',
-            status: 'Loading sessions...'
+            sessionLoadingStatus: 'Loading sessions...',
+            analysisLoadingStatus: 'Loading analyses...'
         }
     },
     created() {
         fw = new Flywheel(sessionStorage.fwApiKey, process.env.VUE_APP_FW_URL)
-        fw.getProject(this.id).then(res => {
-            this.label = res['label']
-            if (res['analyses'].length > 0) {
-                this.sessions = res['sessions']
-                this.analyses = res['analyses']
+        fw.getSessionsForProject(this.id).then(res => {
+            this.label = res.project_label
+            if (res.sessions.length > 0) {
+                this.sessions = res.sessions
+                return fw.getAnalysesForProject(this.id)
             } else {
-                this.status = `No analyses found for ${res['label']}`
+                this.sessionLoadingStatus = 'No sessions found for this project.'
+                return []
             }
-        }).catch(err => {
-            this.status = 'Whoops! We hit an error trying to load the analyses. Please reload the page to try again.'
+        })
+        .then((analyses) => {
+            // set this regardless of whether or not analyses were found
+            // it will be displayed if the user clicks on a session that
+            // has no analyses, or if there are no analyses for the entire project.
+            this.analysisLoadingStatus = 'No analyses found.'
+
+            analyses.forEach(a => {
+                const aSessId = a.parent
+                const sessIdx = this.sessions.findIndex(el => el.id == aSessId)
+                this.sessions[sessIdx].analyses.push(a)
+            })
+        })
+        .catch(err => {
+            this.sessionLoadingtatus = 'Whoops! We hit an error trying to load the sessions. Please reload the page to try again.'
             console.log(err)
         })
     },

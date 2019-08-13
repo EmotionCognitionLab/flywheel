@@ -1,7 +1,6 @@
 <template>
     <div 
     class="analysis "
-    :class="{ hidden: hide }"
     :data-sessid="analysis.parent"
     >
         <div class="header">{{ analysis.label }}</div>
@@ -38,10 +37,6 @@ export default {
     props: {
         analysis: {
             type: Object,
-            required: true
-        },
-        hide: {
-            type: Boolean,
             required: true
         }
     }
