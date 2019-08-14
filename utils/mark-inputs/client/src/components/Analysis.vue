@@ -30,8 +30,14 @@ export default {
             const analysisNode = event.target.closest('.analysis')
             const analysisId = analysisNode.dataset.sessid
             this.$emit('file-clicked', 
-            { selected: event.target.checked, 
-              file: { analysisId: analysisId, name: event.target.dataset.name } })
+            {
+                selected: event.target.checked,
+                file: {
+                    id: analysisId,
+                    name: event.target.dataset.name,
+                    parentType: 'analysis'
+                }
+            })
         }
     },
     props: {

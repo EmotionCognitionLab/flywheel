@@ -26,8 +26,16 @@
                 <button @click="onTabClicked" class="selected tab-btn">Analysis Outputs</button>
             </div>
 
-            <div id="acquisition-list" class="hidden">
-                    <h4>Select a session to see acquisitions for that session.</h4>
+            <div v-if="displayAcquisitions.length" id="acquisition-list" class="hidden" @click.stop="acquisitionSelected">
+                <Acquisition
+                v-for="(acquisition, index) in displayAcquisitions"
+                :key="index"
+                :acquisition="acquisition"
+                @file-clicked="onFileClicked"
+                />
+            </div>
+            <div v-else id="acquisition-list" class="hidden">
+                <h4> {{ acqLoadingStatus }} </h4>
             </div>
 
             <div v-if="displayAnalyses.length" id="analysis-list" @click.stop="analysisSelected">
@@ -52,13 +60,14 @@
 
 <script>
 import { Flywheel } from '../../services/Flywheel'
+import Acquisition from './Acquisition'
 import Analysis from './Analysis'
 import Session from './Session'
 
 let fw
 
 export default {
-    components: { Analysis, Session },
+    components: { Acquisition, Analysis, Session },
     props: {
         id: {
             type: String,
@@ -66,6 +75,28 @@ export default {
         }
     },
     computed: {
+        acqLoadingStatus() {
+            if (!this.selectedSessionId) {
+                return 'Select a session to load acquisitions for that session.'
+            } else {
+                const sess = this.sessions.find(el => el.id == this.selectedSessionId)
+                if (sess.acqLoadingStatus == 'loading') {
+
+                } else if (sess.acqLoadingStatus == 'loaded') {
+                    return `No acquisitions found for subject ${sess.subject_label}, session ${sess.label}`
+                } else {
+                    return 'An error occurred loading the acquisitions for this session. Please click it again.'
+                }
+            }
+        },
+        displayAcquisitions() {
+            if (this.selectedSessionId != '') {
+                const selectedSess = this.sessions.find(el => el.id == this.selectedSessionId)
+                return selectedSess.acquisitions
+            }
+
+            return this.sessions.flatMap(s => s.acquisitions)
+        },
         displayAnalyses() {
             if (this.selectedSessionId != '') {
                 const selectedSess = this.sessions.find(el => el.id == this.selectedSessionId)
@@ -91,7 +122,10 @@ export default {
         fw.getSessionsForProject(this.id).then(res => {
             this.label = res.project_label
             if (res.sessions.length > 0) {
-                this.sessions = res.sessions
+                this.sessions = res.sessions.map(s => {
+                    s.acqLoadingStatus = 'unloaded'
+                    return s
+                })
                 return fw.getAnalysesForProject(this.id)
             } else {
                 this.sessionLoadingStatus = 'No sessions found for this project.'
@@ -116,6 +150,18 @@ export default {
         })
     },
     methods: {
+        acquisitionTabSelected: function() {
+            // TODO use $refs instead of document.getElement
+            return !document.getElementById('acquisition-list').classList.contains('hidden')
+        },
+        acquisitionSelected: function(event) {
+            // clicks on a label also generate a click on the corresponding
+            // input, so we'll ignore label clicks
+            if (event.target.tagName !== 'LABEL') {
+                const acquisitionNode = event.target.closest('.acquisition')
+                this.selectedAnalysisParentId = acquisitionNode.dataset.sessid
+            }
+        },
         analysisSelected: function(event) {
             // clicks on a label also generate a click on the corresponding
             // input, so we'll ignore label clicks
@@ -128,9 +174,11 @@ export default {
             if (fileClickEvent.selected) {
                 this.selectedFiles.push(fileClickEvent.file)
             } else {
+                const deselectedItemId = fileClickEvent.file.id
+                const deselectedItemName = fileClickEvent.file.name
                 const idx = this.selectedFiles.findIndex(function(elem) {
-                    return elem.analysisId === this.analysisId && elem.name == this.name
-                }, fileClickEvent.file)
+                    return elem.id == deselectedItemId && elem.name == deselectedItemName
+                })
                 if (idx != -1) {
                     this.selectedFiles.splice(idx, 1)
                 }
@@ -143,6 +191,21 @@ export default {
         sessionSelected: function(event) {
             if (event.target.tagName == 'TD') {
                 this.selectedSessionId = event.target.parentNode.dataset.sessid
+                if (this.acquisitionTabSelected()) {
+                    const sess = this.sessions.find(el => el.id == this.selectedSessionId)
+                    if (sess.acqLoadingStatus == 'unloaded' || sess.acqLoadingStatus == 'error') {
+                        sess.acqLoadingStatus = 'loading'
+                        fw.getAcquisitionsForSession(this.selectedSessionId)
+                        .then(acqs => {
+                            sess.acqLoadingStatus = 'loaded'
+                            sess.acquisitions = acqs
+                        })
+                        .catch(err => {
+                            sess.acqLoadingStatus = 'error'
+                            console.log(err);
+                        })
+                    }
+                }
                 this.selectedAnalysisParentId = ''
             }
         },
@@ -212,20 +275,17 @@ export default {
         border-bottom: 1px solid #ddd;
         padding: 10px;
     }
-    #analysis-list {
-        margin-left: 40px;
-        float:left;
-        width: 40%;
-    }
     #acquisition-list-title {
         float: left;
         width: 20%;
     }
     #acquisition-list, #analysis-list {
         height: 450px;
-        min-width: 594px;
         overflow: scroll;
         border-bottom: 1px solid lightgray;
         padding: 10px;
+        margin-left: 40px;
+        float:left;
+        width: 40%;
     }
 </style>
