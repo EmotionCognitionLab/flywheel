@@ -18,6 +18,11 @@ class Flywheel {
         return project.data;
     }
 
+    async getAcquisitionsForSession(id) {
+        const acquisitions = await this.api.get(`/sessions/${id}/acquisitions`);
+        return acquisitions.data;
+    }
+
     async getAnalysesForProject(id) {
         const analyses =  await this.api.get(`/projects/${id}/analyses`, this.default_headers);
         return analyses.data
