@@ -6,15 +6,15 @@
         <div class="header">{{ fileContainer.label }}</div>
         <div v-if="fileContainer['files'].length" class="file-list" >
             <div
-            v-for="output in fileContainer['files']"
-            :key="output['id']">
+            v-for="file in fileContainer['files']"
+            :key="file['id']">
                 <input
                 type="checkbox"
-                :id="output['id']"
-                :data-name="output['name']"
+                :id="file['id']"
+                :data-name="file['name']"
                 v-on:change="fileClick"
                 class="list-checkbox" />
-                <label :for="output['id']">{{ output['name'] }}</label>
+                <label :for="file['id']">{{ file['name'] }}</label>
             </div>
         </div>
         <div v-else class="file-list">
