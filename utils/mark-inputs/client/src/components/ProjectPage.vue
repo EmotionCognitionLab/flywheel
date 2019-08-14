@@ -163,6 +163,24 @@ export default {
                 this.selectedFileContainerParentId = acquisitionNode.dataset.sessid
             }
         },
+        loadAcquisitionsForSession: function(sessId) {
+            const sess = this.sessions.find(el => el.id == sessId)
+            if (sess.acqLoadingStatus == 'unloaded' || sess.acqLoadingStatus == 'error') {
+                sess.acqLoadingStatus = 'loading'
+                fw.getAcquisitionsForSession(sessId)
+                .then(acqs => {
+                    sess.acqLoadingStatus = 'loaded'
+                    sess.acquisitions = acqs.map(a => {
+                        a.parentType = 'acquisition'
+                        return a
+                    })
+                })
+                .catch(err => {
+                    sess.acqLoadingStatus = 'error'
+                    console.log(err);
+                })
+            }
+        },
         onFileClicked: function(fileClickEvent) {
             if (fileClickEvent.selected) {
                 this.selectedFiles.push(fileClickEvent.file)
@@ -185,22 +203,7 @@ export default {
             if (event.target.tagName == 'TD') {
                 this.selectedSessionId = event.target.parentNode.dataset.sessid
                 if (this.acquisitionTabSelected()) {
-                    const sess = this.sessions.find(el => el.id == this.selectedSessionId)
-                    if (sess.acqLoadingStatus == 'unloaded' || sess.acqLoadingStatus == 'error') {
-                        sess.acqLoadingStatus = 'loading'
-                        fw.getAcquisitionsForSession(this.selectedSessionId)
-                        .then(acqs => {
-                            sess.acqLoadingStatus = 'loaded'
-                            sess.acquisitions = acqs.map(a => {
-                                a.parentType = 'acquisition'
-                                return a
-                            })
-                        })
-                        .catch(err => {
-                            sess.acqLoadingStatus = 'error'
-                            console.log(err);
-                        })
-                    }
+                    this.loadAcquisitionsForSession(event.target.parentNode.dataset.sessid)
                 }
                 this.selectedFileContainerParentId = ''
             }
