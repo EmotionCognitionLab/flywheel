@@ -15,7 +15,7 @@
                         v-for="session in sessions"
                         :key="session.id"
                         :session="session"
-                        :isSelected="selectedSessionId == session.id || selectedAnalysisParentId == session.id"
+                        :isSelected="selectedSessionId == session.id || selectedFileContainerParentId == session.id"
                         />
                     </tbody>
                 </table>
@@ -26,27 +26,27 @@
                 <button @click="onTabClicked" class="selected tab-btn">Analysis Outputs</button>
             </div>
 
-            <div v-if="displayAcquisitions.length" id="acquisition-list" class="hidden" @click.stop="acquisitionSelected">
-                <Acquisition
+            <div v-if="displayAcquisitions.length" id="acquisition-list" class="hidden tab-contents" @click.stop="fileContainerSelected">
+                <FileContainer
                 v-for="(acquisition, index) in displayAcquisitions"
                 :key="index"
-                :acquisition="acquisition"
+                :fileContainer="acquisition"
                 @file-clicked="onFileClicked"
                 />
             </div>
-            <div v-else id="acquisition-list" class="hidden">
+            <div v-else id="acquisition-list" class="hidden tab-contents">
                 <h4> {{ acqLoadingStatus }} </h4>
             </div>
 
-            <div v-if="displayAnalyses.length" id="analysis-list" @click.stop="analysisSelected">
-                <Analysis
+            <div v-if="displayAnalyses.length" id="analysis-list" @click.stop="fileContainerSelected" class="tab-contents">
+                <FileContainer
                 v-for="(analysis, index) in displayAnalyses"
                 :key="index"
-                :analysis="analysis"
+                :fileContainer="analysis"
                 @file-clicked="onFileClicked"
                 />
             </div>
-            <div v-else id="analysis-list">
+            <div v-else id="analysis-list" class="tab-contents">
                 {{ analysisLoadingStatus }}
             </div>
             <br clear="all"/>
@@ -60,14 +60,13 @@
 
 <script>
 import { Flywheel } from '../../services/Flywheel'
-import Acquisition from './Acquisition'
-import Analysis from './Analysis'
+import FileContainer from './FileContainer'
 import Session from './Session'
 
 let fw
 
 export default {
-    components: { Acquisition, Analysis, Session },
+    components: { FileContainer, Session },
     props: {
         id: {
             type: String,
@@ -110,7 +109,7 @@ export default {
         return { 
             label: '',
             sessions: [],
-            selectedAnalysisParentId: '',
+            selectedFileContainerParentId: '',
             selectedFiles: [],
             selectedSessionId: '',
             sessionLoadingStatus: 'Loading sessions...',
@@ -139,6 +138,7 @@ export default {
             this.analysisLoadingStatus = 'No analyses found.'
 
             analyses.forEach(a => {
+                a.parentType = 'analysis'
                 const aSessId = a.parent
                 const sessIdx = this.sessions.findIndex(el => el.id == aSessId)
                 this.sessions[sessIdx].analyses.push(a)
@@ -154,20 +154,13 @@ export default {
             // TODO use $refs instead of document.getElement
             return !document.getElementById('acquisition-list').classList.contains('hidden')
         },
-        acquisitionSelected: function(event) {
+        fileContainerSelected: function(event) {
+            // triggered either when clicking on anything in the acqusitions or analyses tab
             // clicks on a label also generate a click on the corresponding
             // input, so we'll ignore label clicks
             if (event.target.tagName !== 'LABEL') {
-                const acquisitionNode = event.target.closest('.acquisition')
-                this.selectedAnalysisParentId = acquisitionNode.dataset.sessid
-            }
-        },
-        analysisSelected: function(event) {
-            // clicks on a label also generate a click on the corresponding
-            // input, so we'll ignore label clicks
-            if (event.target.tagName !== 'LABEL') {
-                const analysisNode = event.target.closest('.analysis')
-                this.selectedAnalysisParentId = analysisNode.dataset.sessid
+                const acquisitionNode = event.target.closest('.file-container')
+                this.selectedFileContainerParentId = acquisitionNode.dataset.sessid
             }
         },
         onFileClicked: function(fileClickEvent) {
@@ -186,7 +179,7 @@ export default {
         },
         sessionDeselected: function() {
             this.selectedSessionId = ''
-            this.selectedAnalysisParentId = ''
+            this.selectedFileContainerParentId = ''
         },
         sessionSelected: function(event) {
             if (event.target.tagName == 'TD') {
@@ -198,7 +191,10 @@ export default {
                         fw.getAcquisitionsForSession(this.selectedSessionId)
                         .then(acqs => {
                             sess.acqLoadingStatus = 'loaded'
-                            sess.acquisitions = acqs
+                            sess.acquisitions = acqs.map(a => {
+                                a.parentType = 'acquisition'
+                                return a
+                            })
                         })
                         .catch(err => {
                             sess.acqLoadingStatus = 'error'
@@ -206,7 +202,7 @@ export default {
                         })
                     }
                 }
-                this.selectedAnalysisParentId = ''
+                this.selectedFileContainerParentId = ''
             }
         },
         onTabClicked: function(event) {
@@ -279,7 +275,7 @@ export default {
         float: left;
         width: 20%;
     }
-    #acquisition-list, #analysis-list {
+    .tab-contents {
         height: 450px;
         overflow: scroll;
         border-bottom: 1px solid lightgray;

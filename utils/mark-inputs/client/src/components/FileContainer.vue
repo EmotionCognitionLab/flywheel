@@ -1,12 +1,12 @@
 <template>
     <div 
-    class="acquisition "
-    :data-sessid="acquisition.parent"
+    class="file-container"
+    :data-sessid="fileContainer.parent"
     >
-        <div class="header">{{ acquisition.label }}</div>
-        <div v-if="acquisition['files'].length" class="file-list" >
+        <div class="header">{{ fileContainer.label }}</div>
+        <div v-if="fileContainer['files'].length" class="file-list" >
             <div
-            v-for="output in acquisition['files']"
+            v-for="output in fileContainer['files']"
             :key="output['id']">
                 <input
                 type="checkbox"
@@ -18,30 +18,39 @@
             </div>
         </div>
         <div v-else class="file-list">
-            <h4>No acquisitions</h4>
+            <h4>{{ noFilesText }}</h4>
         </div>
     </div>
 </template>
 
 <script>
 export default {
+    computed: {
+        noFilesText() {
+            if (this.fileContainer.parentType == 'analysis') {
+                return "No analysis outputs."
+            } else {
+                return "No files."
+            }
+        }
+    },
     methods: {
         fileClick: function(event) {
-            const acquisitionNode = event.target.closest('.acquisition')
-            const acquisitionId = acquisitionNode.dataset.sessid
+            const fileContainerNode = event.target.closest('.file-container')
+            const fileContainerId = fileContainerNode.dataset.sessid
             this.$emit('file-clicked', 
             {
                 selected: event.target.checked,
                 file: { 
-                    id: acquisitionId,
+                    id: fileContainerId,
                     name: event.target.dataset.name,
-                    parentType: 'acquisition' 
+                    parentType: this.fileContainer.parentType 
                 } 
             })
         }
     },
     props: {
-        acquisition: {
+        fileContainer: {
             type: Object,
             required: true
         }
