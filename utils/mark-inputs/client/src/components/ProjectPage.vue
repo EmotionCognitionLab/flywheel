@@ -15,7 +15,7 @@
                         v-for="session in sessions"
                         :key="session.id"
                         :session="session"
-                        :isSelected="selectedSessionId == session.id || selectedFileContainerParentId == session.id"
+                        :isSelected="selectedSessionId == session.id"
                         />
                     </tbody>
                 </table>
@@ -62,11 +62,12 @@
 import { Flywheel } from '../../services/Flywheel'
 import FileContainer from './FileContainer'
 import Session from './Session'
+import TagManager from '../../services/TagManager'
 
 let fw
 
 export default {
-    components: { FileContainer, Session },
+    components: { FileContainer, Session, TagManager },
     props: {
         id: {
             type: String,
@@ -89,7 +90,7 @@ export default {
             }
         },
         displayAcquisitions() {
-            if (this.selectedSessionId != '') {
+            if (this.sessionIsSelected) {
                 const selectedSess = this.sessions.find(el => el.id == this.selectedSessionId)
                 return selectedSess.acquisitions
             }
@@ -97,7 +98,7 @@ export default {
             return this.sessions.flatMap(s => s.acquisitions)
         },
         displayAnalyses() {
-            if (this.selectedSessionId != '') {
+            if (this.sessionIsSelected) {
                 const selectedSess = this.sessions.find(el => el.id == this.selectedSessionId)
                 return selectedSess.analyses
             }
@@ -109,14 +110,17 @@ export default {
         return { 
             label: '',
             sessions: [],
-            selectedFileContainerParentId: '',
+            sessionIsSelected: false, // true when a user clicks on a session
             selectedFiles: [],
-            selectedSessionId: '',
+            selectedSessionId: '', // set when user clicks on session OR on analysis OR on acquisition
             sessionLoadingStatus: 'Loading sessions...',
             analysisLoadingStatus: 'Loading analyses...'
         }
     },
     created() {
+        // put files that don't have a tag into selectedFiles
+        this.selectedFiles = TagManager.getAllTags().filter(t => !t.tag).flatMap(t => t.files)
+
         fw = new Flywheel(sessionStorage.fwApiKey, process.env.VUE_APP_FW_URL)
         fw.getSessionsForProject(this.id).then(res => {
             this.label = res.project_label
@@ -139,6 +143,9 @@ export default {
 
             analyses.forEach(a => {
                 a.parentType = 'analysis'
+                a.files.forEach(f => {
+                    f.isSelected = this.fileIsSelected(a.id, f.name)
+                })
                 const aSessId = a.parent
                 const sessIdx = this.sessions.findIndex(el => el.id == aSessId)
                 this.sessions[sessIdx].analyses.push(a)
@@ -155,13 +162,16 @@ export default {
             return !document.getElementById('acquisition-list').classList.contains('hidden')
         },
         fileContainerSelected: function(event) {
-            // triggered either when clicking on anything in the acqusitions or analyses tab
-            // clicks on a label also generate a click on the corresponding
-            // input, so we'll ignore label clicks
+            // Triggered either when clicking on anything in the acqusitions or analyses tab.
+            // Clicks on a label also generate a click on the corresponding
+            // input, so we'll ignore label clicks.
             if (event.target.tagName !== 'LABEL') {
                 const acquisitionNode = event.target.closest('.file-container')
-                this.selectedFileContainerParentId = acquisitionNode.dataset.sessid
+                this.selectedSessionId = acquisitionNode.dataset.sessid
             }
+        },
+        fileIsSelected: function(fileParentId, fileName) {
+            return this.selectedFiles.findIndex(el => el.parentId == fileParentId && el.name == fileName) != -1
         },
         loadAcquisitionsForSession: function(sessId) {
             const sess = this.sessions.find(el => el.id == sessId)
@@ -172,6 +182,9 @@ export default {
                     sess.acqLoadingStatus = 'loaded'
                     sess.acquisitions = acqs.map(a => {
                         a.parentType = 'acquisition'
+                        a.files.forEach(f => {
+                            f.isSelected = this.fileIsSelected(a.id, f.name)
+                        })
                         return a
                     })
                 })
@@ -185,10 +198,10 @@ export default {
             if (fileClickEvent.selected) {
                 this.selectedFiles.push(fileClickEvent.file)
             } else {
-                const deselectedItemId = fileClickEvent.file.id
+                const deselectedItemParentId = fileClickEvent.file.parentId
                 const deselectedItemName = fileClickEvent.file.name
                 const idx = this.selectedFiles.findIndex(function(elem) {
-                    return elem.id == deselectedItemId && elem.name == deselectedItemName
+                    return elem.parentId == deselectedItemParentId && elem.name == deselectedItemName
                 })
                 if (idx != -1) {
                     this.selectedFiles.splice(idx, 1)
@@ -197,15 +210,15 @@ export default {
         },
         sessionDeselected: function() {
             this.selectedSessionId = ''
-            this.selectedFileContainerParentId = ''
+            this.sessionIsSelected = false
         },
         sessionSelected: function(event) {
             if (event.target.tagName == 'TD') {
                 this.selectedSessionId = event.target.parentNode.dataset.sessid
+                this.sessionIsSelected = true
                 if (this.acquisitionTabSelected()) {
                     this.loadAcquisitionsForSession(event.target.parentNode.dataset.sessid)
                 }
-                this.selectedFileContainerParentId = ''
             }
         },
         onTabClicked: function(event) {

@@ -2,6 +2,7 @@
     <div 
     class="file-container"
     :data-sessid="fileContainer.parent"
+    :data-id="fileContainer.id"
     >
         <div class="header">{{ fileContainer.label }}</div>
         <div v-if="fileContainer['files'].length" class="file-list" >
@@ -10,6 +11,7 @@
             :key="file['id']">
                 <input
                 type="checkbox"
+                :checked="file.isSelected"
                 :id="file['id']"
                 :data-name="file['name']"
                 v-on:change="fileClick"
@@ -37,12 +39,14 @@ export default {
     methods: {
         fileClick: function(event) {
             const fileContainerNode = event.target.closest('.file-container')
-            const fileContainerId = fileContainerNode.dataset.sessid
+            const fileContainerId = fileContainerNode.dataset.id
+            const sessId = fileContainerNode.dataset.sessid
             this.$emit('file-clicked', 
             {
                 selected: event.target.checked,
                 file: { 
-                    id: fileContainerId,
+                    parentId: fileContainerId,
+                    sessId: sessId,
                     name: event.target.dataset.name,
                     parentType: this.fileContainer.parentType 
                 } 
