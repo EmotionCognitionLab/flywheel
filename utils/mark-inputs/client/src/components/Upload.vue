@@ -22,7 +22,7 @@
                 @keyup.enter="upload"
                 placeholder="my-files-to-analyze.json"
                 id="filename">
-                <button id="upload" @click="upload">Upload</button>
+                <button id="upload" ref="uploadBtn" @click="upload">Upload</button>
             </div>
             <TaggedFiles v-for="(taggedFiles, index) in allTags"
             :key="index"
@@ -57,6 +57,8 @@ export default {
             this.allTags = TagManager.getAllTags()
         },
         upload: function() {
+            this.$refs.uploadBtn.innerText = "Uploading..."
+            this.$refs.uploadBtn.disabled = true
             if (!fw) fw = new Flywheel(sessionStorage.fwApiKey, process.env.VUE_APP_FW_URL)
             fw.uploadFileToProject(this.projectId, this.filename, this.allTags, 'application/json')
             .then(() => {
