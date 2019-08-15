@@ -33,6 +33,12 @@ export default {
     },
     created() {
         if (this.selectedFiles.length) {
+            const existingTags = TagManager.getAllTags()
+            // if we have a set of files with an empty tag, replace
+            // it with the incoming selected files
+            const hasEmptyTag = existingTags.findIndex(t => !t.tag)
+            if (hasEmptyTag != -1) TagManager.deleteItemsWithTag("")
+            
             TagManager.save({ tag: '', files: this.selectedFiles })
         }
         this.allTags = TagManager.getAllTags()
