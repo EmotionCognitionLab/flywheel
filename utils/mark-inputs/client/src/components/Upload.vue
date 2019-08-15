@@ -5,7 +5,7 @@
                 <p>{{ status.message }}</p>
             </div>
             <div v-if="status.type == 'info'">
-                <a href="/projects">Start over</a>
+                <router-link :to="{ path: '/projects'}">Start over</router-link>
             </div>
             <div v-else>
                 <a href="#" @click.stop="status.message = ''">Try again</a>
