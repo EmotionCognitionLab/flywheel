@@ -30,6 +30,15 @@ export default {
         return true;
     },
 
+    deleteItemsWithTag: function(tag) {
+        const tagList = this.getAllTags()
+        const origTagListLen = tagList.length
+        const filtered = tagList.filter(item => item.tag != tag )
+        sessionStorage.tagList = JSON.stringify(filtered)
+
+        return origTagListLen - filtered;
+    },
+
     deleteAllTags: function() {
         sessionStorage.removeItem('tagList')
     }
