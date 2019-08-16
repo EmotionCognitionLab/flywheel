@@ -3,12 +3,13 @@
 """
 Runs the ANTs buildtemplateparallel process as a gear.
 
-Because buildtemplateparallel takes multiple files as input,
-and because (as of this writing) flywheel can only accept one
-input file, the user of the gear should build a collection of
-files in the flywheel GUI and select one of them as input. 
+Because buildtemplateparallel takes a variable number of files as inputs,
+and because (as of this writing) flywheel can only accept a fixed
+number of inputs, the user of the gear should use the Tagger tool
+(https://github.com/EmotionCognitionLab/flywheel/tree/master/utils/mark-inputs)
+to tag all of the input files and upload a file with the tag info. 
 The gear then uses the flywheel sdk to download all of the files
-in the collection and pass them to buildtemplateparallel. To avoid
+in the tag info file and pass them to buildtemplateparallel. To avoid
 collisions between inputs with the same name, the gear prefixes
 "subj-" plus the subject label to the file name, e.g. 
 't1_32channel.nii.gz' might be downloaded as 
@@ -67,34 +68,44 @@ def get_btp_params():
     return { param_flags[k]:v for (k, v) in config['config'].items() if k in param_flags }
 
 def download_input_files(to_dir):
-    """Downloads all nifti files that (a) have a name matching config['input_file_pattern']
-    and (b) are in acquisitions that are in sessions tagged with config['tag'].
-    Returns a list of {session_id, file_id, file_name} objects.
+    """Downloads all files under the config['tag'] section of
+    the config['tag_file'] file.
+    Returns a list of {sessId, parentType="acquisition|analysis", parentId, name} objects.
     """
 
-    project_label = config['config']['project']
-    project = fw.projects.find_first('label='+project_label)
-    if project == None:
-        print("No project named {} found. Exiting.".format(project_label))
-        raise ValueError
     tag = config['config']['tag']
-    sessions = project.sessions.find('tags='+tag)
-    if len(sessions) == 0:
-        print("No sessions with the tag {} found in project {}. Exiting.".format(tag, project_label))
+    tag_file_info = config['inputs'].get('tag_file', None)
+    if tag_file_info == None:
+        print("No tag file found. Exiting.")
         raise ValueError
 
+    tag_file = tag_file_info['location']['path']
+    with open(tag_file, 'r') as f:
+        tag_list = json.load(f)
+
     results = []
-    for s in sessions:
-        subject = s.subject
-        subj_label = subject_prefix + subject.label + '-'
-        acquisitions = s.acquisitions()
-        for a in acquisitions:
-            files = [ f for f in a.files if f.type == 'nifti' and fnmatch.fnmatch(f.name, config['config']['input_file_pattern']) ]
-            for f in files:
-                results.append({'acquisition_id': a.id, 'file_id': f.id, 'file_name': f.name})
-                local_file_name = os.path.join(to_dir, subj_label + f.name)
-                print('Downloading {0} to {1}'.format(f.name, local_file_name), flush=True)
-                fw.download_file_from_acquisition(a.id, f.name, local_file_name)
+    sess_to_subj = {}
+    # we shouldn't have multiple entries with the same tag, but
+    # in case we do this will flatten all the resulting 'files' entries
+    # into a single result list w/o sublists
+    files_to_download = [ item for sublist in [x['files'] for x in tag_list if x['tag'] == tag] for item in sublist ]
+    for f in files_to_download:
+        sess_id = f['sessId']
+        subj_label = sess_to_subj.get(sess_id, None)
+        if subj_label == None:
+            subj_label = fw.get_session(sess_id).subject.label
+            sess_to_subj[sess_id] = subj_label
+
+        results.append(f)
+        local_file_name = os.path.join(to_dir, '{0}{1}-{2}'.format(subject_prefix, subj_label, f['name']))
+        print('Downloading {0} to {1}'.format(f['name'], local_file_name), flush=True)
+        if f['parentType'] == 'acquisition':
+            fw.download_file_from_acquisition(f['parentId'], f['name'], local_file_name)
+        elif f['parentType'] == 'analysis':
+            fw.download_output_from_analysis(f['parentId'], f['name'], local_file_name)
+        else:
+            print('Unknown item parent type "{0}" found. Skipping.'.format(f['parentType']))
+    
     return results
 
 

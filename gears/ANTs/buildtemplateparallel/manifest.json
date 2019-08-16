@@ -8,14 +8,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/buildtemplateparallel",
     "license": "Other",
-    "version": "1.0.1",
+    "version": "2.0.0",
     "custom": {
-        "docker-image": "matherlab/ants-buildtemplateparallel:1.0.1",
+        "docker-image": "matherlab/ants-buildtemplateparallel:2.0.0",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-buildtemplateparallel:1.0.1",
+            "image": "matherlab/ants-buildtemplateparallel:2.0.0",
 	    "category": "analysis"
         }
     },
@@ -77,10 +77,6 @@
             "description": "Set default queue for PBS jobs",
 	    "optional": true
         },
-        "project": {
-            "type": "string",
-            "description": "The name of the project containing the files to be analyzed"
-        },
         "registration_similarity_metric": {
             "default": "PR",
             "enum": [
@@ -132,6 +128,11 @@
             "base": "file",
             "optional": true,
             "description": "Template volume to be used as target of all inputs. When not used, the script will create an unbiased starting point by averaging all inputs."
+        }
+        ,
+        "tag_file": {
+            "base": "file",
+            "description": "JSON file with a list of files associated with the tag provided as part of the gear configuration"
         }
     },
     "environment": {
