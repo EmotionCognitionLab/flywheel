@@ -33,10 +33,17 @@ dicom_dir = os.path.join(input_dir, "dicom_files")
 os.mkdir(dicom_dir)
 zip.extractall(dicom_dir)
 zip.close()
-# unzip should have created directory with same name as zipfile
-dicom_dir = os.path.join(dicom_dir, os.path.splitext(zipfile_name)[0])
 
-dicom_files = os.listdir(dicom_dir)
+# some zip files contain a directory that contains the files
+# others just contain the files - see which one we're dealing with
+try:
+    dicom_dir = os.path.join(dicom_dir, os.path.splitext(zipfile_name)[0])
+    dicom_files = os.listdir(dicom_dir)
+except FileNotFoundError:
+    # no directory - check if just the files are there
+    dicom_dir = os.path.join(input_dir, "dicom_files")
+    dicom_files = os.listdir(dicom_dir)
+
 dicom_files.sort()
 if len(dicom_files) != 12:
     print(f"Expected 12 dicom files in {zipfile_name}, but found {len(dicom_files)}. Exiting.")
