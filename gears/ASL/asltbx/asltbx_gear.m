@@ -165,7 +165,7 @@ function tagged_files = find_tagged_files(session, tag)
                     tagged_files(cur_idx).files = struct('id', file.id, 'name', file.name);
                     no_tagged_file_found = false;
                 else
-                    tagged_files(cur_idx).files(numel(tagged_files(cur_idx).files) + 1) = struct('id', file.id, 'name', file.name);;
+                    tagged_files(cur_idx).files(numel(tagged_files(cur_idx).files) + 1) = struct('id', file.id, 'name', file.name);
                 end
             end
         end
@@ -277,15 +277,24 @@ function save_outputs(input_files)
     valid_dirs = subj_dirs(strncmp({subj_dirs.name}, '.', 1) == 0);
     subj_sess = {valid_dirs.name};
 
-    % for each subject dir, rename all the files and move them to output
-    % dir using this command (here subject id is 7003)
-    % find /flywheel/v0/input/7003 -type f | while read -r file; do mv -n
-    % "$file" "/flywheel/v0/output/7003_$(basename $file)"; done
+    % for each subject dir, rename the files we may want to use as inputs
+    % in future analyses and move them to output dir using this command
+    % (here subject id is 7003):
+    % find /flywheel/v0/input/7003 -type f -and
+    % \( -name meanPERF* -or -name meanCBF* -or -name wmeanCBF* \)
+    % | while read -r file; do mv -n "$file"
+    % "/flywheel/v0/output/7003_$(basename $file)"; done
     for i=1:numel(subj_sess)
-        find_and_mv_cmd = sprintf('find ''./%s\'' -type f | while read -r file; do mv -vn "$file" "%s/%s_$(basename "$file")"; done', subj_sess{i}, output_dir, subj_sess{i});
+        find_and_mv_cmd = sprintf('find ''./%s\'' -type f -and \\( -name meanPERF* -or -name meanCBF* -or -name wmeanCBF* \\) | while read -r file; do mv -vn "$file" "%s/%s_$(basename "$file")"; done', subj_sess{i}, output_dir, subj_sess{i});
         fprintf('Renaming output files for subject %s with command: %s \n', subj_sess{i}, find_and_mv_cmd);
         system(find_and_mv_cmd);
     end
+
+    % now tar up the rest of the directory and move the tar file to the
+    % output directory just in case we need any of the other output files
+    tar_cmd = sprintf('tar -cvzf %s/results.tar.gz .', output_dir);
+    fprintf('Creating tar file of remaining outputs with command: %s \n', tar_cmd);
+    system(tar_cmd);
 
     cd(curdir);
     
