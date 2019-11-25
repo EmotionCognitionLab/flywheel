@@ -9,9 +9,9 @@
     "license": "Other",
     "version": "0.0.2",
     "custom": {
-        "docker-image": "matherlab/merger-of-acquisitions:0.0.2",
+        "docker-image": "matherlab/merger-of-acquisitions:0.0.3",
         "gear-builder": {
-            "image": "matherlab/merger-of-acquisitions:0.0.2",
+            "image": "matherlab/merger-of-acquisitions:0.0.3",
             "category": "utility"
         }
     },
@@ -29,7 +29,6 @@
         "acquisition_prefixes": {
             "type": "string",
             "description": "Comma-separated list of acquisition prefixes that will be identified as a split acquisition. For example, if you enter 'ER1_, RS_', then all acquisitions whose labels match the regular expression '^ER1_[123]$' or '^RS1_[123]$' will treated as a multi-part acquisition to be merged.",
-            "required": true,
             "default": "RS_, ER1_, ER2_, PB1_, PB2_, PB3_, TM_, UG_"
         }
     },
