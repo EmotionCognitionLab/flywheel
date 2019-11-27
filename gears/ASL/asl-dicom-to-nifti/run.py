@@ -54,7 +54,7 @@ fourD_filename = config['config']['4D_file_name']
 
 # call dcm2niix to convert first dicom to 3D nifti
 first_dicom = os.path.join(dicom_dir, dicom_files[0])
-subprocess.run(['dcm2niix', '-s', 'y', '-z', 'n', '-b', 'n', '-o', output_dir, '-f', threeD_filename, first_dicom], check=True)
+subprocess.run(['dcm2niix', '-x', 'i', '-s', 'y', '-z', 'n', '-b', 'n', '-o', output_dir, '-f', threeD_filename, first_dicom], check=True)
 
 # remove the first dicom file (it has been converted to nifti) and second dicom file (not needed)
 os.remove(first_dicom)
