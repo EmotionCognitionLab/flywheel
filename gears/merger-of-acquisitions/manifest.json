@@ -12,7 +12,7 @@
         "docker-image": "matherlab/merger-of-acquisitions:0.0.3",
         "gear-builder": {
             "image": "matherlab/merger-of-acquisitions:0.0.3",
-            "category": "utility"
+            "category": "converter"
         }
     },
     "config": {
