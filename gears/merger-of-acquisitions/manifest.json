@@ -7,11 +7,11 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/merger-of-acquisitions",
     "license": "Other",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "custom": {
-        "docker-image": "matherlab/merger-of-acquisitions:0.0.4",
+        "docker-image": "matherlab/merger-of-acquisitions:0.0.5",
         "gear-builder": {
-            "image": "matherlab/merger-of-acquisitions:0.0.4",
+            "image": "matherlab/merger-of-acquisitions:0.0.5",
             "category": "converter"
         }
     },
