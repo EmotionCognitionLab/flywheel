@@ -1,6 +1,7 @@
 FROM alpine:3.10
 
 RUN apk update \
+    && apk add bash \
     && apk add python3 \
     && apk add py3-pip \
     && pip3 install --upgrade pip \
