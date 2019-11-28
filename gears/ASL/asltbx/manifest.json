@@ -31,7 +31,7 @@
         "struct_prefix": {
             "type": "string",
             "description": "The prefix that all of the T1-weighted anatomical scan nifti file names start with",
-            "default": "t1_mprage"
+            "default": "mprage"
         },
         "func_prefix": {
             "type": "string",
