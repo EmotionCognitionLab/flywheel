@@ -11,6 +11,7 @@ RUN apk update \
 ENV FLYWHEEL /flywheel/v0
 RUN mkdir -p ${FLYWHEEL}
 COPY run.py ${FLYWHEEL}/run
+RUN chmod +x ${FLYWHEEL}/run
 COPY manifest.json ${FLYWHEEL}/manifest.json
 
 ENTRYPOINT ["/flywheel/v0/run"]
