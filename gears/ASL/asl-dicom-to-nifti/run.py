@@ -18,7 +18,6 @@ print(container, ' initiated', flush=True)
 flywheel_base = '/flywheel/v0'
 input_dir = os.path.join(flywheel_base, 'input')
 output_dir = os.path.join(flywheel_base, 'output')
-manifest = os.path.join(flywheel_base, 'manifest.json')
 config_file = os.path.join(flywheel_base, 'config.json')
 input_file_key = 'zip_file'
 
