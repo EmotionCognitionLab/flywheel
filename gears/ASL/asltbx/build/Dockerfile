@@ -4,7 +4,6 @@ LABEL maintainer "Noah Mercer"
 RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
-    git \
     gnupg \
     libxi6 \
     libxt6 \
@@ -31,8 +30,5 @@ RUN apt-get update && apt-get install -y \
 RUN mkdir /matlab-installer
 COPY matlab_R2018b_glnxa64.zip /matlab-installer
 RUN cd /matlab-installer && unzip -q matlab_R2018b_glnxa64.zip && rm matlab_R2018b_glnxa64.zip
-
-# Install code
-RUN git clone https://github.com/EmotionCognitionLab/flywheel.git /flywheel/
 
 CMD /bin/bash
