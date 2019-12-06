@@ -276,11 +276,11 @@ function save_outputs(tag_file, input_files)
     % in future analyses and move them to output dir using this command
     % (here subject id is 7003):
     % find /flywheel/v0/input/7003 -type f -and
-    % \( -name meanPERF* -or -name meanCBF* -or -name wmeanCBF* \)
+    % \( -name meanPERF* -or -name meanCBF* -or -name wmeanCBF* -or -name wcbf* \)
     % | while read -r file; do mv -n "$file"
     % "/flywheel/v0/output/7003_$(basename $file)"; done
     for i=1:numel(subj_sess)
-        find_and_mv_cmd = sprintf('find ''./%s\'' -type f -and \\( -name meanPERF* -or -name meanCBF* -or -name wmeanCBF* \\) | while read -r file; do mv -vn "$file" "%s/%s_$(basename "$file")"; done', subj_sess{i}, output_dir, subj_sess{i});
+        find_and_mv_cmd = sprintf('find ''./%s\'' -type f -and \\( -name meanPERF* -or -name meanCBF* -or -name wmeanCBF* -or -name wcbf* \\) | while read -r file; do mv -vn "$file" "%s/%s_$(basename "$file")"; done', subj_sess{i}, output_dir, subj_sess{i});
         fprintf('Renaming output files for subject %s with command: %s \n', subj_sess{i}, find_and_mv_cmd);
         system(find_and_mv_cmd);
     end
