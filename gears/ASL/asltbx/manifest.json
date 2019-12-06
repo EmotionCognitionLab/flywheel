@@ -8,14 +8,14 @@
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ASL/asltbx",
     "cite": "Ze Wang, Geoffrey Aguirre, Hengyi Rao, JiongJiong Wang, Anna R. Childress, John A. Detre, Empirical ASL data analysis using an ASL data processing toolbox: ASLtbx, Magnetic Resonance Imaging, 2008, 26(2):261-9.",
     "license": "GPL-2.0",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "custom": {
-        "docker-image": "matherlab/asl-asltbx:2.0.0",
+        "docker-image": "matherlab/asl-asltbx:2.0.1",
         "flywheel": {
             "suite": "ASL"
         },
         "gear-builder": {
-            "image": "matherlab/asl-asltbx:2.0.0",
+            "image": "matherlab/asl-asltbx:2.0.1",
             "category": "analysis"
         }
     },
@@ -55,6 +55,10 @@
     "inputs": {
         "api_key": {
             "base": "api-key"
+        },
+        "tag_file": {
+            "base": "file",
+            "description": "JSON file with a list of files associated with the tag provided as part of the gear configuration"
         }
     }
 }
