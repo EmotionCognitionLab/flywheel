@@ -18,7 +18,6 @@ print(container, ' initiated', flush=True)
 flywheel_base = '/flywheel/v0'
 input_dir = os.path.join(flywheel_base, 'input')
 output_dir = os.path.join(flywheel_base, 'output')
-manifest = os.path.join(flywheel_base, 'manifest.json')
 config_file = os.path.join(flywheel_base, 'config.json')
 input_file_key = 'zip_file'
 
@@ -54,7 +53,7 @@ fourD_filename = config['config']['4D_file_name']
 
 # call dcm2niix to convert first dicom to 3D nifti
 first_dicom = os.path.join(dicom_dir, dicom_files[0])
-subprocess.run(['dcm2niix', '-s', 'y', '-z', 'n', '-b', 'n', '-o', output_dir, '-f', threeD_filename, first_dicom], check=True)
+subprocess.run(['dcm2niix', '-x', 'i', '-s', 'y', '-z', 'n', '-b', 'n', '-o', output_dir, '-f', threeD_filename, first_dicom], check=True)
 
 # remove the first dicom file (it has been converted to nifti) and second dicom file (not needed)
 os.remove(first_dicom)

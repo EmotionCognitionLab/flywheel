@@ -2,12 +2,9 @@ function run_gear()
 %   Main entry point for the ASL gear
 %   This gear runs an ASLtbx (https://cfn.upenn.edu/~zewang/ASLtbx.php)
 %   analysis on a given set of files. Specify which files you wish to
-%   analyze by assiging a tag to the session(s) containing the file(s). 
-%   Then add a "tag" field to the info object of each file you wish to
-%   analyze in the tagged sessions. This two-step process is necessary
-%   because at this time (a) files don't fully support tags and (b) files
-%   don't have any information associating them with a given subject - the
-%   session is what ties the subject and the files together.
+%   analyze by using the Tagger tool
+%   (https://github.com/EmotionCognitionLab/flywheel/tree/master/utils/mark-inputs)
+%   to tag all of the input files and upload a file with the tag info.
 
     fprintf('[matherlab/ASLtbx] initiated\n');
     
@@ -42,21 +39,18 @@ function run_gear()
         error('More than one project named "%s" was found. Exiting.', proj_label);
     end
     
-    sessions = project.sessions.find(strcat('tags=', config.config.tag));
-    if numel(sessions) < 1
-        error('No sessions with the tag %s were found in project %s. Exiting.', config.config.tag, proj_label);
-    end
-    
     struct_prefix = config.config.struct_prefix; % names of all structural files start with this prefix
     func_prefix = config.config.func_prefix;
     calib_prefix = config.config.calib_prefix;
     validate_prefixes(struct_prefix, func_prefix, calib_prefix);
 
     % download input files and process them
-    input_files = download_files(proj_label, sessions, config.config.tag, struct_prefix);
+    tag_file = config.inputs.tag_file.location.path;
+    input_files = download_files(proj_label, config.config.tag, tag_file, struct_prefix);
     asl_params = build_parameters(config, struct_prefix, func_prefix);
     batch_run(asl_params); % call the actual ASLtbx analysis code
-    save_outputs(unique([{input_files.file_name}]));
+    [~, tag_file_name, tag_file_ext] = fileparts(tag_file);
+    save_outputs(strcat(tag_file_name, tag_file_ext), unique([{input_files.file_name}]));
     analysis_id = config.destination.id;
     save_inputs_to_analysis(analysis_id, input_files);
 end
@@ -95,11 +89,18 @@ function validate_prefixes(struct_prefix, func_prefix, calib_prefix)
     end
 end
 
+function input_files = download_files(proj_label, tag, tag_file, struct_prefix)
+    % tag_file is a json file with the structure:
+    % [
+    %   { "tag":"some_tag",
+    %      "files":[
+    %               {"parentId": "id of file parent", "sessId":"some_session_id", "name":"foo.gz", "parentType":acquisition|analysis},
+    %       ...]
+    %   },
+    %  ...]
 
-function input_files = download_files(proj_label, sessions, tag, struct_prefix)
-    % For each session in sessions, downloads all of the files in that
-    % session that have the key-value pair 'Tags=<tag parameter>' in their
-    % info object. Functional, structural and calibration files are all
+    % Downloads all of the files found in tag_file under the tag parameter.
+    % Functional, structural and calibration files are all
     % required for ASLtbx analysis and the struct_prefix is used to
     % determine which is which. (All files whose names start with
     % struct_prefix are assumed to be structural files, and all others
@@ -109,63 +110,54 @@ function input_files = download_files(proj_label, sessions, tag, struct_prefix)
     global fw;
     global struct_dir;
     global func_dir;
-    
-    for i = 1:numel(sessions)
-       sess = sessions{i};
-       tagged_file_info = find_tagged_files(sess, tag);
-       if numel(tagged_file_info) > 0
-           subj_dir = make_subject_folder(proj_label, sess.subject.label, sess.label);
-           for f = 1:numel(tagged_file_info)
-               acquisition_id = tagged_file_info(f).acquisition_id;
-               files = tagged_file_info(f).files;
-               for j = 1:numel(files)
-                    file = files(j);
-                    dest_dir = '';
-                    if startsWith(file.name, struct_prefix)
-                        dest_dir = struct_dir;
-                    else
-                        dest_dir = func_dir;
-                    end
-                    dest_file = fullfile(subj_dir, dest_dir, file.name);
-                    fprintf('Downloading %s_%s/%s/%s to %s\n', sess.subject.label, sess.label, acquisition_id, file.name, dest_file);
-                    fw.downloadFileFromAcquisition(acquisition_id, file.name, dest_file);
-                    if (endsWith(dest_file, '.gz'))
-                            fprintf('gunzipping %s...\n', dest_file);
-                            gunzip(dest_file);
-                            delete(dest_file);
-                    end
-                    if (i == 1 && f == 1 && j == 1) 
-                        input_files = struct('subject', sess.subject.label, 'session', sess.label,'acquisition_id', acquisition_id, 'file_id', file.id, 'file_name', file.name);
-                    else
-                        input_files(numel(input_files) + 1) = struct('subject', sess.subject.label, 'session', sess.label,'acquisition_id', acquisition_id, 'file_id', file.id, 'file_name', file.name);
-                    end
-               end
-           end
-       end
-    end
-end
 
-function tagged_files = find_tagged_files(session, tag)
-    % Returns a struct array where each element has an acquisition_id field
-    % and a files field. The files field is an array of structs (file id
-    % and name) for the files in the acquisition tagged with the tag parameter.
-    global fw;
-    tagged_files = [];
-    acquisitions = session.acquisitions();
-    for a = 1:numel(acquisitions)
-        cur_idx = numel(tagged_files) + 1;
-        files = acquisitions{a}.files;
-        no_tagged_file_found = true;
-        for f = 1:numel(files)
-            file = fw.getAcquisitionFileInfo(acquisitions{a}.id, files{f}.name);
-            file_info = file.info.struct;
-            if isfield(file_info, 'Tags') && strcmp(file_info.Tags, tag) && strcmp(file.type, 'nifti')
-                tagged_files(cur_idx).acquisition_id = acquisitions{a}.id;
-                if no_tagged_file_found
-                    tagged_files(cur_idx).files = struct('id', file.id, 'name', file.name);
-                    no_tagged_file_found = false;
+    tagged_files = jsondecode(fileread(tag_file));
+    cached_sessions = containers.Map;
+    for i = 1:numel(tagged_files)
+        cur_tag = tagged_files(i).tag;
+        if strcmp(tag, cur_tag)
+            files = tagged_files(i).files;
+            for j = 1:numel(files)
+                sess_id = files(j).sessId;
+                if isKey(cached_sessions, sess_id)
+                    sess = cached_sessions(sess_id);
                 else
-                    tagged_files(cur_idx).files(numel(tagged_files(cur_idx).files) + 1) = struct('id', file.id, 'name', file.name);
+                    sess = fw.getSession(sess_id);
+                    cached_sessions(sess_id) = sess;
+                end
+
+                dest_dir = '';
+                fname = files(j).name;
+                if startsWith(fname, struct_prefix)
+                    dest_dir = struct_dir;
+                else
+                    dest_dir = func_dir;
+                end
+
+                subj_dir = make_subject_folder(proj_label, sess.subject.label, sess.label);
+
+                dest_file = fullfile(subj_dir, dest_dir, fname);
+                parent_id = files(j).parentId;
+                fprintf('Downloading %s_%s/%s/%s to %s\n', sess.subject.label, sess.label, parent_id, fname, dest_file);
+
+                parent_type = files(j).parentType;
+                if strcmp('acquisition', parent_type)
+                    fw.downloadFileFromAcquisition(parent_id, fname, dest_file);
+                elseif strcmp('analysis', parent_type)
+                    fw.downloadFileFromAnalysis(parent_id, fname, dest_file);
+                else
+                    fprintf('Unknown parent type %s found. Skipping.', parent_type);
+                end
+
+                if (endsWith(dest_file, '.gz'))
+                    fprintf('gunzipping %s...\n', dest_file);
+                    gunzip(dest_file);
+                    delete(dest_file);
+                end
+                if (i == 1 && j == 1)
+                    input_files = struct('subject', sess.subject.label, 'session', sess.label,'parent_id', parent_id, 'file_name', fname);
+                else
+                    input_files(numel(input_files) + 1) = struct('subject', sess.subject.label, 'session', sess.label,'parent_id', parent_id, 'file_name', fname);
                 end
             end
         end
@@ -239,7 +231,7 @@ function params = build_parameters(config, struct_prefix, func_prefix)
     params.funcimgfilters = {func_prefix};
 end
 
-function save_outputs(input_files)
+function save_outputs(tag_file, input_files)
     % ASLtbx generates output files in the input directory.
     % It also generates output files that have identical names
     % for each subject, meaning that they cannot be put into
@@ -249,6 +241,9 @@ function save_outputs(input_files)
     % their subject id. Also writes the Flywheel output manifest.
     global input_dir;
     global output_dir;
+
+    % include the tag file as one of the input files; it should be deleted
+    input_files = [input_files, tag_file];
 
     % we un-gzipped the files, so they no longer have .gz ext
     input_files_no_gz = regexprep(input_files, ".gz$", ""); 
@@ -281,11 +276,11 @@ function save_outputs(input_files)
     % in future analyses and move them to output dir using this command
     % (here subject id is 7003):
     % find /flywheel/v0/input/7003 -type f -and
-    % \( -name meanPERF* -or -name meanCBF* -or -name wmeanCBF* \)
+    % \( -name meanPERF* -or -name meanCBF* -or -name wmeanCBF* -or -name wcbf* \)
     % | while read -r file; do mv -n "$file"
     % "/flywheel/v0/output/7003_$(basename $file)"; done
     for i=1:numel(subj_sess)
-        find_and_mv_cmd = sprintf('find ''./%s\'' -type f -and \\( -name meanPERF* -or -name meanCBF* -or -name wmeanCBF* \\) | while read -r file; do mv -vn "$file" "%s/%s_$(basename "$file")"; done', subj_sess{i}, output_dir, subj_sess{i});
+        find_and_mv_cmd = sprintf('find ''./%s\'' -type f -and \\( -name meanPERF* -or -name meanCBF* -or -name wmeanCBF* -or -name wcbf* \\) | while read -r file; do mv -vn "$file" "%s/%s_$(basename "$file")"; done', subj_sess{i}, output_dir, subj_sess{i});
         fprintf('Renaming output files for subject %s with command: %s \n', subj_sess{i}, find_and_mv_cmd);
         system(find_and_mv_cmd);
     end

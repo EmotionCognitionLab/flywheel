@@ -37,9 +37,9 @@ And you're now done setting up your buid environment. If you want to build the g
 
  ### Building the Gear
 
- 1. Run the docker image you set up:
+ 1. Run the docker image you set up. You'll want to mount the source directory to it, so if your source is in something like /Users/pat/code/flywheel, you would do:
 
-        docker run --rm -it asltbx-gear-builder:installed
+        docker run -v /Users/pat/code/flywheel:/flywheel --rm -it asltbx-gear-builder:installed
 
 2. In the docker container, run matlab:
 

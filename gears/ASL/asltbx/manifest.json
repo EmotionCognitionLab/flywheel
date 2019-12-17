@@ -8,14 +8,14 @@
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ASL/asltbx",
     "cite": "Ze Wang, Geoffrey Aguirre, Hengyi Rao, JiongJiong Wang, Anna R. Childress, John A. Detre, Empirical ASL data analysis using an ASL data processing toolbox: ASLtbx, Magnetic Resonance Imaging, 2008, 26(2):261-9.",
     "license": "GPL-2.0",
-    "version": "1.1.3",
+    "version": "2.0.2",
     "custom": {
-        "docker-image": "matherlab/asl-asltbx:1.1.3",
+        "docker-image": "matherlab/asl-asltbx:2.0.2",
         "flywheel": {
             "suite": "ASL"
         },
         "gear-builder": {
-            "image": "matherlab/asl-asltbx:1.1.3",
+            "image": "matherlab/asl-asltbx:2.0.2",
             "category": "analysis"
         }
     },
@@ -31,7 +31,7 @@
         "struct_prefix": {
             "type": "string",
             "description": "The prefix that all of the T1-weighted anatomical scan nifti file names start with",
-            "default": "t1_mprage"
+            "default": "mprage"
         },
         "func_prefix": {
             "type": "string",
@@ -55,6 +55,10 @@
     "inputs": {
         "api_key": {
             "base": "api-key"
+        },
+        "tag_file": {
+            "base": "file",
+            "description": "JSON file with a list of files associated with the tag provided as part of the gear configuration"
         }
     }
 }

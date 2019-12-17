@@ -7,14 +7,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/antsRegistrationSyNQuick",
     "license": "Other",
-    "version": "0.0.6",
+    "version": "0.0.8",
     "custom": {
-        "docker-image": "matherlab/ants-registration-syn-quick:0.0.6",
+        "docker-image": "matherlab/ants-registration-syn-quick:0.0.8",
         "flywheel": {
             "suite": "ANTs"
         },
 	"gear-builder": {
-	    "image": "matherlab/ants-registration-syn-quick:0.0.6"
+	    "image": "matherlab/ants-registration-syn-quick:0.0.8"
 	}
     },
     "cite": "Brian B. Avants, Nick Tustison and Gang Song. Penn Image Computing And Science Laboratory. University of Pennsylvania. Please reference http://www.ncbi.nlm.nih.gov/pubmed/20851191. A reproducible evaluation of ANTs similarity metric performance in brain image registration: Avants BB, Tustison NJ, Song G, Cook PA, Klein A, Gee JC. Neuroimage, 2011.",
@@ -61,11 +61,6 @@
             "description": "Spline distance for deformable B-spline SyN transform",
             "optional": true
         },
-        "masks": {
-            "type": "string",
-            "description": "Mask(s) for the fixed image space.  Should specify either a single image to be used for all stages or one should specify a mask image for each 'stage' (cf -t option).  If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of a file name.",
-            "optional": true
-        },
         "precision_type": {
             "type": "string",
             "description": "Precision type. f=float, d=double",
@@ -89,6 +84,36 @@
         "moving": {
             "base": "file",
             "description": "Moving image or target image"
+        },
+        "mask1": {
+            "optional": true,
+            "base": "file",
+            "description": "Mask(s) for the fixed image space. Should specify either a single image to be used for all stages or one should specify a mask image for each 'stage' (cf -t option).  If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of a file name.",
+            "type": {
+                "enum": [
+                    "nifti"
+                ]
+            }
+        },
+        "mask2": {
+            "optional": true,
+            "base": "file",
+            "description": "Mask file for second stage (if applicable). Should specify either a single image to be used for all stages or one should specify a mask image for each 'stage' (cf -t option).  If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of a file name.",
+            "type": {
+                "enum": [
+                    "nifti"
+                ]
+            }
+        },
+        "mask3": {
+            "optional": true,
+            "base": "file",
+            "description": "Mask file for third stage (if applicable). Should specify either a single image to be used for all stages or one should specify a mask image for each 'stage' (cf -t option).  If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of a file name.",
+            "type": {
+                "enum": [
+                    "nifti"
+                ]
+            }
         }
     }
 }

@@ -40,10 +40,10 @@ function batch_norm_spm12(PAR)
         imgs{1,1}=spm_select('FPList', char(PAR.condirs{sb,1}), ['^meanCBF.*\.nii']);
         %%% if you want to normalize the cbf image series, you can enable the
         %%% following lines
-    %     cbfimgs=spm_select('EXTFPList', char(PAR.condirs{sb,c}), ['^cbf_.*\.nii'], 1:1000);
-    %     for i=1:size(cbfimgs,1)
-    %         imgs{1+i,1}=deblank(cbfimgs(i,:));
-    %     end
+        cbfimgs=spm_select('EXTFPList', char(PAR.condirs{sb,1}), ['^cbf_.*\.nii'], 1:1000);
+        for i=1:size(cbfimgs,1)
+            imgs{1+i,1}=deblank(cbfimgs(i,:));
+        end
 
         % Make the default normalization parameters file name
         matname = fullfile(PAR.structdir{sb}, ['y_' spm_str_manip(P,'dst') '.nii']);

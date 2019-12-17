@@ -31,7 +31,6 @@ param_flags[num_threads]=-n
 param_flags[transform_type]=-t
 param_flags[histogram_bin_count]=-r
 param_flags[spline_distance]=-s
-param_flags[masks]=-x
 param_flags[precision_type]=-p
 param_flags[use_histogram_matching]=-j
 
@@ -51,6 +50,14 @@ function parse_config {
   fi
 }
 
+function get_mask_input {
+  res="$(parse_config 'inputs' $1'.location.path')"
+  if [ "${res}" == "null" ]; then
+    res="NULL"
+  fi
+  echo "${res}"
+}
+
 declare -A param_values
 for param_name in "${!param_flags[@]}"; do
     param_values[$param_name]="$(parse_config 'config' ${param_name})"
@@ -58,15 +65,33 @@ done
 
 fixed_input_file="$(parse_config 'inputs' 'fixed.location.path')"
 moving_input_file="$(parse_config 'inputs' 'moving.location.path')"
+mask_file_1="$(get_mask_input 'mask1')"
+mask_file_2="$(get_mask_input 'mask2')"
+mask_file_3="$(get_mask_input 'mask3')"
 
 echo "fixed_input_file: ${fixed_input_file}"
 echo "moving_input_file: ${moving_input_file}"
+echo "mask_file_1: ${mask_file_1}"
+echo "mask_file_2: ${mask_file_2}"
+echo "mask_file_3: ${mask_file_3}"
 
 
 ##############################################################################
 # Build up the command line arguments for antsRegistrationSyNQuick.sh
 
-ants_cmd="${ANTSPATH}/antsRegistrationSyNQuick.sh -f ${fixed_input_file} -m ${moving_input_file} "
+ants_cmd="${ANTSPATH}/antsRegistrationSyNQuick.sh -f ${fixed_input_file} -m ${moving_input_file}"
+
+if [ "${mask_file_1}" != "NULL" ]; then
+  ants_cmd="${ants_cmd} -x ${mask_file_1}"
+fi
+
+if [ "${mask_file_2}" != "NULL" ] || [ "${mask_file_3}" != "NULL" ]; then
+  ants_cmd="${ants_cmd} -x ${mask_file_2}"
+fi
+
+if [ "${mask_file_3}" != "NULL" ]; then
+  ants_cmd="${ants_cmd} -x ${mask_file_3}"
+fi
 
 for param_name in "${!param_flags[@]}"; do
     if [ "${param_values[$param_name]}" != "null" ]; then
