@@ -209,9 +209,12 @@ function params = build_parameters(config, struct_prefix, func_prefix)
     params.TE = config.config.TE;
     
     input_items = dir(input_dir);
-    % All directories in input_dir whose name doesn't start with '.' should
-    % be subject directories
-    subject_dirs = input_items([input_items.isdir] == 1 & strncmp({input_items.name}, '.', 1) == 0);
+    % All directories in input_dir whose name doesn't start with '.' and
+    % aren't the tag file directory should be subject directories
+    tag_file = config.inputs.tag_file.location.path;
+    [tag_file_dir] = fileparts(tag_file);
+    [~, tag_file_dir_name] = fileparts(tag_file_dir);
+    subject_dirs = input_items([input_items.isdir] == 1 & strncmp({input_items.name}, '.', 1) == 0 & strncmp({input_items.name}, tag_file_dir_name, 1) == 0);
     params.subjects = ({subject_dirs.name});
     params.nsubs = numel(params.subjects);
     for i=1:numel(params.subjects)
