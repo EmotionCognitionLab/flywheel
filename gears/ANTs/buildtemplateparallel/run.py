@@ -112,7 +112,7 @@ def download_input_files(to_dir):
 def get_btp_command():
     """Builds the shell command that will run buildtemplateparallel"""
 
-    btp_cmd = [ os.path.join(os.environ['ANTSPATH'], 'buildtemplateparallel.sh') ]
+    btp_cmd = [ 'ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=8', os.path.join(os.environ['ANTSPATH'], 'buildtemplateparallel.sh') ]
     params = get_btp_params()
     for (param_flag, param_value) in params.items():
         btp_cmd.append(param_flag)
