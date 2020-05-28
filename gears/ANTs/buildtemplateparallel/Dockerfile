@@ -24,7 +24,7 @@ RUN apt-get update -qq \
     && echo deb http://neurodeb.pirsquared.org stretch main contrib non-free >> /etc/apt/sources.list.d/neurodebian.sources.list \
     && apt-get update -qq \
     && apt-get install -y -q --no-install-recommends ants \
-    && pip3 install flywheel-sdk~=6.1.0 \
+    && pip3 install flywheel-sdk~=10.7.4 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
     && sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen \
