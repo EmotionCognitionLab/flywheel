@@ -142,7 +142,8 @@ def get_output_files(from_dir):
     input_file_pattern = config['config']['input_file_pattern']
     output_glob_pattern = os.path.join(from_dir, out_prefix + subject_prefix + '*-' + input_file_pattern)
     output_files.extend(glob.glob(output_glob_pattern))
-
+    mat_file_glob_pattern = os.path.join(from_dir, out_prefix + subject_prefix + '*-' + ".mat")
+    output_files.extend(glob.glob(mat_file_glob_pattern))
     
     return output_files
 
