@@ -32,6 +32,9 @@ RUN apt-get update -qq \
     && update-locale LANG="en_US.UTF-8" \
     && chmod 777 /opt && chmod a+s /opt
 
+# Copy our custom buildtemplateparallel.sh
+COPY buildtemplateparallel.sh ${ANTSPATH}/
+RUN chmod a+x ${ANTSPATH}/buildtemplateparallel.sh
 # Make directory for flywheel spec (v0)
 ENV FLYWHEEL /flywheel/v0
 RUN mkdir -p ${FLYWHEEL}
