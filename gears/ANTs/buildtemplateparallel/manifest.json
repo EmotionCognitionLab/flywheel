@@ -117,7 +117,13 @@
         "xgrid_args": {
             "type": "string",
             "description": "XGrid arguments (e.g., -x '-p password -h controlhost')",
-	    "optional": true
+	        "optional": true
+        },
+        "log_disk_usage": {
+            "type": "boolean",
+            "default": false,
+            "description": "Periodically logs disk usage",
+            "optional": true
         }
     },
     "inputs": {

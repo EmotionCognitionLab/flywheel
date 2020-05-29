@@ -20,12 +20,18 @@ import flywheel
 import fnmatch
 import glob
 import json
+import logging
 import os
 from pprint import pprint
+import shutil
 import subprocess
+import threading
+import time
 
 container = '[matherlab/buildtemplateparallel]'
 print(container, ' initiated', flush=True)
+
+logging.basicConfig(format='%(levelname)s %(asctime)s %(message)s', level=logging.DEBUG)
 
 # key directories/files, as per flywheel spec
 flywheel_base = '/flywheel/v0'
@@ -154,6 +160,16 @@ def save_inputs_to_analysis(input_files):
     # TODO this sets an object with the key 'inputs' into the 'info' field. Figure out how to simply set the 'inputs' field.
     fw.modify_analysis_info(analysis_id, {'set': {'inputs': input_files}})
 
+def log_disk_usage(every_n_seconds=300):
+    """Periodically logs the disk utilization. Call this in a separate thread; it runs eternally."""
+    while True:
+        total, used, free = shutil.disk_usage(flywheel_base)
+        logging.debug('disk(used/free/total) GB: %d/%d/%d', used // 2**30, free // 2**30, total // 2**30)
+        time.sleep(every_n_seconds)
+
+if (config['config']['log_disk_usage']):
+    disk_usage_logging_thread = threading.Thread(target=log_disk_usage, daemon=True)
+    disk_usage_logging_thread.start()
 
 input_files = download_input_files(input_dir)
 btp_cmd = get_btp_command()
