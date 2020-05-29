@@ -112,7 +112,7 @@ def download_input_files(to_dir):
 def get_btp_command():
     """Builds the shell command that will run buildtemplateparallel"""
 
-    btp_cmd = [ 'ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS=8', os.path.join(os.environ['ANTSPATH'], 'buildtemplateparallel.sh') ]
+    btp_cmd = [ os.path.join(os.environ['ANTSPATH'], 'buildtemplateparallel.sh') ]
     params = get_btp_params()
     for (param_flag, param_value) in params.items():
         btp_cmd.append(param_flag)
@@ -158,7 +158,9 @@ def save_inputs_to_analysis(input_files):
 input_files = download_input_files(input_dir)
 btp_cmd = get_btp_command()
 print('btp_cmd: ' + ' '.join(btp_cmd), flush=True)
-subprocess.run(btp_cmd, cwd=input_dir, check=True)
+env = os.environ.copy()
+env['ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS'] = '8'
+subprocess.run(btp_cmd, cwd=input_dir, env=env, check=True)
 output_files = get_output_files(input_dir)
 # move all of the output files to the output directory
 for f in output_files:
