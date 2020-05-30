@@ -163,7 +163,7 @@ def save_inputs_to_analysis(input_files):
 def log_disk_usage(every_n_seconds=300):
     """Periodically logs the disk utilization. Call this in a separate thread; it runs eternally."""
     while True:
-        total, used, free = shutil.disk_usage(flywheel_base)
+        total, used, free = shutil.disk_usage(input_dir)
         logging.debug('disk(used/free/total) GB: %d/%d/%d', used // 2**30, free // 2**30, total // 2**30)
         time.sleep(every_n_seconds)
 
