@@ -168,6 +168,8 @@ def log_disk_usage(every_n_seconds=300):
         time.sleep(every_n_seconds)
 
 if (config['config']['log_disk_usage']):
+    # DEBUG also log file system setup
+    subprocess.run(['df', '-h'])
     disk_usage_logging_thread = threading.Thread(target=log_disk_usage, daemon=True)
     disk_usage_logging_thread.start()
 
