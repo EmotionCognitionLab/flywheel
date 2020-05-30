@@ -177,7 +177,11 @@ print('btp_cmd: ' + ' '.join(btp_cmd), flush=True)
 env = os.environ.copy()
 env['ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS'] = '8'
 subprocess.run(btp_cmd, cwd=input_dir, env=env, check=True)
+# DEBUG
+subprocess.run(['ls', '-lR', '/flywheel/v0/input/'])
 output_files = get_output_files(input_dir)
+# DEBUG
+logging.debug('Output files to keep: %s', output_files)
 # move all of the output files to the output directory
 for f in output_files:
     os.rename(f, os.path.join(output_dir, os.path.basename(f)))
