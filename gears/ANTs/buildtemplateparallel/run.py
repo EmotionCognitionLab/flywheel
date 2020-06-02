@@ -200,7 +200,7 @@ for f in single_output_files:
     os.rename(f, outpath)
     all_output_files.append(outpath)
 # zip all of the zipped output files
-zip_file = os.path.join(output_dir, '.btp.zip')
+zip_file = os.path.join(output_dir, 'btp.zip')
 with ZipFile(zip_file, 'w') as outzip:
     for f in zipped_output_files:
         outzip.write(f)
