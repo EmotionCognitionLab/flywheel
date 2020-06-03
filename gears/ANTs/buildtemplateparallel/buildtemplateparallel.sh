@@ -1270,8 +1270,6 @@ while [  $i -lt ${ITERATIONLIMIT} ]
   # echo "--------------------------------------------------------------------------------------"
 
   mkdir ${TRANSFORMATIONTYPE}_iteration_${i}
-  echo " Listing files that would ordinarily be backed up from iteration $itdisplay"
-  ls -l ${TEMPLATENAME}warp*log.txt *.cfg *${OUTPUTNAME}*.nii.gz 
   # cp ${TEMPLATENAME}warp*log.txt *.cfg *${OUTPUTNAME}*.nii.gz ${TRANSFORMATIONTYPE}_iteration_${i}/
 
   # backup logs
