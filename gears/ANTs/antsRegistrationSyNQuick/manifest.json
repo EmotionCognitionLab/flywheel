@@ -7,14 +7,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/antsRegistrationSyNQuick",
     "license": "Other",
-    "version": "0.0.8",
+    "version": "1.0.0",
     "custom": {
-        "docker-image": "matherlab/ants-registration-syn-quick:0.0.8",
+        "docker-image": "matherlab/ants-registration-syn-quick:1.0.0",
         "flywheel": {
             "suite": "ANTs"
         },
 	"gear-builder": {
-	    "image": "matherlab/ants-registration-syn-quick:0.0.8"
+	    "image": "matherlab/ants-registration-syn-quick:1.0.0"
 	}
     },
     "cite": "Brian B. Avants, Nick Tustison and Gang Song. Penn Image Computing And Science Laboratory. University of Pennsylvania. Please reference http://www.ncbi.nlm.nih.gov/pubmed/20851191. A reproducible evaluation of ANTs similarity metric performance in brain image registration: Avants BB, Tustison NJ, Song G, Cook PA, Klein A, Gee JC. Neuroimage, 2011.",
