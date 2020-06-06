@@ -141,31 +141,22 @@ def get_output_files(from_dir):
     Note that not *all* output files are kept.
     """
 
-    single_output_files = []
+    output_files = []
     out_prefix = config['config']['out_prefix']
     template_suffixes = ['template.nii.gz', 'templateAffine.txt', 'template_InverseWarp.nii.gz', 'templatewarp.nii.gz']
     for suffix in template_suffixes:
         out_file = os.path.join(from_dir, out_prefix + suffix)
         if (os.path.isfile(out_file)):
-            single_output_files.append(out_file)
-    
-    # upload e.g. btp_test_subj-5006-5006_post_MPRAGE_reoriented_upsampled.nii.gz singly
-    # but btp_test_subj-5006-5006_post_MPRAGE_reoriented_upsampledWarp.nii.gz,
-    # btp_test_subj-5006-5006_post_MPRAGE_reoriented_upsampledrepaired.nii.gz, etc. zipped
+            output_files.append(out_file)
+
+    zipped_output_files = []
     input_file_pattern = config['config']['input_file_pattern']
     output_glob_pattern = os.path.join(from_dir, out_prefix + subject_prefix + '*-' + input_file_pattern)
-    all_output_files = glob.glob(output_glob_pattern)
-    zipped_output_files = []
-    for f in all_output_files:
-        if (f.endswith('Warp.nii.gz') or f.endswith('deformed.nii.gz') or f.endswith('repaired.nii.gz')):
-            zipped_output_files.append(f)
-        else:
-            single_output_files.append(f)
-
+    zipped_output_files.extend(glob.glob(output_glob_pattern))
     affine_glob_pattern = os.path.join(from_dir, out_prefix + subject_prefix + '*-*' + "Affine.txt")
     zipped_output_files.extend(glob.glob(affine_glob_pattern))
     
-    return (single_output_files, zipped_output_files)
+    return (output_files, zipped_output_files)
 
 def save_inputs_to_analysis(input_files):
     """Saves a list of files used as inputs to this analysis as part of the analysis.info field"""
