@@ -2,11 +2,18 @@
 
 """
 Runs the ANTs registrationSyNQuick process as a gear.
+
+In some cases the file we want to use as the fixed image
+for antsRegistrationSyNQuick will be in a zip file. When that
+happens, we extract the desired file from the zip, rather than
+using the zip file itself as an input.
 """
 import json
 import os
 from os import path
 import subprocess
+import tempfile
+import zipfile
 
 container = '[matherlab/buildtemplateparallel]'
 print(container, ' initiated', flush=True)
@@ -46,6 +53,15 @@ def get_reg_syn_quick_command():
     cmd = [ os.path.join(os.environ['ANTSPATH'], 'antsRegistrationSyNQuick.sh') ]
 
     fixed_input_file = config['inputs']['fixed']['location']['path']
+    if fixed_input_file.endswith('.zip'):
+        zip_path = config['config']['fixed_image_zip_path']
+        if zip_path == '':
+            print('The fixed image input ({0}) appears to be a zip file, but no fixed_image_zip_path was provided. Exiting.'.format(fixed_input_file))
+            raise ValueError
+        with zipfile.ZipFile(fixed_input_file, 'r') as zip:
+            fixed_input_file = zip.extract(zip_path, path=input_dir)
+
+
     cmd.append('-f')
     cmd.append(fixed_input_file)
 

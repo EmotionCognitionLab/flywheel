@@ -74,12 +74,17 @@
             ],
             "description": "Use histogram matching. 0=false, 1=true.",
             "optional": true
+        },
+        "fixed_image_zip_path": {
+            "type": "string",
+            "description": "If the fixed image input is a zip file, use this field to specify which file in the zip file is the fixed image",
+            "optional": true
         }
     },
     "inputs": {
         "fixed": {
             "base": "file",
-            "description": "Fixed image or source image or reference image"
+            "description": "Fixed image or source image or reference image (may be nifti or zip)"
         },
         "moving": {
             "base": "file",
