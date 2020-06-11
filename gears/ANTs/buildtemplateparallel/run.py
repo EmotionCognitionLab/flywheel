@@ -165,11 +165,15 @@ def save_inputs_to_analysis(input_files):
     # TODO this sets an object with the key 'inputs' into the 'info' field. Figure out how to simply set the 'inputs' field.
     fw.modify_analysis_info(analysis_id, {'set': {'inputs': input_files}})
 
-def log_disk_usage(every_n_seconds=300):
+def log_resource_utilization(every_n_seconds=300):
     """Periodically logs the disk utilization. Call this in a separate thread; it runs eternally."""
     while True:
         total, used, free = shutil.disk_usage(input_dir)
         logging.debug('disk(used/free/total) GB: %d/%d/%d', used // 2**30, free // 2**30, total // 2**30)
+        logging.debug('vmstat -s -S M output:')
+        subprocess.run(['vmstat', '-s', '-S', 'M'])
+        logging.debug("ps -eo 'cmd,etime,pcpu,pmem' output:")
+        subprocess.run(['ps', '-e', '-o', 'cmd,etime,pcpu,pmem'])
         time.sleep(every_n_seconds)
 
 if (config['config']['log_disk_usage']):
@@ -178,8 +182,8 @@ if (config['config']['log_disk_usage']):
     # DEBUG also log nproc output
     logging.debug('nproc output:')
     subprocess.run(['nproc'])
-    disk_usage_logging_thread = threading.Thread(target=log_disk_usage, daemon=True)
-    disk_usage_logging_thread.start()
+    usage_logging_thread = threading.Thread(target=log_resource_utilization, daemon=True)
+    usage_logging_thread.start()
 
 input_files = download_input_files(input_dir)
 btp_cmd = get_btp_command()
