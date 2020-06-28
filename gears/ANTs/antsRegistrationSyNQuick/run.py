@@ -50,7 +50,7 @@ def get_params():
 
 def get_reg_syn_quick_command():
     """Builds up the command line arguments for antsRegistrationSyNQuick.sh"""
-    cmd = [ os.path.join(os.environ['ANTSPATH'], 'antsRegistrationSyNQuick.sh') ]
+    cmd = [ os.path.join(os.environ.get('ANTSPATH', '/usr/lib/ants'), 'antsRegistrationSyNQuick.sh') ]
 
     fixed_input_file = config['inputs']['fixed']['location']['path']
     if fixed_input_file.endswith('.zip'):
