@@ -27,6 +27,9 @@ os.makedirs(output_dir, exist_ok=True)
 manifest = os.path.join(flywheel_base, 'manifest.json')
 config_file = os.path.join(flywheel_base, 'config.json')
 
+# set ANTSPATH
+os.environ['ANTSPATH'] = '/usr/lib/ants'
+
 # load the config file
 with open(config_file, 'r') as f:
     config = json.load(f)
@@ -50,7 +53,7 @@ def get_params():
 
 def get_reg_syn_quick_command():
     """Builds up the command line arguments for antsRegistrationSyNQuick.sh"""
-    cmd = [ os.path.join(os.environ.get('ANTSPATH', '/usr/lib/ants'), 'antsRegistrationSyNQuick.sh') ]
+    cmd = [ os.path.join(os.environ['ANTSPATH'], 'antsRegistrationSyNQuick.sh') ]
 
     fixed_input_file = config['inputs']['fixed']['location']['path']
     if fixed_input_file.endswith('.zip'):
@@ -98,7 +101,7 @@ def get_reg_syn_quick_command():
 
 rsq_cmd = get_reg_syn_quick_command()
 print('antsRegistrationSyNQuick command: ', rsq_cmd, flush=True)
-subprocess.run(rsq_cmd, check=True)
+subprocess.run(rsq_cmd, check=True, env=os.environ)
 
 out_prefix = config['config']['out_prefix']
 expected_files = map(lambda x: out_prefix+x, ['0GenericAffine.mat', '1Warp.nii.gz', '1InverseWarp.nii.gz', 'Warped.nii.gz', 'InverseWarped.nii.gz'])
