@@ -1,0 +1,155 @@
+{
+    "name": "ants-applyTransforms",
+    "label": "ANTs: Apply Transforms",
+    "description": "Runs antsApplyTransforms from ANTs toolkit",
+    "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
+    "cite": "Brian B. Avants, Nick Tustison and Gang Song. Penn Image Computing And Science Laboratory. University of Pennsylvania. Please reference http://www.ncbi.nlm.nih.gov/pubmed/20851191. A reproducible evaluation of ANTs similarity metric performance in brain image registration: Avants BB, Tustison NJ, Song G, Cook PA, Klein A, Gee JC. Neuroimage, 2011.",
+    "maintainer": "MatherLab <matherlab@usc.edu>",
+    "url": "http://gero.usc.edu/labs/matherlab/",
+    "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/applyTransforms",
+    "license": "Other",
+    "version": "0.0.1",
+    "custom": {
+        "docker-image": "matherlab/ants-applytransforms:0.0.1",
+        "flywheel": {
+            "suite": "ANTs"
+        },
+        "gear-builder": {
+            "image": "matherlab/ants-applytransforms:0.0.1",
+	        "category": "analysis"
+        }
+    },
+    "config": {
+        "dimensionality": {
+            "minimum": 2,
+            "maximum": 4,
+            "type": "integer",
+            "description": "This option forces the image to be treated as a specified-dimensional image."
+        },
+        "input_image_type": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 3,
+            "default": 0,
+            "description": "Option specifying the input image type of scalar (default, 0), vector (1), tensor (2), or time series (3)."
+        },
+        "interpolation": {
+            "type": "string",
+            "enum": [
+                "Linear",
+                "NearestNeighbor",
+                "MultiLabel",
+                "Gaussian",
+                "BSpline",
+                "CosineWindowedSinc",
+                "WelchWindowedSinc",
+                "HammingWindowedSinc",
+                "LanczosWindowedSinc",
+                "GenericLabel"
+            ],
+            "description": "Several interpolation options are available in ITK. These have all been made available."
+        },
+        "transform_target_1": {
+            "type": "string",
+            "optional": true,
+            "description": "If the first transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "transform_target_2": {
+            "type": "string",
+            "optional": true,
+            "description": "If the second transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "transform_target_3": {
+            "type": "string",
+            "optional": true,
+            "description": "If the third transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "transform_target_4": {
+            "type": "string",
+            "optional": true,
+            "description": "If the fourth transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "transform_target_5": {
+            "type": "string",
+            "optional": true,
+            "description": "If the fifth transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "transform_target_6": {
+            "type": "string",
+            "optional": true,
+            "description": "If the sixth transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "transform_target_7": {
+            "type": "string",
+            "optional": true,
+            "description": "If the seventh transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "transform_target_8": {
+            "type": "string",
+            "optional": true,
+            "description": "If the eighth transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "verbose": {
+            "default": false,
+            "type": "boolean",
+            "description": "Force antsApplyTransform to print verbose output."
+        },
+        "float": {
+            "default": false,
+            "type": "boolean",
+            "description": "Use 'float' instead of 'double' for computations."
+        }
+    },
+    "inputs": {
+        "input_file": {
+            "base": "file",
+            "description": "Image file input"
+        },
+        "reference_file": {
+            "base": "file",
+            "description": "For warping input images, the reference image defines the spacing, origin, size, and direction of the output warped image."
+        },
+        "transform_file_1": {
+            "base": "file",
+            "description": "The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform."
+        },
+        "transform_file_2": {
+            "base": "file",
+            "optional": true,
+            "description": "The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform."
+        },
+        "transform_file_3": {
+            "base": "file",
+            "optional": true,
+            "description": "The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform."
+        },
+        "transform_file_4": {
+            "base": "file",
+            "optional": true,
+            "description": "The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform."
+        },
+        "transform_file_5": {
+            "base": "file",
+            "optional": true,
+            "description": "The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform."
+        },
+        "transform_file_6": {
+            "base": "file",
+            "optional": true,
+            "description": "The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform."
+        },
+        "transform_file_7": {
+            "base": "file",
+            "optional": true,
+            "description": "The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform."
+        },
+        "transform_file_8": {
+            "base": "file",
+            "optional": true,
+            "description": "The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform."
+        }
+    },
+    "environment": {
+      "ANTSPATH": "/usr/lib/ants"
+    }
+}
