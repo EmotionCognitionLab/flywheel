@@ -1,5 +1,5 @@
 {
-    "name": "ants-applyTransforms",
+    "name": "ants-applytransforms",
     "label": "ANTs: Apply Transforms",
     "description": "Runs antsApplyTransforms from ANTs toolkit",
     "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
