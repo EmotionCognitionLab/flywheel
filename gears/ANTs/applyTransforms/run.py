@@ -35,9 +35,11 @@ def get_params():
 
     # Build a map of btp param flag -> value from the config
     params = { param_flags[k]:v for (k, v) in config['config'].items() if k in param_flags }
-    for x in ['-v', '--float']: # convert True to 1
+    for x in ['-v', '--float']: # convert True to 1/False to 0
         if params.get(x, False):
             params[x] = 1
+        if not params.get(x, True):
+            params[x] = 0
 
     return params
 
