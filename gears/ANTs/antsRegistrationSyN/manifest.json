@@ -1,0 +1,129 @@
+{
+    "label": "ANTs: RegistrationSyN",
+    "name": "ants-antsregistrationsyn",
+    "description": "Runs antsRegistrationSyN from ANTs toolkit",
+    "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
+    "maintainer": "MatherLab <matherlab@usc.edu>",
+    "url": "http://gero.usc.edu/labs/matherlab/",
+    "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/antsRegistrationSyN",
+    "license": "Other",
+    "version": "0.0.1",
+    "custom": {
+        "docker-image": "matherlab/ants-registration-syn:0.0.1",
+        "flywheel": {
+            "suite": "ANTs"
+        },
+	"gear-builder": {
+        "image": "matherlab/ants-registration-syn:0.0.1",
+        "category": "analysis"
+	}
+    },
+    "cite": "Brian B. Avants, Nick Tustison and Gang Song. Penn Image Computing And Science Laboratory. University of Pennsylvania. Please reference http://www.ncbi.nlm.nih.gov/pubmed/20851191. A reproducible evaluation of ANTs similarity metric performance in brain image registration: Avants BB, Tustison NJ, Song G, Cook PA, Klein A, Gee JC. Neuroimage, 2011.",
+    "config": {
+        "image_dimension": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 3,
+            "description": "Number of image dimensions. 2 or 3 (for 2 or 3 dimensional registration of single volume)"
+        },
+        "out_prefix": {
+            "default": "aligned_",
+            "type": "string",
+            "description": "A prefix that is prepended to all output files."
+        },
+        "num_threads": {
+            "type": "integer",
+            "description": "Number of threads",
+            "optional": true
+        },
+        "transform_type": {
+            "type": "string",
+            "enum": [
+                "t",
+                "r",
+                "a",
+                "s",
+                "sr",
+                "so",
+                "b",
+                "br",
+                "bo"
+            ],
+            "description": "Transform type. t=translation (1 stage), r=rigid (1 stage), a=rigid + affine (2 stages), s=rigid + affine + deformable syn (3 stages), sr=rigid + deformable syn (2 stages), so=deformable syn only (1 stage), b=rigid + affine + deformable b-spline syn (3 stages), br=rigid + deformable b-spline syn (2 stages), bo=deformable b-spline syn only (1 stage)",
+            "optional": true
+        },
+        "radius": {
+            "type": "integer",
+            "description": "Radius for cross correlation metric used during SyN stage",
+            "optional": true
+        },
+        "spline_distance": {
+            "type": "integer",
+            "description": "Spline distance for deformable B-spline SyN transform",
+            "optional": true
+        },
+        "precision_type": {
+            "type": "string",
+            "description": "Precision type. f=float, d=double",
+            "optional": true
+        },
+        "use_histogram_matching": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "description": "Use histogram matching. 0=false, 1=true.",
+            "optional": true
+        },
+        "collapse_output_transforms": {
+            "type": "integer",
+            "enum": [
+                0,
+                1
+            ],
+            "description": "Collapse output transforms. 0=false, 1=true",
+            "optional": true
+        }
+    },
+    "inputs": {
+        "fixed": {
+            "base": "file",
+            "description": "Fixed image or source image or reference image (may be nifti or zip)"
+        },
+        "moving": {
+            "base": "file",
+            "description": "Moving image or target image"
+        },
+        "mask1": {
+            "optional": true,
+            "base": "file",
+            "description": "Mask(s) for the fixed image space. Should specify either a single image to be used for all stages or one should specify a mask image for each 'stage' (cf -t option).  If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of a file name.",
+            "type": {
+                "enum": [
+                    "nifti"
+                ]
+            }
+        },
+        "mask2": {
+            "optional": true,
+            "base": "file",
+            "description": "Mask file for second stage (if applicable). Should specify either a single image to be used for all stages or one should specify a mask image for each 'stage' (cf -t option).  If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of a file name.",
+            "type": {
+                "enum": [
+                    "nifti"
+                ]
+            }
+        },
+        "mask3": {
+            "optional": true,
+            "base": "file",
+            "description": "Mask file for third stage (if applicable). Should specify either a single image to be used for all stages or one should specify a mask image for each 'stage' (cf -t option).  If no mask is to be used for a particular stage, the keyword 'NULL' should be used in place of a file name.",
+            "type": {
+                "enum": [
+                    "nifti"
+                ]
+            }
+        }
+    }
+}
