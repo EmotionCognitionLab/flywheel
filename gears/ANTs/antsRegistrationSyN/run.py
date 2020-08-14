@@ -108,9 +108,9 @@ def log_resource_utilization(every_n_seconds=300):
         subprocess.run(['ps', '-e', '-o', 'cmd,etime,pcpu,pmem'])
         time.sleep(every_n_seconds)
 
-
-if (config['config']['log_resource_usage']):
-    usage_logging_thread = threading.Thread(target=log_resource_utilization, daemon=True)
+resource_logging_frequency = int(config['config']['log_resource_usage_every_N_seconds'])
+if resource_logging_frequency > 0:
+    usage_logging_thread = threading.Thread(target=log_resource_utilization, kwargs=dict(every_n_seconds=resource_logging_frequency), daemon=True)
     usage_logging_thread.start()
 
 rs_cmd = get_reg_syn_command()

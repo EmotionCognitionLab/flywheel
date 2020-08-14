@@ -7,14 +7,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/antsRegistrationSyN",
     "license": "Other",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "custom": {
-        "docker-image": "matherlab/ants-registration-syn:0.0.2",
+        "docker-image": "matherlab/ants-registration-syn:0.0.3",
         "flywheel": {
             "suite": "ANTs"
         },
 	"gear-builder": {
-        "image": "matherlab/ants-registration-syn:0.0.2",
+        "image": "matherlab/ants-registration-syn:0.0.3",
         "category": "analysis"
 	}
     },
@@ -85,10 +85,10 @@
             "description": "Collapse output transforms. 0=false, 1=true",
             "optional": true
         },
-        "log_resource_usage": {
-            "type": "boolean",
-            "description": "Turns on resource utilization logging for debug purposes",
-            "optional": true
+        "log_resource_usage_every_N_seconds": {
+            "type": "integer",
+            "description": "Controls how often resource utilization is logged. Use 0 to turn off logging.",
+            "default": 0
         }
     },
     "inputs": {
