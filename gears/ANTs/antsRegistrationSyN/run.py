@@ -9,14 +9,20 @@ happens, we extract the desired file from the zip, rather than
 using the zip file itself as an input.
 """
 import json
+import logging
 import os
 from os import path
+import shutil
 import subprocess
 import tempfile
+import threading
+import time
 import zipfile
 
 container = '[matherlab/ants-registration-syn]'
 print(container, ' initiated', flush=True)
+
+logging.basicConfig(format='%(levelname)s %(asctime)s %(message)s', level=logging.DEBUG)
 
 # key directories/files, as per flywheel spec
 flywheel_base = '/flywheel/v0'
@@ -90,6 +96,22 @@ def get_reg_syn_command():
         cmd.append(str(param_value))
 
     return cmd
+
+def log_resource_utilization(every_n_seconds=300):
+    """Periodically logs resource utilization. Call this in a separate thread; it runs eternally."""
+    while True:
+        total, used, free = shutil.disk_usage(input_dir)
+        logging.debug('disk(used/free/total) GB: %d/%d/%d', used // 2**30, free // 2**30, total // 2**30)
+        logging.debug('vmstat -s -S M output:')
+        subprocess.run(['vmstat', '-s', '-S', 'M'])
+        logging.debug("ps -eo 'cmd,etime,pcpu,pmem' output:")
+        subprocess.run(['ps', '-e', '-o', 'cmd,etime,pcpu,pmem'])
+        time.sleep(every_n_seconds)
+
+
+if (config['config']['log_resource_usage']):
+    usage_logging_thread = threading.Thread(target=log_resource_utilization, daemon=True)
+    usage_logging_thread.start()
 
 rs_cmd = get_reg_syn_command()
 print('antsRegistrationSyN command: ', rs_cmd, flush=True)
