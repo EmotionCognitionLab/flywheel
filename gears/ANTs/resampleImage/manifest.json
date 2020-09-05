@@ -1,0 +1,62 @@
+{
+    "label": "ANTs: Resample Image",
+    "name": "ants-resampleimage",
+    "description": "Runs ResampleImage from ANTs toolkit",
+    "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
+    "maintainer": "MatherLab <matherlab@usc.edu>",
+    "url": "http://gero.usc.edu/labs/matherlab/",
+    "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/resampleImage",
+    "license": "Other",
+    "version": "0.0.1",
+    "custom": {
+        "docker-image": "matherlab/ants-resampleimage:0.0.1",
+        "flywheel": {
+            "suite": "ANTs"
+        },
+        "gear-builder": {
+            "image": "matherlab/ants-resampleimage:0.0.1",
+            "category": "utility"
+        }
+    },
+    "cite": "Brian B. Avants, Nick Tustison and Gang Song. Penn Image Computing And Science Laboratory. University of Pennsylvania. Please reference http://www.ncbi.nlm.nih.gov/pubmed/20851191. A reproducible evaluation of ANTs similarity metric performance in brain image registration: Avants BB, Tustison NJ, Song G, Cook PA, Klein A, Gee JC. Neuroimage, 2011.",
+    "config": {
+        "image_dimension": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 4,
+            "description": "Number of image dimensions."
+        },
+        "output_image": {
+            "default": "resampled.nii.gz",
+            "type": "string",
+            "description": "Name for the resampled image."
+        },
+        "MxNxO": {
+            "type": "string",
+            "description": "Target dimensions (size or spacing) to resample to"
+        },
+        "size_or_spacing": {
+            "type": "boolean",
+            "description": "Check if your MxNxO argument should be interpreted as the size to resample the image to. Uncheck if it should be interpreted as the spacing instead.",
+            "default": true
+        },
+        "interpolation_type": {
+            "type": "string",
+            "description": "Interpolation type. 0. linear (default), 1. nn, 2. gaussian [sigma=imageSpacing] [alpha=1.0], 3. windowedSinc [type = 'c'osine, 'w'elch, 'b'lackman, 'l'anczos, 'h'amming], 4. B-Spline [order=3]",
+            "optional": true
+        },
+        "pixel_type": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 7,
+            "description": "Data type for image pixels. 0: char, 1: unsigned char, 2: short, 3: unsigned short, 4: int, 5: unsigned int, 6: float (default), 7: double",
+            "optional": true
+        }
+    },
+    "inputs": {
+        "inputImage": {
+            "base": "file",
+            "description": "Input image to be resampled."
+        }
+    }
+}
