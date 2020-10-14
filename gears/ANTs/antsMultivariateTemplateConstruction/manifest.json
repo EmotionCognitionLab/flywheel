@@ -1,5 +1,5 @@
 {
-    "name": "ants-multivariateTemplateConstruction",
+    "name": "ants-multivariatetemplateconstruction",
     "label": "ANTs: Multivariate Template Construction",
     "description": "Runs antsMultivariateTemplateConstruction from ANTs toolkit",
     "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
@@ -10,12 +10,12 @@
     "license": "Other",
     "version": "0.0.1",
     "custom": {
-        "docker-image": "matherlab/ants-multivariatetemplateconstruction:0.0.1",
+        "docker-image": "matherlab/ants-multivariatetemplateconstruction:0.0.2",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-multivariatetemplateconstruction:0.0.1",
+            "image": "matherlab/ants-multivariatetemplateconstruction:0.0.2",
 	    "category": "analysis"
         }
     },
