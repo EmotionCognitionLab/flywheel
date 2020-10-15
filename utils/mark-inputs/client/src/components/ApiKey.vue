@@ -2,8 +2,8 @@
     <div>
         <div v-if="!hasSeenTaggerIntro" id="intro">
             Welcome to Tagger! Tagger is a tool to help you specify inputs for Flywheel analyses.
-            It allows you to select one or more files (currently just from outputs of existing analyses,
-            but soon to include acquisitions as well) and associate them with a tag. You can create as many
+            It allows you to select one or more files (either from outputs of existing analyses,
+            or from acquisitions) and associate them with a tag. You can create as many
             tag/file groups as you want. Once you're done, Tagger will upload them all to a file in Flywheel.
             You can then use that file as an input to a Flywheel analysis.
             <br/>
