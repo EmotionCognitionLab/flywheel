@@ -24,7 +24,7 @@ export default {
         }
     },
     watch: {
-        isSelected: function(newVal, oldVal) {
+        isSelected: function(newVal) {
             if (newVal) { // only run when isSelected is true
                 document.querySelector(`[data-sessid="${this.session['id']}"]`).scrollIntoView()
             }

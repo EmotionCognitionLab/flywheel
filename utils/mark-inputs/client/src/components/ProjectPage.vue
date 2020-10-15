@@ -67,7 +67,7 @@ import TagManager from '../../services/TagManager'
 let fw
 
 export default {
-    components: { FileContainer, Session, TagManager },
+    components: { FileContainer, Session },
     props: {
         id: {
             type: String,
@@ -80,9 +80,7 @@ export default {
                 return 'Select a session to load acquisitions for that session.'
             } else {
                 const sess = this.sessions.find(el => el.id == this.selectedSessionId)
-                if (sess.acqLoadingStatus == 'loading') {
-
-                } else if (sess.acqLoadingStatus == 'loaded') {
+                if (sess.acqLoadingStatus == 'loaded') {
                     return `No acquisitions found for subject ${sess.subject_label}, session ${sess.label}`
                 } else {
                     return 'An error occurred loading the acquisitions for this session. Please click it again.'
@@ -221,7 +219,7 @@ export default {
                 }
             }
         },
-        onTabClicked: function(event) {
+        onTabClicked: function() {
             // TODO use $refs instead of document.getElement
             const tabBtns = document.getElementsByClassName('tab-btn')
             for (var btn of tabBtns) {
