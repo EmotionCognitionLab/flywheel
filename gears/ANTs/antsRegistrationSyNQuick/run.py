@@ -15,7 +15,7 @@ import subprocess
 import tempfile
 import zipfile
 
-container = '[matherlab/buildtemplateparallel]'
+container = '[matherlab/ants-registration-syn-quick]'
 print(container, ' initiated', flush=True)
 
 # key directories/files, as per flywheel spec
