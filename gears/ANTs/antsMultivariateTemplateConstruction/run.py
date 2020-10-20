@@ -74,6 +74,7 @@ def get_params():
     param_flags['registration_similarity_metric'] = '-s'
     param_flags['rigid_body_registration'] = '-r'
     param_flags['transformation_model_type'] = '-t'
+    param_flags['update_template_with_full_affine'] = '-y'
 
     # Build a map of btp param flag -> value from the config
     return { param_flags[k]:v for (k, v) in config['config'].items() if k in param_flags }
