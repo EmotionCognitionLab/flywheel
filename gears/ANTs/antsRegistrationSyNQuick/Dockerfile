@@ -1,6 +1,6 @@
-FROM ubuntu:18.04
+FROM matherlab/ants-2.3.4
 
-ENV ANTSPATH=/usr/lib/ants
+ENV ANTSPATH=/opt/ANTs/bin
 
 RUN apt-get update -qq \
     && apt-get install -y -q --no-install-recommends \
@@ -8,8 +8,6 @@ RUN apt-get update -qq \
            python3-pip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* 
-
-COPY bin/ants /usr/lib/ants
 
 # Make directory for flywheel spec (v0)
 ENV FLYWHEEL /flywheel/v0

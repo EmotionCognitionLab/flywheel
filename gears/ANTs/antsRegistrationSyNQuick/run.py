@@ -28,7 +28,7 @@ manifest = os.path.join(flywheel_base, 'manifest.json')
 config_file = os.path.join(flywheel_base, 'config.json')
 
 # set ANTSPATH
-os.environ['ANTSPATH'] = '/usr/lib/ants'
+os.environ['ANTSPATH'] = '/opt/ANTs/bin'
 
 # load the config file
 with open(config_file, 'r') as f:
