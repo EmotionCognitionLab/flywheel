@@ -150,6 +150,6 @@
         }
     },
     "environment": {
-      "ANTSPATH": "/usr/lib/ants"
+      "ANTSPATH": "/opt/ANTs/bin"
     }
 }
