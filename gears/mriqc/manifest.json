@@ -1,5 +1,5 @@
 {
-    "label": "MRIQC: Group level ",
+    "label": "MRIQC: Group level",
     "name": "mriqc-group",
     "description": "Runs group-level mriqc reports across the entire project or certain acquisitions in the project. You must have already run participant level mriqc reports to generate mriqc.json files and your data must be BIDS-curated before running this gear.",
     "author": "Oscar Esteban, Krzysztof F. Gorgolewski. Poldrack Lab, Psychology, CRN, Stanford University",
@@ -7,11 +7,11 @@
     "url": "https://github.com/poldracklab/mriqc",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/mriqc",
     "license": "Other",
-    "version": "0.0.1_0.15.1",
+    "version": "0.0.2_0.15.1",
     "custom": {
-        "docker-image": "matherlab/mriqc:0.0.1_0.15.1",
+        "docker-image": "matherlab/mriqc:0.0.2_0.15.1",
         "gear-builder": {
-            "image": "matherlab/mriqc:0.0.1_0.15.1",
+            "image": "matherlab/mriqc:0.0.2_0.15.1",
             "category": "analysis"
         }
     },
@@ -19,11 +19,14 @@
     "config": {
         "acquisition_label_regex": {
             "type": "string",
-            "description": "Only acquisitions with labels matching this regular expression will be included. Leave blank to include all acquisitions."
+            "description": "Only acquisitions with labels matching this regular expression will be included. Leave blank to include all acquisitions.",
+            "optional": true,
+            "default": ""
         },
         "ignore_errors": {
             "type": "boolean",
-            "description": "If checked, errors (such as missing BIDS data) will cause individual mriqc.json files to be skipped, rather than stopping the entire gear run. Useful for finding all problematic files in a single run, rather than failing on each one."
+            "description": "If checked, errors (such as missing BIDS data) will cause individual mriqc.json files to be skipped, rather than stopping the entire gear run. Useful for finding all problematic files in a single run, rather than failing on each one.",
+            "default": false
         }
     },
     "inputs": {
