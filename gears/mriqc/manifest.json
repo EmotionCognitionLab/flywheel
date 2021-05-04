@@ -7,11 +7,11 @@
     "url": "https://github.com/poldracklab/mriqc",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/mriqc",
     "license": "Other",
-    "version": "0.0.3_0.15.1",
+    "version": "0.0.4_0.15.1",
     "custom": {
-        "docker-image": "matherlab/mriqc:0.0.3_0.15.1",
+        "docker-image": "matherlab/mriqc:0.0.4_0.15.1",
         "gear-builder": {
-            "image": "matherlab/mriqc:0.0.3_0.15.1",
+            "image": "matherlab/mriqc:0.0.4_0.15.1",
             "category": "analysis"
         }
     },
