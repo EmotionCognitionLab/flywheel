@@ -24,10 +24,10 @@ if acquisition_label_regex == '':
 
 
 def find_mriqc_json_files(proj_name, acq_label_regex=None):
-    query = 'project.label = {proj_name} and file.name contains mriqc.json'.format(proj_name=proj_name)
+    query = f'project.label = {proj_name} and file.name contains mriqc.json'
     if acq_label_regex:
-        query = query + ' and acquisition.label =~ "{acq_label_regex}"'.format(acq_label_regex=acq_label_regex)
-    print('Query for mriqc.json files: {query}'.format(query=query))
+        query = query + f' and acquisition.label =~ "{acq_label_regex}"'
+    print(f'Query for mriqc.json files: {query}')
     return fw.search({'structured_query': query, 'return_type': 'file'}, size=10000)
 
 
@@ -37,24 +37,24 @@ def mriqc_json_to_bids(query_results, ignore_errors, dest_dir):
     inputs = []
     for item in query_results:
         if not item['file']['name'].endswith('_mriqc.json'):
-            raise ValueError("Expoected an mriqc.json file, but found {item['file']['name']}".format(item=item))
+            raise ValueError(f"Expoected an mriqc.json file, but found {item['file']['name']}")
 
         sess = item['session']['label']
         subj = item['subject']['code']
         acq_id = item['parent'].to_dict()['id']
         acq = fw.get_acquisition(acq_id)
         fname = item['file']['name']
-        fpath = '{subj}/{sess}/{acq.label} ({acq_id}) /{fname}'.format(subj=subj, sess=sess, acq=acq, acq_id=acq_id, fname=fname)
-        print('Including {fpath}'.format(fpath=fpath), flush=True)
+        fpath = f'{subj}/{sess}/{acq.label} ({acq_id}) /{fname}'
+        print(f'Including {fpath}', flush=True)
 
         try:
             (base_name, _) = fname.split('_mriqc.json')
-            nifti_meta = fw.get_acquisition_file_info(acq_id, '{base_name}.nii.gz'.format(base_name=base_name))
+            nifti_meta = fw.get_acquisition_file_info(acq_id, f'{base_name}.nii.gz')
             bids_info = nifti_meta['info'].get('BIDS', None)
             if not bids_info or bids_info == 'NA':
-                err_msg = 'BIDS info is missing for {base_name}.nii.gz .'.format(base_name=base_name)
+                err_msg = f'BIDS info is missing for {base_name}.nii.gz .'
                 if ignore_errors:
-                    print('\t Skipping. {err_msg}'.format(err_msg=err_msg), flush=True)
+                    print(f'\t Skipping. {err_msg}', flush=True)
                     continue
                 else:
                     raise Exception(err_msg)
@@ -64,20 +64,20 @@ def mriqc_json_to_bids(query_results, ignore_errors, dest_dir):
             bids_full_path = os.path.join(bids_dest_dir, bids_filename)
             os.makedirs(bids_dest_dir, exist_ok=True)
             if os.path.exists(bids_full_path):
-                err_msg = '{bids_filename} already exists'.format(bids_filename=bids_filename)
+                err_msg = f'{bids_filename} already exists'
                 if ignore_errors:
-                    print('\tSkipping. {err_msg}'.format(err_msg=err_msg), flush=True)
+                    print(f'\tSkipping. {err_msg}', flush=True)
                 else:
                     raise Exception(err_msg)
             fw.download_file_from_acquisition(acq_id, item['file']['name'], bids_full_path)
             inputs.append(fpath)
         except KeyError as ke:
-            print("Error trying to download {fname} from {subj}/{sess}/{acq.label}. Check to make sure a corresponding nifti file exists, that you have run BIDS curation and that the nifti file has BIDS.Filename and BIDS.Path correctly set.".format(fname=fname, subj=subj, sess=sess, acq=acq), flush=True)
-            print('Missing key: {ke}'.format(ke=ke), flush=True)
+            print(f"Error trying to download {fname} from {subj}/{sess}/{acq.label}. Check to make sure a corresponding nifti file exists, that you have run BIDS curation and that the nifti file has BIDS.Filename and BIDS.Path correctly set.", flush=True)
+            print(f'Missing key: {ke}', flush=True)
             if ignore_errors:
                 continue
             else:
-                raise Exception('Error trying to download {fname} from {subj}/{sess}/{acq.label}, probably due to incorrect/missing BIDS metadata in corresponding nifti file.'.format(fname=fname, subj=subj, sess=sess, acq=acq))
+                raise Exception(f'Error trying to download {fname} from {subj}/{sess}/{acq.label}, probably due to incorrect/missing BIDS metadata in corresponding nifti file.')
     
     return inputs
 
@@ -89,10 +89,10 @@ with tempfile.TemporaryDirectory() as tmpdir:
     outpaths = [os.path.join(tmpdir, f) for f in outfiles]
     # saved_output_files = []
     for (f, p) in zip(outfiles, outpaths):
-        print('Checking {p}'.format(p=p))
+        print(f'Checking {p}')
         if os.path.exists(p):
             saved_path = os.path.join(output_dir, f)
-            print('{p} exists, copying to {saved_path}'.format(p=p, saved_path=saved_path))
+            print(f'{p} exists, copying to {saved_path}')
             shutil.copy(p, saved_path)
             # saved_output_files.append(saved_path)
 
