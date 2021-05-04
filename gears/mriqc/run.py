@@ -83,18 +83,14 @@ def mriqc_json_to_bids(query_results, ignore_errors, dest_dir):
 
 res = find_mriqc_json_files(project_label, acquisition_label_regex)
 with tempfile.TemporaryDirectory() as tmpdir: 
-    input_files = mriqc_json_to_bids(res, ignore_errors, tmpdir)
+    mriqc_json_to_bids(res, ignore_errors, tmpdir)
     subprocess.run(['mriqc', input_dir, tmpdir, 'group'], check=True)
     outfiles = ['group_T1w.html', 'group_T1w.tsv', 'group_bold.html', 'group_bold.tsv']
     outpaths = [os.path.join(tmpdir, f) for f in outfiles]
-    # saved_output_files = []
     for (f, p) in zip(outfiles, outpaths):
         print(f'Checking {p}')
         if os.path.exists(p):
             saved_path = os.path.join(output_dir, f)
             print(f'{p} exists, copying to {saved_path}')
             shutil.copy(p, saved_path)
-            # saved_output_files.append(saved_path)
-
-    fw.modify_analysis_info(destination, {'set': {'inputs': input_files}})
 
