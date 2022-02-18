@@ -37,7 +37,7 @@ def mriqc_json_to_bids(query_results, ignore_errors, dest_dir):
     inputs = []
     for item in query_results:
         if not item['file']['name'].endswith('_mriqc.json'):
-            raise ValueError(f"Expoected an mriqc.json file, but found {item['file']['name']}")
+            raise ValueError(f"Expected an mriqc.json file, but found {item['file']['name']}")
 
         sess = item['session']['label']
         subj = item['subject']['code']
