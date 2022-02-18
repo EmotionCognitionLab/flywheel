@@ -1,4 +1,4 @@
-FROM poldracklab/mriqc:0.15.1
+FROM poldracklab/mriqc:0.16.1
 
 # Install flywheel sdk
 RUN pip install flywheel-sdk~=14.6.2
