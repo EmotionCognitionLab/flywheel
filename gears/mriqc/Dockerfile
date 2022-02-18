@@ -1,7 +1,12 @@
 FROM poldracklab/mriqc:0.16.1
 
+# Remove expired LetsEncrypt cert
+RUN rm /usr/share/ca-certificates/mozilla/DST_Root_CA_X3.crt && \
+     update-ca-certificates
+ENV REQUESTS_CA_BUNDLE "/etc/ssl/certs/ca-certificates.crt"
+
 # Install flywheel sdk
-RUN pip install flywheel-sdk~=14.6.2
+RUN pip install flywheel-sdk~=14.6.6
 
 # Make directory for flywheel spec (v0)
 ENV FLYWHEEL /flywheel/v0
