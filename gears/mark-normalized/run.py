@@ -41,7 +41,8 @@ def main(context):
     
             new_label = add_rec_entity(destination.label, context.config.get("rec_value"))
             log.info(f"Changing {destination.label} to {new_label}")
-            context.metadata.update_container("acquisition", label=new_label)
+            destination.reload()
+            destination.update({"label": new_label})
             break
 
 
