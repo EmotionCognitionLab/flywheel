@@ -7,11 +7,11 @@
   "url": "https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils",
   "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/FSL/fslmaths",
   "license": "Apache-2.0",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "custom": {
-    "docker-image": "matherlab/fslmaths:0.0.3",
+    "docker-image": "matherlab/fslmaths:0.0.4",
     "gear-builder": {
-      "image": "matherlab/fslmaths:0.0.3",
+      "image": "matherlab/fslmaths:0.0.4",
       "category": "converter"
     },
     "flywheel": {
