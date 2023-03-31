@@ -7,7 +7,7 @@
   "url": "https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils",
   "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/FSL/fslmaths",
   "license": "Apache-2.0",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "custom": {
     "docker-image": "matherlab/fslmaths:0.0.1",
     "gear-builder": {
@@ -96,5 +96,5 @@
       "optional": true
     }
   },
-  "command": "/flywheel/v0/run"
+  "command": "/opt/conda/bin/python3 /flywheel/v0/run"
 }
