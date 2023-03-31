@@ -8,7 +8,7 @@ import sys
 
 FLYWHEEL='/flywheel/v0'
 os.environ['FSLOUTPUTTYPE'] = 'NIFTI_GZ'
-os.environ['FSLDIR'] = '/opt/conda/bin'
+os.environ['FSLDIR'] = '/opt/conda/'
 binary_ops = ['add_op', 'sub_op']
 
 def op_to_fn(op, mathobj, context):
