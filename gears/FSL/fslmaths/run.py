@@ -5,6 +5,7 @@ import logging
 log = logging.getLogger(__name__)
 import os
 import sys
+import tempfile
 
 FLYWHEEL='/flywheel/v0'
 os.environ['FSLOUTPUTTYPE'] = 'NIFTI_GZ'
@@ -50,8 +51,9 @@ def run_maths(op, context):
     log.info(f'Running {op} on {first_input}...')
     m = fslmaths(first_input)
     m = op_to_fn(op, m, context)
-    output = f'{FLYWHEEL}/output/fslmaths-output.nii.gz'
-    m.run(output)
+    (output_handle, output_name) = tempfile.mkstemp(prefix='fslmaths-output-', suffix='.nii.gz', dir=f'{FLYWHEEL}/output/')
+    os.close(output_handle) # we just need the name; close it and let fslmaths write to it
+    m.run(output_name)
     log.info('Finished running fslmaths.')
 
 
