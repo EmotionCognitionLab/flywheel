@@ -1,0 +1,100 @@
+{
+  "name": "fslmaths",
+  "label": "FSL: fslmaths (v6.0)",
+  "description": "Provides a subset of the operations provided by the fslmaths command: add, bin, bptf, sqrt, sub, thr, thrp, thrP. The gear only supports one operation per run; do not choose more than one of the _op options in the configuration. LICENSING NOTE: FSL software are owned by Oxford University Innovation and license is required for any commercial applications. For commercial licence please contact fsl@innovation.ox.ac.uk. For academic use, an academic license is required which is available by registering on the FSL website. Any use of the software requires that the user obtain the appropriate license. See https://fsl.fmrib.ox.ac.uk/fsldownloads_registration for more information.",
+  "maintainer": "MatherLab <matherlab@usc.edu>",
+  "author": "Analysis Group, FMRIB, Oxford, UK.",
+  "url": "https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils",
+  "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/FSL/fslmaths",
+  "license": "Apache-2.0",
+  "version": "0.0.1",
+  "custom": {
+    "docker-image": "matherlab/fslmaths:0.0.1",
+    "gear-builder": {
+      "image": "matherlab/fslmaths:0.0.1",
+      "category": "converter"
+    },
+    "flywheel": {
+      "suite": "FSL"
+    }
+  },
+  "config": {
+    "add_op": {
+      "description": "Add an image to the input",
+      "default": false,
+      "type": "boolean"
+    },
+    "bin_op": {
+      "description": "Use (input >0) to binarise",
+      "default": false,
+      "type": "boolean"
+    },
+    "bptf_op": {
+      "description": "Bandpass temporal filtering; nonlinear highpass and Gaussian linear lowpass (with sigmas in volumes, not seconds); set either sigma<0 to skip that filter",
+      "default": false,
+      "type": "boolean"
+    },
+    "bptf_hp_sigma": {
+      "description": "The highpass sigma for the bptf filter. Sigma is in volumes, not seconds. Set to 0 to skip this filter.",
+      "default": 0,
+      "type": "number"
+    },
+    "bptf_lp_sigma": {
+      "description": "The lowpass sigma for the bptf filter. Sigma is in volumes, not seconds. Set to 0 to skip this filter.",
+      "default": 0,
+      "type": "number"
+    },
+    "sqrt_op": {
+      "description": "Square root",
+      "default": false,
+      "type": "boolean"
+    },
+    "sub_op": {
+      "description": "Subtract an image from the input",
+      "default": false,
+      "type": "boolean"
+    },
+    "thr_op": {
+      "description": "Threshold below the following number (zero anything below the number)",
+      "default": false,
+      "type": "boolean"
+    },
+    "thrp_op": {
+      "description": "Threshold below the following percentage (0-100) of ROBUST RANGE",
+      "default": false,
+      "type": "boolean"
+    },
+    "thrP_op": {
+      "description": "Threshold below the following percentage (0-100) of the positive voxels' ROBUST RANGE",
+      "default": false,
+      "type": "boolean"
+    },
+    "thr_value": {
+      "description": "The threshold value. For thr_op, anything below this number will be set to zero. For thrp_op and thrP_op, this is the percentage threshold.",
+      "default": 0,
+      "type": "number"
+    }
+  },
+  "inputs": {
+    "first_input": {
+      "description": "NIfTI file to be processed.",
+      "base": "file",
+      "type": {
+        "enum": [
+          "nifti"
+        ]
+      }
+    },
+    "second_input": {
+      "description": "NIfTI file to be processed with the first input.",
+      "base": "file",
+      "type": {
+        "enum": [
+          "nifti"
+        ]
+      },
+      "optional": true
+    }
+  },
+  "command": "/flywheel/v0/run"
+}
