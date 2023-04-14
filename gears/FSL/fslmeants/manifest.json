@@ -1,0 +1,90 @@
+{
+  "name": "fslmeants",
+  "label": "FSL: fslmeants (v6.0)",
+  "description": "Gear wrapper for the fslmeants command. LICENSING NOTE: FSL software are owned by Oxford University Innovation and license is required for any commercial applications. For commercial licence please contact fsl@innovation.ox.ac.uk. For academic use, an academic license is required which is available by registering on the FSL website. Any use of the software requires that the user obtain the appropriate license. See https://fsl.fmrib.ox.ac.uk/fsldownloads_registration for more information.",
+  "maintainer": "MatherLab <matherlab@usc.edu>",
+  "author": "Analysis Group, FMRIB, Oxford, UK.",
+  "url": "https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils",
+  "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/FSL/fslmeants",
+  "license": "Apache-2.0",
+  "version": "0.0.1",
+  "custom": {
+    "docker-image": "matherlab/fslmeants:0.0.1",
+    "gear-builder": {
+      "image": "matherlab/fslmeants:0.0.1",
+      "category": "converter"
+    },
+    "flywheel": {
+      "suite": "FSL"
+    }
+  },
+  "config": {
+    "coordinate": {
+      "description": "Use this x y z coordinate (three numbers, separated by spaces) instead of mask",
+      "default": "",
+      "type": "string"
+    },
+    "use_mm": {
+      "description": "Treat x,y, and z as mm coordinates, not voxels. Only applies if x, y and z are specified.",
+      "default": false,
+      "type": "boolean"
+    },
+    "show_all": {
+      "description": "Show all voxel time series (within mask) instead of averaging",
+      "default": false,
+      "type": "boolean"
+    },
+    "no_bin": {
+      "description": "Do not binarise the mask for calculation of Eigenvariates",
+      "default": false,
+      "type": "boolean"
+    },
+    "order": {
+      "description": "Select number of Eigenvariates (default 1)",
+      "default": 1,
+      "type": "integer"
+    },
+    "transpose": {
+      "description": "Output results in transpose format (one row per voxel/mean)",
+      "default": false,
+      "type": "boolean"
+    },
+    "eig": {
+      "description": "Calculate Eigenvariate(s) instead of mean (output will have 0 mean)",
+      "default": false,
+      "type": "boolean"
+    },
+    "weighted": {
+      "description": "Output weighted mean, using mask values as weights",
+      "default": false,
+      "type": "boolean"
+    },
+    "verbose": {
+      "description": "Switch on diagnostic messages",
+      "default": false,
+      "type": "boolean"
+    }
+  },
+  "inputs": {
+    "input": {
+      "description": "NIfTI file to be processed.",
+      "base": "file",
+      "type": {
+        "enum": [
+          "nifti"
+        ]
+      }
+    },
+    "mask_file": {
+      "description": "Optional mask file specifying which voxels are to be averaged",
+      "base": "file",
+      "type": {
+        "enum": [
+          "nifti"
+        ]
+      },
+      "optional": true
+    }
+  },
+  "command": "/opt/conda/bin/python3 /flywheel/v0/run"
+}
