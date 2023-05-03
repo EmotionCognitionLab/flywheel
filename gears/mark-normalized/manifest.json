@@ -1,17 +1,17 @@
 {
     "label": "Mark normalized acquisitions",
     "name": "mark-normalized",
-    "description": "Marks normalized acquisitions by adding rec-<something> to acquisition label. A dicom file with the 'NORM' entry in the ImageType array is assumed to be normalized.",
+    "description": "Marks normalized acquisitions by adding rec-<something> to acquisition label. A dicom file with the 'NORM' entry in the ImageType array is assumed to be normalized. Also removes _1 from the end of the acquisition label, regardless of whether the dicom is normalized. (Either the normalized or the non-nomalized acquisition gets _1 appended to the label by Flywheel; it's inconsistent as to which one gets it.)",
     "author": "Noah Mercer",
     "maintainer": "MatherLab <matherlab@usc.edu>",
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/mark-normalized",
     "license": "Other",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "custom": {
-        "docker-image": "matherlab/mark-normalized:0.0.2",
+        "docker-image": "matherlab/mark-normalized:0.0.3",
         "gear-builder": {
-            "image": "matherlab/mark-normalized:0.0.2",
+            "image": "matherlab/mark-normalized:0.0.3",
             "category": "converter"
         }
     },

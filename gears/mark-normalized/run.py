@@ -35,14 +35,20 @@ def main(context):
     for f in destination.files:
         if f.name == filename:
             info = f["info"]
+            new_label = destination.label
+            if destination.label.endswith("_1"):
+                new_label = destination.label[0:-2] # strip off the _1; we don't want it regardless of whether it's normalized or not
+
             if not "NORM" in info["ImageType"]:
-                log.info(f"{filename} in {destination.label} does not appear to be normalized. Skipping.")
-                return
-    
-            new_label = add_rec_entity(destination.label, context.config.get("rec_value"))
-            log.info(f"Changing {destination.label} to {new_label}")
-            destination.reload()
-            destination.update({"label": new_label})
+                log.info(f"{filename} in {destination.label} does not appear to be normalized.")
+            else:
+                new_label = add_rec_entity(new_label, context.config.get("rec_value"))
+            
+            if not new_label == destination.label:
+                log.info(f"Changing {destination.label} to {new_label}")
+                destination.reload()
+                destination.update({"label": new_label})
+                
             break
 
 
