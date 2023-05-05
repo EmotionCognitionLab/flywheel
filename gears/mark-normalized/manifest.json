@@ -7,11 +7,11 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/mark-normalized",
     "license": "Other",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "custom": {
-        "docker-image": "matherlab/mark-normalized:0.0.4",
+        "docker-image": "matherlab/mark-normalized:0.0.5",
         "gear-builder": {
-            "image": "matherlab/mark-normalized:0.0.4",
+            "image": "matherlab/mark-normalized:0.0.5",
             "category": "converter"
         }
     },
@@ -30,7 +30,7 @@
             },
             "description": "A dicom file"
         },
-        "api_key": {
+        "api-key": {
             "base": "api-key"
         }
     }
