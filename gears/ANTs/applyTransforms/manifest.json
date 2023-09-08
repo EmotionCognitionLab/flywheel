@@ -8,14 +8,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/applyTransforms",
     "license": "Other",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "custom": {
-        "docker-image": "matherlab/ants-applytransforms:0.0.5",
+        "docker-image": "matherlab/ants-applytransforms:0.0.6",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-applytransforms:0.0.5",
+            "image": "matherlab/ants-applytransforms:0.0.6",
 	        "category": "analysis"
         }
     },
