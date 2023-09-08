@@ -84,15 +84,22 @@ def get_transforms():
     The transform_target_1 through 8 params are used solely to specify which files should be
     extracted from any zip files specified. If no zip file is specified for a given transform_target
     param, the last zip file specified should be used.
+
+    Additionally, each of the eight transforms can have an optional inverse flag associated with
+    it, specifying that the inverse of the specified transform should be applied.
     """
     transform_files = [ config['inputs'].get('transform_file_' + str(x), None) for x in range(1,9) ]
     transform_targets = [ config['config'].get('transform_target_' + str(x), None) for x in range(1, 9) ]
+    transform_inversions = [ config['config'].get('invert_transform_' + str(x), None) for x in range(1, 9)]
 
     transforms = []
     cur_zip = None
-    for (target, file) in zip(transform_targets, transform_files):
+    for (target, file, inversion) in zip(transform_targets, transform_files, transform_inversions):
         if file is None:
             if target is None:
+                if inversion is not None:
+                    # error - no transform file/target was given, but they want to invert this non-existent transform
+                    raise ValueError('Found transform inversion, but no associated transform.')
                 continue
             if cur_zip is None:
                 # error - a target has been specified, but we haven't yet seen a 
@@ -103,12 +110,18 @@ def get_transforms():
         else:
             # just a regular file; append it to transforms
             transforms.append('-t')
-            transforms.append(file['location']['path'])
+            if inversion:
+                transforms.append(f"[{file['location']['path']}, 1]")
+            else:
+                transforms.append(file['location']['path'])
         if target is not None:
             with ZipFile(cur_zip) as zipfile:
                 zipfile.extract(target, os.path.dirname(cur_zip))
             transforms.append('-t')
-            transforms.append(os.path.join(os.path.dirname(cur_zip), target))
+            if inversion:
+                transforms.append(f"[{os.path.join(os.path.dirname(cur_zip), target)}, 1]")
+            else:
+                transforms.append(os.path.join(os.path.dirname(cur_zip), target))
         # if target is None it's weird, but not illegal - the zip file may be referred to by a later target
 
     if len(transforms) < 4: # we need a minimum of two transforms, each preceded by '-t'

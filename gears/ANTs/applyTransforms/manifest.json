@@ -8,14 +8,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/applyTransforms",
     "license": "Other",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "custom": {
-        "docker-image": "matherlab/ants-applytransforms:0.0.4",
+        "docker-image": "matherlab/ants-applytransforms:0.0.5",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-applytransforms:0.0.4",
+            "image": "matherlab/ants-applytransforms:0.0.5",
 	        "category": "analysis"
         }
     },
@@ -29,9 +29,9 @@
         "input_image_type": {
             "type": "integer",
             "minimum": 0,
-            "maximum": 3,
+            "maximum": 5,
             "default": 0,
-            "description": "Option specifying the input image type of scalar (default, 0), vector (1), tensor (2), or time series (3)."
+            "description": "Option specifying the input image type of scalar (default, 0), vector (1), tensor (2), time series (3), multichannel (4), or five-dimensional (5)."
         },
         "interpolation": {
             "type": "string",
@@ -54,40 +54,80 @@
             "optional": true,
             "description": "If the first transform file input is a zip file, specify the target file to extract from the zip file here."
         },
+        "invert_transform_1": {
+            "type": "boolean",
+            "optional": true,
+            "description": "Invert the first transform"
+        },
         "transform_target_2": {
             "type": "string",
             "optional": true,
             "description": "If the second transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "invert_transform_2": {
+            "type": "boolean",
+            "optional": true,
+            "description": "Invert the second transform"
         },
         "transform_target_3": {
             "type": "string",
             "optional": true,
             "description": "If the third transform file input is a zip file, specify the target file to extract from the zip file here."
         },
+        "invert_transform_3": {
+            "type": "boolean",
+            "optional": true,
+            "description": "Invert the third transform"
+        },
         "transform_target_4": {
             "type": "string",
             "optional": true,
             "description": "If the fourth transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "invert_transform_4": {
+            "type": "boolean",
+            "optional": true,
+            "description": "Invert the fourth transform"
         },
         "transform_target_5": {
             "type": "string",
             "optional": true,
             "description": "If the fifth transform file input is a zip file, specify the target file to extract from the zip file here."
         },
+        "invert_transform_5": {
+            "type": "boolean",
+            "optional": true,
+            "description": "Invert the fifth transform"
+        },
         "transform_target_6": {
             "type": "string",
             "optional": true,
             "description": "If the sixth transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "invert_transform_6": {
+            "type": "boolean",
+            "optional": true,
+            "description": "Invert the sixth transform"
         },
         "transform_target_7": {
             "type": "string",
             "optional": true,
             "description": "If the seventh transform file input is a zip file, specify the target file to extract from the zip file here."
         },
+        "invert_transform_7": {
+            "type": "boolean",
+            "optional": true,
+            "description": "Invert the seventh transform"
+        },
         "transform_target_8": {
             "type": "string",
             "optional": true,
             "description": "If the eighth transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "invert_transform_8": {
+            "type": "boolean",
+            "optional": true,
+            "description": "Invert the eighth transform"
         },
         "verbose": {
             "default": false,
@@ -150,6 +190,6 @@
         }
     },
     "environment": {
-      "ANTSPATH": "/opt/ANTs/bin"
+      "ANTSPATH": "/opt/ants-2.5.0/bin"
     }
 }
