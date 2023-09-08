@@ -7,14 +7,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/resampleImage",
     "license": "Other",
-    "version": "0.0.3",
+    "version": "0.0.4_2.5.0",
     "custom": {
-        "docker-image": "matherlab/ants-resampleimage:0.0.3",
+        "docker-image": "matherlab/ants-resampleimage:0.0.4_2.5.0",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-resampleimage:0.0.3",
+            "image": "matherlab/ants-resampleimage:0.0.4_2.5.0",
             "category": "converter"
         }
     },
