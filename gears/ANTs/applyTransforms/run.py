@@ -97,7 +97,7 @@ def get_transforms():
     for (target, file, inversion) in zip(transform_targets, transform_files, transform_inversions):
         if file is None:
             if target is None:
-                if inversion is not None:
+                if inversion:
                     # error - no transform file/target was given, but they want to invert this non-existent transform
                     raise ValueError('Found transform inversion, but no associated transform.')
                 continue
