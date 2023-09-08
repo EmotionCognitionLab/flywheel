@@ -1,4 +1,4 @@
-FROM matherlab/ants-2.3.4
+FROM matherlab/ants-2.5.0
 
 ENV ANTSPATH=/opt/ANTs/bin
 
