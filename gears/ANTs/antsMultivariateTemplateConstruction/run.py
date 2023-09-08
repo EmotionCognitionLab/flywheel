@@ -46,7 +46,7 @@ config_file = os.path.join(flywheel_base, 'config.json')
 subject_prefix = 'subj-'
 
 # set ANTSPATH
-os.environ['ANTSPATH'] = '/opt/ANTs/bin'
+os.environ['ANTSPATH'] = '/opt/ants-2.5.0/bin'
 
 # load the config file
 with open(config_file, 'r') as f:
