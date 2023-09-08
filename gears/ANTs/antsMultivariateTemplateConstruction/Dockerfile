@@ -1,4 +1,4 @@
-FROM matherlab/ants-2.3.4
+FROM matherlab/ants-2.5.0
 
 # Install python3
 RUN apt-get update -qq \
