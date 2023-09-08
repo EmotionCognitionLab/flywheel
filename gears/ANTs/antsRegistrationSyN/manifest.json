@@ -7,14 +7,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/antsRegistrationSyN",
     "license": "Other",
-    "version": "0.0.5",
+    "version": "0.0.6_2.5.0",
     "custom": {
-        "docker-image": "matherlab/ants-registration-syn:0.0.5",
+        "docker-image": "matherlab/ants-registration-syn:0.0.6_2.5.0",
         "flywheel": {
             "suite": "ANTs"
         },
 	"gear-builder": {
-        "image": "matherlab/ants-registration-syn:0.0.5",
+        "image": "matherlab/ants-registration-syn:0.0.6_2.5.0",
         "category": "analysis"
 	}
     },
