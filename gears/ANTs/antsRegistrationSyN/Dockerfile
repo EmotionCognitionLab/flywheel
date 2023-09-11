@@ -1,7 +1,5 @@
 FROM matherlab/ants-2.5.0
 
-ENV ANTSPATH=/opt/ants-2.5.0/bin
-
 RUN apt-get update -qq \
     && apt-get install -y -q --no-install-recommends \
            python3 \

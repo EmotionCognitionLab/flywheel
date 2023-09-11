@@ -33,8 +33,9 @@ os.makedirs(output_dir, exist_ok=True)
 manifest = os.path.join(flywheel_base, 'manifest.json')
 config_file = os.path.join(flywheel_base, 'config.json')
 
-# set ANTSPATH
-os.environ['ANTSPATH'] = '/opt/ants-2.5.0/bin'
+# set PATH
+ANTS_HOME = '/opt/ants-2.5.0/bin'
+os.environ['PATH'] = os.environ['PATH'] + ':' + ANTS_HOME
 
 # load the config file
 with open(config_file, 'r') as f:
@@ -60,7 +61,7 @@ def get_params():
 
 def get_reg_syn_command():
     """Builds up the command line arguments for antsRegistrationSyN.sh"""
-    cmd = [ os.path.join(os.environ['ANTSPATH'], 'antsRegistrationSyN.sh') ]
+    cmd = [ os.path.join(ANTS_HOME, 'antsRegistrationSyN.sh') ]
 
     fixed_input_file = config['inputs']['fixed']['location']['path']
     cmd.append('-f')
