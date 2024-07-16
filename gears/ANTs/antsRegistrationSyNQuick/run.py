@@ -27,8 +27,9 @@ os.makedirs(output_dir, exist_ok=True)
 manifest = os.path.join(flywheel_base, 'manifest.json')
 config_file = os.path.join(flywheel_base, 'config.json')
 
-# set ANTSPATH
+# set ANTSPATH and PATH
 os.environ['ANTSPATH'] = '/opt/ants-2.5.0/bin'
+os.environ['PATH'] = '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/ants-2.5.0/bin'
 
 # load the config file
 with open(config_file, 'r') as f:
