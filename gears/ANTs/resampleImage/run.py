@@ -68,6 +68,3 @@ if path.exists(final_output_path):
 else:
     print('Expected output file %s was not found. Check log for errors.' % final_output_path)
     sys.exit(1)
-
-with open(os.path.join(output_dir, '.manifest.json'), 'w') as manifest:
-    json.dump({'acquisition': {'files': [ final_output_path ] }}, manifest)
