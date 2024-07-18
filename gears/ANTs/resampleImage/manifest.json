@@ -56,7 +56,10 @@
     "inputs": {
         "inputImage": {
             "base": "file",
-            "description": "Input image to be resampled."
+            "description": "Input image to be resampled.",
+            "type": {
+                "enum": ["nifti"]
+            }
         }
     }
 }
