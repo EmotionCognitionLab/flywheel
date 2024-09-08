@@ -165,6 +165,10 @@ def get_output_files(from_dir):
     for suffix in suffixes:
         output_glob_pattern = os.path.join(from_dir, out_prefix + subject_prefix + '*' + suffix)
         zipped_output_files.extend(glob.glob(output_glob_pattern))
+
+    intermediate_dir = os.path.join(input_dir, 'intermediateTemplates')
+    output_glob_pattern = os.path.join(intermediate_dir, '*')
+    zipped_output_files.extend(glob.glob(output_glob_pattern))
     
     return (output_files, zipped_output_files)
 
