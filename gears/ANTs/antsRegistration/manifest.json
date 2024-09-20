@@ -1,0 +1,48 @@
+{
+    "label": "ANTs: Registration",
+    "name": "ants-antsregistration",
+    "description": "Runs antsRegistratio from ANTs toolkit",
+    "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
+    "maintainer": "MatherLab <matherlab@usc.edu>",
+    "url": "http://gero.usc.edu/labs/matherlab/",
+    "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/antsRegistration",
+    "license": "Other",
+    "version": "1.0.0_2.5.0",
+    "custom": {
+        "docker-image": "matherlab/ants-registration:1.0.0_2.5.0",
+        "flywheel": {
+            "suite": "ANTs"
+        },
+	"gear-builder": {
+        "image": "matherlab/ants-registration:1.0.0_2.5.0",
+        "category": "analysis"
+	}
+    },
+    "cite": "Brian B. Avants, Nick Tustison and Gang Song. Penn Image Computing And Science Laboratory. University of Pennsylvania. Please reference http://www.ncbi.nlm.nih.gov/pubmed/20851191. A reproducible evaluation of ANTs similarity metric performance in brain image registration: Avants BB, Tustison NJ, Song G, Cook PA, Klein A, Gee JC. Neuroimage, 2011.",
+    "config": {
+        "command_line": {
+            "type": "string",
+            "description": "The antsRegistration command line you wish to run, minus antsRegistration itself. Where you need to refer to your fixed input file write #fixed_input. For your movinng input file use #moving_input and for the mask input #mask_input. Make sure there are no spaces in your parameters. For example, MI[#fixed_input, #moving_input,...] is not valid; MI[#fixed_input,#moving_input,...] is valid."
+        }
+    },
+    "inputs": {
+        "fixed": {
+            "base": "file",
+            "description": "Fixed image or source image or reference image (may be nifti or zip)"
+        },
+        "moving": {
+            "base": "file",
+            "description": "Moving image or target image"
+        },
+        "mask": {
+            "optional": true,
+            "base": "file",
+            "description": "Mask to be used for all stages. (This gear does not support specifying a mask for each stage.)",
+            "type": {
+                "enum": [
+                    "nifti"
+                ]
+            }
+        }
+    }
+}
