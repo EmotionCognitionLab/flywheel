@@ -9,8 +9,8 @@ import tempfile
 
 FLYWHEEL='/flywheel/v0'
 os.environ['FSLOUTPUTTYPE'] = 'NIFTI_GZ'
-os.environ['FSLDIR'] = '/opt/conda/'
-binary_ops = ['add_op', 'sub_op']
+os.environ['FSLDIR'] = '/opt/conda/envs/fslmaths-env'
+binary_ops = ['add_op', 'mul_op', 'sub_op']
 
 def op_to_fn(op, mathobj, context):
     config = context.config
@@ -28,6 +28,9 @@ def op_to_fn(op, mathobj, context):
             lp_sigma = config['bptf_lp_sigma']
             log.info(f'using hp_sigma={hp_sigma}, lp_sigma={lp_sigma}')
             return mathobj.bptf(hp_sigma, lp_sigma)
+        case 'mul_op':
+            log.info(f'multiplying first input by {second_input}')
+            return mathobj.mul(second_input)
         case 'sqrt_op':
             return mathobj.sqrt()
         case 'sub_op':

@@ -1,17 +1,17 @@
 {
   "name": "fslmaths",
   "label": "FSL: fslmaths (v6.0)",
-  "description": "Provides a subset of the operations provided by the fslmaths command: add, bin, bptf, sqrt, sub, thr, thrp, thrP. The gear only supports one operation per run; do not choose more than one of the _op options in the configuration. LICENSING NOTE: FSL software are owned by Oxford University Innovation and license is required for any commercial applications. For commercial licence please contact fsl@innovation.ox.ac.uk. For academic use, an academic license is required which is available by registering on the FSL website. Any use of the software requires that the user obtain the appropriate license. See https://fsl.fmrib.ox.ac.uk/fsldownloads_registration for more information.",
+  "description": "Provides a subset of the operations provided by the fslmaths command: add, bin, bptf, mul, sqrt, sub, thr, thrp, thrP. The gear only supports one operation per run; do not choose more than one of the _op options in the configuration. LICENSING NOTE: FSL software are owned by Oxford University Innovation and license is required for any commercial applications. For commercial licence please contact fsl@innovation.ox.ac.uk. For academic use, an academic license is required which is available by registering on the FSL website. Any use of the software requires that the user obtain the appropriate license. See https://fsl.fmrib.ox.ac.uk/fsldownloads_registration for more information.",
   "maintainer": "MatherLab <matherlab@usc.edu>",
   "author": "Analysis Group, FMRIB, Oxford, UK.",
   "url": "https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils",
   "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/FSL/fslmaths",
   "license": "Apache-2.0",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "custom": {
-    "docker-image": "matherlab/fslmaths:0.0.6",
+    "docker-image": "matherlab/fslmaths:0.0.7",
     "gear-builder": {
-      "image": "matherlab/fslmaths:0.0.6",
+      "image": "matherlab/fslmaths:0.0.7",
       "category": "converter"
     },
     "flywheel": {
@@ -43,6 +43,11 @@
       "description": "The lowpass sigma for the bptf filter. Sigma is in volumes, not seconds. Set to 0 to skip this filter.",
       "default": 0,
       "type": "number"
+    },
+    "mul_op": {
+      "description": "Multiplication",
+      "default": false,
+      "type": "boolean"
     },
     "sqrt_op": {
       "description": "Square root",
