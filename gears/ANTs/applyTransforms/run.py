@@ -62,12 +62,12 @@ def get_inputs():
 
 def get_transforms():
     """
-    There can be between 2 and 8 transforms. (These limits are imposed by the gear, not
+    There can be between 2 and 9 transforms. (These limits are imposed by the gear, not
     by antsApplyTransform.) Each transform file may either be an ordinary gear input or
     may be a file inside a zip input. One zip input may (in fact, is likely) to contain
     more than one transform file.
-    All of this means that there is one mandatory and seven optional inputs for the gear
-    and eight optional paramaters corresponding to those inputs. In the simplest case,
+    All of this means that there is one mandatory and eight optional inputs for the gear
+    and nine optional paramaters corresponding to those inputs. In the simplest case,
     there are two ordinary (non-zip) files specified as inputs and these are passed to
     antsApplyTransform. A more complicated case might look something like this:
     Inputs:
@@ -79,18 +79,18 @@ def get_transforms():
       transform_target_1: name of file to extract from transform_file_1 zip file
       transform_target_2: name of file to extract. Because transform_file_2 is blank, we assume
         it is to be extracted from the transform_file_1 zip file.
-      transform_target_3 through 8: <blank>
+      transform_target_3 through 9: <blank>
 
-    The transform_target_1 through 8 params are used solely to specify which files should be
+    The transform_target_1 through 9 params are used solely to specify which files should be
     extracted from any zip files specified. If no zip file is specified for a given transform_target
     param, the last zip file specified should be used.
 
-    Additionally, each of the eight transforms can have an optional inverse flag associated with
+    Additionally, each of the nine transforms can have an optional inverse flag associated with
     it, specifying that the inverse of the specified transform should be applied.
     """
-    transform_files = [ config['inputs'].get('transform_file_' + str(x), None) for x in range(1,9) ]
-    transform_targets = [ config['config'].get('transform_target_' + str(x), None) for x in range(1, 9) ]
-    transform_inversions = [ config['config'].get('invert_transform_' + str(x), None) for x in range(1, 9)]
+    transform_files = [ config['inputs'].get('transform_file_' + str(x), None) for x in range(1,10) ]
+    transform_targets = [ config['config'].get('transform_target_' + str(x), None) for x in range(1, 10) ]
+    transform_inversions = [ config['config'].get('invert_transform_' + str(x), None) for x in range(1, 10)]
 
     transforms = []
     cur_zip = None
@@ -128,8 +128,8 @@ def get_transforms():
         raise ValueError('Too few transforms provided - a minimum of two is required.')
     if len(transforms) % 2:
         raise ValueError('Error generating transforms; odd number of arguments: {}.'.format(transforms))
-    if len(transforms) > 16: # max of eight transforms allowed, each preceded by '-t'
-        raise ValueError('Too many transforms provided - a maximum of eight is allowed.')
+    if len(transforms) > 18: # max of nine transforms allowed, each preceded by '-t'
+        raise ValueError('Too many transforms provided - a maximum of nine is allowed.')
 
     return transforms
 

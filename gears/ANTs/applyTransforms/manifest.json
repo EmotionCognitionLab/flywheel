@@ -8,14 +8,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/applyTransforms",
     "license": "Other",
-    "version": "0.0.7_2.5.0",
+    "version": "0.0.8_2.5.0",
     "custom": {
-        "docker-image": "matherlab/ants-applytransforms:0.0.7_2.5.0",
+        "docker-image": "matherlab/ants-applytransforms:0.0.8_2.5.0",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-applytransforms:0.0.7_2.5.0",
+            "image": "matherlab/ants-applytransforms:0.0.8_2.5.0",
 	        "category": "analysis"
         }
     },
@@ -128,6 +128,16 @@
             "type": "boolean",
             "optional": true,
             "description": "Invert the eighth transform"
+        },
+        "transform_target_9": {
+            "type": "string",
+            "optional": true,
+            "description": "If the ninth transform file input is a zip file, specify the target file to extract from the zip file here."
+        },
+        "invert_transform_9": {
+            "type": "boolean",
+            "optional": true,
+            "description": "Invert the ninth transform"
         },
         "verbose": {
             "default": false,
