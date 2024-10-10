@@ -8,14 +8,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/applyTransforms",
     "license": "Other",
-    "version": "0.0.8_2.5.0",
+    "version": "0.0.9_2.5.0",
     "custom": {
-        "docker-image": "matherlab/ants-applytransforms:0.0.8_2.5.0",
+        "docker-image": "matherlab/ants-applytransforms:0.0.9_2.5.0",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-applytransforms:0.0.8_2.5.0",
+            "image": "matherlab/ants-applytransforms:0.0.9_2.5.0",
 	        "category": "analysis"
         }
     },
@@ -194,6 +194,11 @@
             "description": "The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform."
         },
         "transform_file_8": {
+            "base": "file",
+            "optional": true,
+            "description": "The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform."
+        },
+        "transform_file_9": {
             "base": "file",
             "optional": true,
             "description": "The ordering of the transformations follows the ordering specified on the command line. An identity transform is pushed onto the transformation stack. Each new transform encountered on the command line is also pushed onto the transformation stack. Then, to warp the input object, each point comprising the input object is warped first according to the last transform pushed onto the stack followed by the second to last transform, etc. until the last transform encountered which is the identity transform."
