@@ -7,11 +7,11 @@
   "url": "https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/Fslutils",
   "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/FSL/fslmaths",
   "license": "Apache-2.0",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "custom": {
-    "docker-image": "matherlab/fslmaths:0.0.7",
+    "docker-image": "matherlab/fslmaths:0.0.8",
     "gear-builder": {
-      "image": "matherlab/fslmaths:0.0.7",
+      "image": "matherlab/fslmaths:0.0.8",
       "category": "converter"
     },
     "flywheel": {
@@ -101,5 +101,15 @@
       "optional": true
     }
   },
-  "command": "/opt/conda/bin/python3 /flywheel/v0/run"
+  "command": "/opt/conda/bin/python3 /flywheel/v0/run",
+  "environment": {
+    "PWD": "/",
+    "LC_ALL": "C.UTF-8",
+    "CONDA_DIR": "/opt/conda",
+    "MATH_ENV": "fslmaths-env",
+    "LANG": "C.UTF-8",
+    "FSL_CONDA_CHANNEL": "https://fsl.fmrib.ox.ac.uk/fsldownloads/fslconda/public",
+    "PATH": "/opt/conda/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "FLYWHEEL": "/flywheel/v0"
+  }
 }
