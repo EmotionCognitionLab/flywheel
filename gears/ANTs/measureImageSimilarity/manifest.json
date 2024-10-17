@@ -1,0 +1,108 @@
+{
+    "name": "ants-measureimagesimilarity",
+    "label": "ANTs: Measure Image Similarity",
+    "description": "Runs MeasureImageSimilarity from ANTs toolkit",
+    "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
+    "cite": "Brian B. Avants, Nick Tustison and Gang Song. Penn Image Computing And Science Laboratory. University of Pennsylvania. Please reference http://www.ncbi.nlm.nih.gov/pubmed/20851191. A reproducible evaluation of ANTs similarity metric performance in brain image registration: Avants BB, Tustison NJ, Song G, Cook PA, Klein A, Gee JC. Neuroimage, 2011.",
+    "maintainer": "MatherLab <matherlab@usc.edu>",
+    "url": "http://gero.usc.edu/labs/matherlab/",
+    "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/measureImageSimilarity",
+    "license": "Other",
+    "version": "1.0.0_2.5.0",
+    "custom": {
+        "docker-image": "matherlab/ants-measureimagesimilarity:1.0.0_2.5.0",
+        "flywheel": {
+            "suite": "ANTs"
+        },
+        "gear-builder": {
+            "image": "matherlab/ants-measureimagesimilarity:1.0.0_2.5.0",
+	        "category": "analysis"
+        }
+    },
+    "config": {
+        "dimensionality": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 4,
+            "description": "Number of image dimensions - 2/3/4",
+            "optional": false
+        },
+        "metric": {
+            "default": "CC",
+            "enum": [
+                "CC",
+                "MI",
+                "Mattes",
+                "MeanSquares",
+                "Demons",
+                "GC"
+            ],
+            "type": "string",
+            "description": "Type of similarity metric used for comparison. "
+        },
+        "metric_weight": {
+            "optional": false,
+            "type": "number"
+        },
+        "radius": {
+            "optional": true,
+            "type": "number"
+        },
+        "number_of_bins": {
+            "optional": true,
+            "type": "integer"
+        },
+        "sampling_strategy": {
+            "type": "string",
+            "enum": [
+                "None",
+                "Regular",
+                "Random"
+            ],
+            "optional": false
+        },
+        "sampling_percentage": {
+            "type": "number",
+            "optional": false,
+            "minimum": 0,
+            "maximum": 1
+        },
+        "verbose": {
+            "type": "boolean",
+            "default": false,
+            "description": "Turn on verbose logging",
+            "optional": true
+        },
+        "output_gradient_image": {
+            "type": "boolean",
+            "default": false,
+            "optional": true
+        }
+    },
+    "inputs": {
+        "fixed_image": {
+            "base": "file",
+            "optional": false,
+            "description": "Fixed image for the comparison"
+        },
+        "moving_image": {
+            "base": "file",
+            "optional": false,
+            "description": "Moving image for the comparison"
+        },
+        "fixed_image_mask": {
+            "base": "file",
+            "optional": true,
+            "description": "Optional mask for fixed image"
+        },
+        "moving_image_mask": {
+            "base": "file",
+            "optional": true,
+            "description": "Optional mask for moving image"
+        }
+    },
+    "environment": {
+        "ANTSPATH": "/opt/ants-2.5.0/bin",
+        "PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/ants-2.5.0/bin"
+    }
+}
