@@ -24,8 +24,7 @@
             "type": "integer",
             "minimum": 2,
             "maximum": 4,
-            "description": "Number of image dimensions - 2/3/4",
-            "optional": false
+            "description": "Number of image dimensions - 2/3/4"
         },
         "metric": {
             "default": "CC",
@@ -41,7 +40,6 @@
             "description": "Type of similarity metric used for comparison. "
         },
         "metric_weight": {
-            "optional": false,
             "type": "number"
         },
         "radius": {
@@ -58,25 +56,21 @@
                 "None",
                 "Regular",
                 "Random"
-            ],
-            "optional": false
+            ]
         },
         "sampling_percentage": {
             "type": "number",
-            "optional": false,
             "minimum": 0,
             "maximum": 1
         },
         "verbose": {
             "type": "boolean",
             "default": false,
-            "description": "Turn on verbose logging",
-            "optional": true
+            "description": "Turn on verbose logging"
         },
         "output_gradient_image": {
             "type": "boolean",
-            "default": false,
-            "optional": true
+            "default": false
         }
     },
     "inputs": {
