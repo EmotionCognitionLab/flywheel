@@ -44,14 +44,14 @@ def get_params():
 
 def get_ouputs():
     """
-    Returns the outpout parameter (including the optional estimated noise image, if requested).
+    Returns the output parameter (including the optional estimated noise image, if requested).
     Adds output directory to provide file name(s).
     """
     output_file_path = os.path.join(output_dir, config['config']['output_image'])
     noise_image_file = config['config'].get('noise_image', None)
     if noise_image_file:
         noise_file_path = os.path.join(output_dir, noise_image_file)
-        return { '--output': f'[ "{output_file_path}", "{noise_file_path}" ]' }
+        return { '--output': f'[{output_file_path},{noise_file_path}]' }
     
     return { '--output': output_file_path }
 
