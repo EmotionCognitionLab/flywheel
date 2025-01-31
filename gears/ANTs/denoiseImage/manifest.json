@@ -1,0 +1,82 @@
+{
+    "name": "ants-denoiseimage",
+    "label": "ANTs: Denoise Image",
+    "description": "Runs DenoiseImage from ANTs toolkit",
+    "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
+    "cite": "Brian B. Avants, Nick Tustison and Gang Song. Penn Image Computing And Science Laboratory. University of Pennsylvania. Please reference http://www.ncbi.nlm.nih.gov/pubmed/20851191. A reproducible evaluation of ANTs similarity metric performance in brain image registration: Avants BB, Tustison NJ, Song G, Cook PA, Klein A, Gee JC. Neuroimage, 2011.",
+    "maintainer": "MatherLab <matherlab@usc.edu>",
+    "url": "http://gero.usc.edu/labs/matherlab/",
+    "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/denoiseImage",
+    "license": "Other",
+    "version": "0.0.1_2.5.0",
+    "custom": {
+        "docker-image": "matherlab/ants-denoiseimage:0.0.1_2.5.0",
+        "flywheel": {
+            "suite": "ANTs"
+        },
+        "gear-builder": {
+            "image": "matherlab/ants-denoiseimage:0.0.1_2.5.0",
+	        "category": "analysis"
+        }
+    },
+    "config": {
+        "dimensionality": {
+            "minimum": 2,
+            "maximum": 4,
+            "type": "integer",
+            "optional": true,
+            "description": "This option forces the image to be treated as a specified-dimensional image."
+        },
+        "noise_model": {
+            "type": "string",
+            "enum": [
+                "Gaussian",
+                "Rician"
+            ],
+            "optional": true,
+            "description": "Employ a Rician or Gaussian noise model."
+        },
+        "shrink_factor": {
+            "type": "integer",
+            "optional": true,
+            "description": "Running noise correction on large images can be time consuming. To lessen computation time, the input image can be resampled. The shrink factor, specified as a single integer, describes this resampling. Shrink factor = 1 is the default."
+        },
+        "patch_radius": {
+            "type": "string",
+            "optional": true,
+            "description": "Patch radius. Default = 1x1x1."
+        },
+        "search_radius": {
+            "type": "string",
+            "optional": true,
+            "description": "Search radius. Default = 3x3x3."
+        },
+        "output_image": {
+            "type": "string",
+            "description": "The name the corrected image should be saved under."
+        },
+        "noise_image": {
+            "type": "string",
+            "optional": true,
+            "description": "The name the estimated noise image should be saved under. Leave blank to not save an estimated noise image"
+        },
+        "verbose": {
+            "default": false,
+            "type": "boolean",
+            "description": "Force antsDenoiseImage to print verbose output."
+        }
+    },
+    "inputs": {
+        "input_file": {
+            "base": "file",
+            "description": "Image file input"
+        },
+        "mask_image": {
+            "base": "file",
+            "description": "If a mask image is specified, denoising is only performed in the mask region."
+        }
+    },
+    "environment": {
+      "ANTSPATH": "/opt/ants-2.5.0/bin"
+    }
+}
