@@ -8,14 +8,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/denoiseImage",
     "license": "Other",
-    "version": "0.0.1_2.5.0",
+    "version": "0.0.2_2.5.0",
     "custom": {
-        "docker-image": "matherlab/ants-denoiseimage:0.0.1_2.5.0",
+        "docker-image": "matherlab/ants-denoiseimage:0.0.2_2.5.0",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-denoiseimage:0.0.1_2.5.0",
+            "image": "matherlab/ants-denoiseimage:0.0.2_2.5.0",
 	        "category": "analysis"
         }
     },
@@ -73,7 +73,8 @@
         },
         "mask_image": {
             "base": "file",
-            "description": "If a mask image is specified, denoising is only performed in the mask region."
+            "description": "If a mask image is specified, denoising is only performed in the mask region.",
+            "optional": true
         }
     },
     "environment": {
