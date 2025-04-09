@@ -79,7 +79,17 @@ def get_params():
     param_flags['update_template_with_full_affine'] = '-y'
 
     # Build a map of btp param flag -> value from the config
-    return { param_flags[k]:v for (k, v) in config['config'].items() if k in param_flags }
+    # Exclude params that have empty string values
+    params = {}
+    for (k, v) in config['config'].items():
+        if k in param_flags:
+            if isinstance(v, str):
+                if (len(v.strip()) > 0):
+                    params[param_flags[k]] = v
+            else:
+                params[param_flags[k]] = v
+
+    return params
 
 def download_input_files(to_dir):
     """Downloads all files under the config['tag'] section of
