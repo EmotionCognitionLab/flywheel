@@ -8,14 +8,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/antsMultiVariateTemplateConstruction",
     "license": "Other",
-    "version": "0.0.9_2.5.0",
+    "version": "0.0.10_2.5.0",
     "custom": {
-        "docker-image": "matherlab/ants-multivariatetemplateconstruction:0.0.9_2.5.0",
+        "docker-image": "matherlab/ants-multivariatetemplateconstruction:0.0.10_2.5.0",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-multivariatetemplateconstruction:0.0.9_2.5.0",
+            "image": "matherlab/ants-multivariatetemplateconstruction:0.0.10_2.5.0",
 	    "category": "analysis"
         }
     },
@@ -63,6 +63,11 @@
             "type": "string",
             "pattern": "^([0-9]{1,}x){1,}[0-9]{1,}$",
             "description": "Max-Iterations in form: JxKxL where J = max iterations at coarsest resolution (here, reduce by power of 2^2); K = middle resolution iterations (here,reduce by power of 2); L = fine resolution iterations (here, full resolution) !!this level takes much more time per iteration!! Adding an extra value before JxKxL (i.e. resulting in IxJxKxL) would add another iteration level."
+        },
+        "save_full_iteration_output": {
+            "default": false,
+            "type": "boolean",
+            "description": "Check if you want images and warps saved for each pairwise registration at each iteration."
         },
         "n4_bias_field_correction": {
             "default": 1,

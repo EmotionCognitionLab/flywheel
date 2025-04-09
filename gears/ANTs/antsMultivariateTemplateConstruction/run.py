@@ -69,6 +69,7 @@ def get_params():
     param_flags['image_dimension'] = '-d'
     param_flags['iteration_limit'] = '-i'
     param_flags['max_iterations'] = '-m'
+    param_flags['save_full_iteration_output'] = '-b'
     param_flags['n4_bias_field_correction'] = '-n'
     param_flags['out_prefix'] = '-o'
     param_flags['parallel_computation'] = '-c'
@@ -129,7 +130,12 @@ def get_command():
     params = get_params()
     for (param_flag, param_value) in params.items():
         cmd = cmd + ' ' + param_flag
-        cmd = cmd + ' ' + str(param_value)
+        if param_value is True:
+            cmd = cmd + ' 1'
+        elif param_value is False:
+            cmd = cmd + ' 0'
+        else:
+            cmd = cmd + ' ' + str(param_value)
 
     template_file = config['inputs'].get('template', None)
     if (template_file):
