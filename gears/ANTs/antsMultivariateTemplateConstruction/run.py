@@ -121,7 +121,7 @@ def download_input_files(to_dir):
             sess_to_subj[sess_id] = subj_label
 
         results.append(f)
-        local_file_name = os.path.join(to_dir, '{0}{1}-{2}'.format(subject_prefix, subj_label, f['name']))
+        local_file_name = os.path.join(to_dir, '{0}{1}-{2}-{3}'.format(subject_prefix, subj_label, f['parentId'], f['name']))
         print('Downloading {0} to {1}'.format(f['name'], local_file_name), flush=True)
         if f['parentType'] == 'acquisition':
             fw.download_file_from_acquisition(f['parentId'], f['name'], local_file_name)
