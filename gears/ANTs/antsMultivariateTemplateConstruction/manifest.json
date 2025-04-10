@@ -8,14 +8,14 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/antsMultiVariateTemplateConstruction",
     "license": "Other",
-    "version": "0.0.12_2.5.0",
+    "version": "0.0.13_2.5.0",
     "custom": {
-        "docker-image": "matherlab/ants-multivariatetemplateconstruction:0.0.12_2.5.0",
+        "docker-image": "matherlab/ants-multivariatetemplateconstruction:0.0.13_2.5.0",
         "flywheel": {
             "suite": "ANTs"
         },
         "gear-builder": {
-            "image": "matherlab/ants-multivariatetemplateconstruction:0.0.12_2.5.0",
+            "image": "matherlab/ants-multivariatetemplateconstruction:0.0.13_2.5.0",
 	    "category": "analysis"
         }
     },

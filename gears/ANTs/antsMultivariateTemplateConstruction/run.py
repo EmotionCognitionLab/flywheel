@@ -19,6 +19,7 @@ the input files as a note in the 'info' field of the analysis.
 import flywheel
 import fnmatch
 import glob
+import re
 import json
 import logging
 import os
@@ -163,13 +164,9 @@ def get_output_files(from_dir):
     Note that not *all* output files are kept.
     """
 
-    output_files = []
     out_prefix = config['config']['out_prefix']
-    template_suffixes = ['template0.nii.gz', 'template0Affine.txt', 'template0warp.nii.gz']
-    for suffix in template_suffixes:
-        out_file = os.path.join(from_dir, out_prefix + suffix)
-        if (os.path.isfile(out_file)):
-            output_files.append(out_file)
+    pattern = r'template[0-9]+(.nii.gz|warp.nii.gz|Affine.txt)'
+    output_files = [file for file in glob.glob(os.path.join(from_dir, out_prefix + '*')) if re.search(pattern, file) and os.path.isfile(file)]
 
     zipped_output_files = []
     template_suffixes = ['WarpedToTemplate.nii.gz', 'Repaired.nii.gz']
