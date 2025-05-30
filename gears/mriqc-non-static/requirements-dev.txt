@@ -1,0 +1,4 @@
+coverage[toml]==7.3.2 ; python_version >= "3.8" and python_version < "4.0"
+pytest-cov==3.0.0 ; python_version >= "3.8" and python_version < "4.0"
+pytest-mock==3.11.1 ; python_version >= "3.8" and python_version < "4.0"
+tomli==2.0.1 ; python_full_version <= "3.11.0a6" and python_version >= "3.8"

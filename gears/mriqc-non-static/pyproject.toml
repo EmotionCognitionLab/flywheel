@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "fw-gear-mriqc"
+version = "0.8.0"
+description = "Image quality metrics for quality assessment of MRI"
+authors = ["Flywheel <support@flywheel.io>"]
+readme = "README.md"
+license = "MIT"
+keywords = [
+    "Flywheel",
+    "Gears"
+]
+repository = "https://gitlab.com/flywheel-io/scientific-solutions/gears/mriqc"
+classifiers = [
+    "Topic :: Scientific/Engineering"
+]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+flywheel-gear-toolkit = "^0.6.10"
+flywheel-sdk = "^17.0"
+beautifulsoup4 = "^4.12.2"
+pyfakefs = "^5.3.0"
+pytest-subprocess = "^1.5.0"
+fw-utils = "^4.3.5"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.1.2"
+pytest-cov = "^3.0.0"
+pytest-mock = "^3.8.2"
+
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.core.masonry.api"
