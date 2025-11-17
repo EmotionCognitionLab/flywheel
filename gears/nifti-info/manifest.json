@@ -26,5 +26,6 @@
         "api-key": {
             "base": "api-key"
         }
-    }
+    },
+    "config": {}
 }
