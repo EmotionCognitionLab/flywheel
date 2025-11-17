@@ -1,0 +1,30 @@
+{
+    "label": "Get row/col/slice info from NIfTI",
+    "name": "nifti-info",
+    "description": "Extracts the dimensions (rows, columns, slices) of a NIfTI file and writes the information to the file metadata.",
+    "author": "Noah Mercer",
+    "maintainer": "MatherLab <matherlab@usc.edu>",
+    "url": "http://gero.usc.edu/labs/matherlab/",
+    "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/nifti-info",
+    "license": "Other",
+    "version": "0.0.1",
+    "custom": {
+        "docker-image": "matherlab/nifti-info:0.0.1",
+        "gear-builder": {
+            "image": "matherlab/nifti-info:0.0.1",
+            "category": "utility"
+        }
+    },
+    "inputs": {
+        "nifti": {
+            "base": "file",
+            "type": {
+                "enum": ["nifti"]
+            },
+            "description": "A nifti file to extract row/col/slice info from."
+        },
+        "api-key": {
+            "base": "api-key"
+        }
+    }
+}
