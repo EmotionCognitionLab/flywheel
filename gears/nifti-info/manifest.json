@@ -7,11 +7,12 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/nifti-info",
     "license": "Other",
-    "version": "0.0.2",
+    "version": "0.0.3",
+    "cite": "https://doi.org/10.5281/zenodo.13936989",
     "custom": {
-        "docker-image": "matherlab/nifti-info:0.0.2",
+        "docker-image": "matherlab/nifti-info:0.0.3",
         "gear-builder": {
-            "image": "matherlab/nifti-info:0.0.2",
+            "image": "matherlab/nifti-info:0.0.3",
             "category": "utility"
         }
     },
