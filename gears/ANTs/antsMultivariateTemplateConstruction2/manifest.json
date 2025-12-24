@@ -1,0 +1,177 @@
+{
+    "name": "ants-multivariatetemplateconstruction2",
+    "label": "ANTs: Multivariate Template Construction 2",
+    "description": "Runs antsMultivariateTemplateConstruction2 from ANTs toolkit",
+    "author": "Brian B. Avants <diffzero@gmail.com>, Nick Tustison <ntustison@virginia.edu> and Gang Song",
+    "cite": "Brian B. Avants, Nick Tustison and Gang Song. Penn Image Computing And Science Laboratory. University of Pennsylvania. Please reference http://www.ncbi.nlm.nih.gov/pubmed/20851191. A reproducible evaluation of ANTs similarity metric performance in brain image registration: Avants BB, Tustison NJ, Song G, Cook PA, Klein A, Gee JC. Neuroimage, 2011.",
+    "maintainer": "MatherLab <matherlab@usc.edu>",
+    "url": "http://gero.usc.edu/labs/matherlab/",
+    "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/ANTs/antsMultivariateTemplateConstruction2",
+    "license": "Other",
+    "version": "0.0.1_2.5.0",
+    "custom": {
+        "docker-image": "matherlab/ants-multivariatetemplateconstruction2:0.0.1_2.5.0",
+        "flywheel": {
+            "suite": "ANTs"
+        },
+        "gear-builder": {
+            "image": "matherlab/ants-multivariatetemplateconstruction2:0.0.1_2.5.0",
+	        "category": "analysis"
+        }
+    },
+    "config": {
+        "cpu_cores": {
+            "default": 96,
+            "minimum": 1,
+            "type": "integer",
+            "description": "Number of CPU cores to use (default 96). This option only applies if you select '2 - pexec' for parallel computation."
+        },
+        "num_modalities": {
+            "default": 1,
+            "minimum": 1,
+            "type": "integer",
+            "description": "Number of modalities used to construct the template (default 1)"
+        },
+        "modality_weights": {
+            "default": "1x0x0",
+            "type": "string",
+            "description": "Modality weights used in the similarity metric (default = 1) --- specified as e.g. 1x0.5x0.75"
+        },
+        "gradient_step_size": {
+            "default": 0.25,
+            "type": "number",
+            "description": "Gradient step size (default 0.25): smaller in magnitude results in more cautious steps.  Use smaller steps to refine template details. 0.25 is an upper (aggressive) limit for this parameter."
+        },
+        "image_dimension": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 4,
+            "description": "Number of image dimensions. 2 or 3 (for 2 or 3 dimensional registration of single volume) or 4 (for template generation of time-series data)"
+        },
+        "image_summarization_statistic": {
+            "default": 1,
+            "minimum": 0,
+            "maximum": 2,
+            "type": "integer",
+            "description": "Image summarization statistic (default = 1). Options are: 0 = mean; 1 = mean of normalized intensities; 2 = median. Normalization here means dividing each image by its mean intensity."
+        },
+        "input_file_pattern": {
+            "default": "*.nii.gz",
+            "type": "string",
+            "description": "File system wildcard pattern (e.g. *.nii.gz) matching your input files."
+        },
+        "iteration_limit": {
+            "default": 4,
+            "type": "integer",
+            "description": "Iteration limit (default = 4). Iterations of the template construction (Iteration limit)*NumImages registrations."
+        },
+        "max_iterations": {
+            "default": "100x1000x70x20",
+            "type": "string",
+            "pattern": "^\\d+(?:x\\d+)*$",
+            "description": "Max iterations for each pairwise registration (default = 100x1000x70x20). Specified in the form JxK...xF where J = max iterations at first (coarsest) resolution, K = max iterations at next resolution, and F = max iterations at the final resolution. Finer resolutions take much more time per iteration than coarser resolutions. The resolution for each level is controlled by the shrink factors \"-f\", so \"-q JxKxL -f 4x2x1\" does J iterations at factor 4, K at factor 2, L at factor 1."
+        },
+        "save_full_iteration_output": {
+            "default": false,
+            "type": "boolean",
+            "description": "Boolean to save the transform files, bias corrected inputs, templates, transforms, and warped images  for each iteration. By default, only the templates and the shape update warp field are saved."
+        },
+        "n4_bias_field_correction": {
+            "default": 1,
+            "minimum": 0,
+            "maximum": 1,
+            "type": "integer",
+            "description": "N4BiasFieldCorrection of moving image ( 0 = off; 1 = on (default 1) )"
+        },
+        "out_prefix": {
+            "default": "full_template_",
+            "type": "string",
+            "description": "A prefix that is prepended to all output files."
+        },
+        "parallel_computation": {
+            "default": 2,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 5,
+            "description": "Control for parallel computation. 0 == run serially,  1 == SGE qsub, 2 == use PEXEC (localhost), 3 == Apple XGrid, 4 == PBS Grid, 5 == SLURM"
+        },
+        "registration_similarity_metric": {
+            "default": "CC",
+            "type": "string",
+            "description": "Type of similarity metric used for pairwise registration (default = CC). CC = cross-correlation; MI = mutual information; MSQ = mean square difference; DEMONS = demon's metric. A similarity metric per modality can be specified.  If the CC metric is chosen, one can also specify the radius in brackets, e.g. \"-m CC[ 4 ]\". This option controls the metric for the transformation specified with \"-t\", so \"-m CC -t SyN\" means the SyN stage is run with the CC metric; preceding linear stages use MI."
+        },
+        "rigid_body_registration": {
+            "default": 0,
+            "minimum": 0,
+            "maximum": 1,
+            "type": "integer",
+            "description": "Do rigid-body registration of inputs to the initial template, before doing the main pairwise registration. 0 == off 1 == on (default 0). If you are trying to refine or update an existing template, you would use '-r 0'. Rigid initialization is useful when you do not have an initial template, or you want to use a single image as a reference for rigid alignment only. For example, if you specify a template input setting this to 1 will rigidly align all input images to that template, then use their average to begin the template building process."
+        },
+        "sharpening": {
+            "default": 1,
+            "minimum": 0,
+            "maximum": 2,
+            "type": "integer",
+            "description": "Sharpening applied to template at each iteration (default = 1)."
+        },
+        "shrink_factors": {
+            "default": "6x4x2x1",
+            "type": "string",
+            "pattern": "^\\d+(?:x\\d+)*$",
+            "description": "Shrink factors in pairwise registration (default = 6x4x2x1). In the same form as max_iterations. Must have the same number of components as the max_iterations and smoothing. The shrink factors are integer factors for downsampling the the virtual space (usually the template image) during registration."
+        },
+        "smoothing": {
+            "default": "3x2x1x0",
+            "type": "string",
+            "pattern": "^\\d+(?:x\\d+)*$",
+            "description": "Smoothing kernels in pairwise registration (default = 3x2x1x0). In the same form as max_iterations and shrink_factors. Must have the same number of components as max_iterations and shrink_factors. Standard deviation of a Gaussian smoothing kernel applied to the images before downsampling at each level. The kernel may be specified in mm units or voxels with \"AxBxCmm\" or \"AxBxCvox\". Missing units implies vox."
+        },
+        "tag": {
+            "type": "string",
+            "description": "Tag used to identify the acquisitions that should be analyzed"
+        },
+        "transformation_model_type": {
+            "enum": [
+                "SyN",
+                "BSplineSyN",
+                "TimeVaryingVelocityField",
+                "TimeVaryingBSplineVelocityField",
+                "Affine",
+                "Rigid"
+            ],
+            "type": "string",
+            "description": "Type of transformation model used for registration (default = SyN). SyN = Greedy SyN; BSplineSyN = Greedy B-spline SyN; TimeVaryingVelocityField = Time-varying velocity field; TimeVaryingBSplineVelocityField = Time-varying B-spline velocity field. The transformations above are used after Rigid + Affine linear registration. To use linear registration only, options are: Affine = Affine (runs Rigid + Affine); Rigid = Rigid (runs Rigid only)."
+        },
+        "log_disk_usage": {
+            "type": "boolean",
+            "default": false,
+            "description": "Periodically logs disk usage"
+        },
+        "update_template_with_full_affine": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 1,
+            "description": "Update the template with the full affine transform (default 1). If 0, the rigid component of the affine transform will not be used to update the template. If your template drifts in translation or orientation try setting this to 0."
+        }
+    },
+    "inputs": {
+        "api_key": {
+            "base": "api-key"
+        },
+        "template": {
+            "base": "file",
+            "optional": true,
+            "description": "Template volume to be used as target of all inputs. When not used, the script will create an unbiased starting point by averaging all inputs."
+        }
+        ,
+        "tag_file": {
+            "base": "file",
+            "description": "JSON file with a list of files associated with the tag provided as part of the gear configuration"
+        }
+    },
+    "environment": {
+	"ANTSPATH": "/opt/ants-2.5.0/bin",
+	"PATH": "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/ants-2.5.0/bin"
+    }
+}
