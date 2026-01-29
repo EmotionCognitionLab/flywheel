@@ -1,0 +1,62 @@
+{
+    "label": "Compute LC contrast values",
+    "name": "lc-contrast",
+    "description": "Compute slice-wise LC contrast ratios",
+    "author": "Wenhui Zhao, Noah Mercer",
+    "maintainer": "MatherLab <matherlab@usc.edu>",
+    "url": "http://gero.usc.edu/labs/matherlab/",
+    "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/lc-contrast",
+    "license": "Other",
+    "version": "0.0.1",
+    "custom": {
+        "docker-image": "matherlab/lc-contrast:0.0.1",
+        "gear-builder": {
+            "image": "matherlab/lc-contrast:0.0.1",
+            "category": "utility"
+        }
+    },
+    "config": {
+        "output_filename": {
+            "default": "lc_contrast_values.csv",
+            "type": "string",
+            "description": "Name of the CSV output file containing LC contrast values."
+        },
+        "split_hemispheres": {
+            "default": false,
+            "type": "boolean",
+            "description": "Split the ROI into left and right hemispheres."
+        },
+        "also_save_summary_as_metadata": {
+            "default": true,
+            "type": "boolean",
+            "description": "Saves the output summary as part of the file metadata (under the key \"LCContrastSummary\") for the lc_nifti input file."
+        }
+    },
+    "inputs": {
+        "api-key": {
+            "base": "api-key"
+        },
+        "lc_nifti": {
+            "base": "file",
+            "type": {
+                "enum": ["nifti"]
+            },
+            "description": "A NIfTI file containing the LC scan."
+        },
+        "roi_mask": {
+            "base": "file",
+            "type": {
+                "enum": ["nifti"]
+            },
+            "description": "The bilateral LC ROI mask."
+        },
+        "reference_mask": {
+            "base": "file",
+            "optional": true,
+            "type": {
+                "enum": ["nifti"]
+            },
+            "description": "The reference region mask."
+        }
+    }
+}
