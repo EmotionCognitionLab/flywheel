@@ -17,7 +17,6 @@ collisions between inputs with the same name, the gear prefixes
 the input files as a note in the 'info' field of the analysis.
 """
 import flywheel
-import fnmatch
 import glob
 import re
 import json
@@ -169,7 +168,7 @@ def get_output_files(from_dir):
     """
 
     out_prefix = config['config']['out_prefix']
-    pattern = r'template[0-9]+(.nii.gz|warp.nii.gz|Affine.txt)'
+    pattern = r'template[0-9]+(.nii.gz|warp.nii.gz|Affine.txt|GenericAffine.mat)'
     output_files = [file for file in glob.glob(os.path.join(from_dir, out_prefix + '*')) if re.search(pattern, file) and os.path.isfile(file)]
 
     zipped_output_files = []
@@ -178,7 +177,7 @@ def get_output_files(from_dir):
         output_glob_pattern = os.path.join(from_dir, out_prefix + 'template0' + subject_prefix + '*' + suffix)
         zipped_output_files.extend(glob.glob(output_glob_pattern))
 
-    suffixes = ['Warp.nii.gz', 'Affine.txt']
+    suffixes = ['Warp.nii.gz', 'Affine.txt', '0GenericAffine.mat']
     for suffix in suffixes:
         output_glob_pattern = os.path.join(from_dir, out_prefix + subject_prefix + '*' + suffix)
         zipped_output_files.extend(glob.glob(output_glob_pattern))
