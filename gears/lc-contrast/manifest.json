@@ -7,11 +7,11 @@
     "url": "http://gero.usc.edu/labs/matherlab/",
     "source": "https://github.com/EmotionCognitionLab/flywheel/tree/master/gears/lc-contrast",
     "license": "Other",
-    "version": "0.0.1",
+    "version": "1.0.0",
     "custom": {
-        "docker-image": "matherlab/lc-contrast:0.0.1",
+        "docker-image": "matherlab/lc-contrast:1.0.0",
         "gear-builder": {
-            "image": "matherlab/lc-contrast:0.0.1",
+            "image": "matherlab/lc-contrast:1.0.0",
             "category": "utility"
         }
     },
