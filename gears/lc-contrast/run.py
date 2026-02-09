@@ -100,14 +100,14 @@ def compute_ref_mean(lc_img: np.ndarray, ref_mask: np.ndarray) -> float:
 def compute_ref_max_by_slice(lc_img: np.ndarray, ref_mask: np.ndarray) -> Dict[int, float]:
     """
     Return {z: refMax(z)} where:
-    refMax(z) = max(lc_img[:,:,z] within ref_mask[:,:,z])
+      refMax(z) = max(lc_img[:,:,z] within ref_mask[:,:,z])
     """
     nz = lc_img.shape[2]
     out: Dict[int, float] = {}
     for z in range(nz):
         m = ref_mask[:, :, z] > 0
-    if np.any(m):
-        out[z] = float(lc_img[:, :, z][m].max())
+        if np.any(m):
+            out[z] = float(lc_img[:, :, z][m].max())
     return out
 
 
